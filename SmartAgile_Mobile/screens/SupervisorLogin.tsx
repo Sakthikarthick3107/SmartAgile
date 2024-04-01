@@ -1,7 +1,7 @@
 import {Button, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import GlobalStyles from '../styles/GlobalStyle';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import Colors from '../styles/Colors';
 import { NavigationType } from '../navigation/NavigationTypes';
 
 type Props = {
