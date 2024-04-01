@@ -7,7 +7,7 @@ import SupervisorLogin from "./pages/SupervisorLogin"
 function App() {
   return (
     <Routes>
-      <Route path="" element={<Welcome/>}/>
+      <Route path="/" element={<Welcome/>}/>
       <Route path="/employee-login" element={<EmployeeLogin/>} />
       <Route path="/supervisor-login" element={<SupervisorLogin/>} />
     </Routes>
