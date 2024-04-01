@@ -11,11 +11,11 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const Navigation = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Welcome">
-        <Stack.Screen name="Welcome" component={Welcome} options={{headerShown: false}} />
-        <Stack.Screen name="SupervisorLogin" component={SupervisorLogin} options={{headerShown: false}} />
-        <Stack.Screen name="EmployeeLogin" component={EmployeeLogin} options={{headerShown: false}} />
-        <Stack.Screen name="SupervisorDashboard" component={SupervisorDashboard} options={{headerShown: false}} />
+      <Stack.Navigator initialRouteName="Welcome" screenOptions={{headerShown:false ,gestureDirection:'horizontal' , animation:'slide_from_right',animationDuration:50}}>
+        <Stack.Screen name="Welcome" component={Welcome}  />
+        <Stack.Screen name="SupervisorLogin" component={SupervisorLogin}  />
+        <Stack.Screen name="EmployeeLogin" component={EmployeeLogin}  />
+        <Stack.Screen name="SupervisorDashboard" component={SupervisorDashboard}  />
       </Stack.Navigator>
     </NavigationContainer>
   );

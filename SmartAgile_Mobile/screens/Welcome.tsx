@@ -1,4 +1,4 @@
-import {Button, StyleSheet, Text, View , Dimensions, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View , Dimensions, TouchableOpacity, Image} from 'react-native';
 import React from 'react';
 import GlobalStyles from '../styles/GlobalStyle';
 import Colors from '../styles/Colors';
@@ -6,6 +6,7 @@ import { NavigationType } from '../navigation/NavigationTypes';
 import LottieView from 'lottie-react-native';
 import robot from '../assets/robot.json';
 import LinearGradient from 'react-native-linear-gradient';
+import tlogo from '../assets/t-logo.png';
 
 type Props = {
   navigation : NavigationType<'Welcome'>
@@ -15,7 +16,8 @@ const {width,height} = Dimensions.get('window');
 
 const Welcome: React.FC<Props> = ({navigation}) => {
   return (
-    <LinearGradient colors={[ Colors.primary , Colors.secondary ]} style={[GlobalStyles.container,{backgroundColor : Colors.primary}]}>
+    <LinearGradient colors={[ Colors.secondary ,Colors.primary  ]} style={GlobalStyles.container}>
+      <Image source={tlogo}/>
       <Text style={styles.heading}>Smart Agile</Text>
       <LottieView source={robot} autoPlay loop style={styles.lottie}/>
       
