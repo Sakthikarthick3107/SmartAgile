@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   },
   heading:{
     color:'white',
-    fontSize:30,
+    fontSize:26,
     fontFamily:'Poppins'
   },
   form:{
