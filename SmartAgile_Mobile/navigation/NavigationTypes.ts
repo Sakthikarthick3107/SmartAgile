@@ -6,7 +6,7 @@ export type RootStackParamList = {
     Welcome : undefined;
     SupervisorLogin : undefined;
     EmployeeLogin : undefined;
-    SupervisorDashboard : undefined
+    SupervisorTabBar : undefined
 }
 
 export type NavigationType<T extends keyof RootStackParamList> = NativeStackNavigationProp<RootStackParamList , T>;

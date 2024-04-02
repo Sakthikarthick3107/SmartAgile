@@ -81,6 +81,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        buildConfigField 'boolean', 'IS_NEW_ARCHITECTURE_ENABLED', 'true' // Change to 'true' if using the new architecture
+        buildConfigField 'boolean', 'IS_HERMES_ENABLED', 'true' // Change to 'true' to enable Hermes
     }
     signingConfigs {
         debug {

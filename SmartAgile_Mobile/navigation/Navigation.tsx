@@ -5,6 +5,7 @@ import EmployeeLogin from '../screens/EmployeeLogin';
 import SupervisorLogin from '../screens/SupervisorLogin';
 import SupervisorDashboard from '../screens/Supervisor/SupervisorDashboard';
 import { RootStackParamList } from './NavigationTypes';
+import SupervisorTabBar from './SupervisorTabBar';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -15,7 +16,7 @@ const Navigation = () => {
         <Stack.Screen name="Welcome" component={Welcome}  />
         <Stack.Screen name="SupervisorLogin" component={SupervisorLogin}  />
         <Stack.Screen name="EmployeeLogin" component={EmployeeLogin}  />
-        <Stack.Screen name="SupervisorDashboard" component={SupervisorDashboard}  />
+        <Stack.Screen name="SupervisorTabBar" component={SupervisorTabBar}  />
       </Stack.Navigator>
     </NavigationContainer>
   );
