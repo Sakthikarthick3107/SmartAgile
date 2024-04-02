@@ -3,6 +3,9 @@ import SupervisorDashboard from "../screens/Supervisor/SupervisorDashboard";
 import { NavigationType } from "./NavigationTypes";
 import SupervisorProjectScreen from "../screens/Supervisor/SupervisorProjectScreen";
 import Colors from "../styles/Colors";
+import Icon from 'react-native-vector-icons/Ionicons'
+import EmployeeView from "../screens/Supervisor/EmployeeView";
+import { StyleSheet, Text } from "react-native";
 
 
 const Tab = createBottomTabNavigator()
@@ -13,7 +16,18 @@ type Props = {
 
 const SupervisorTabBar : React.FC<Props> = ({navigation}) => {
     return(
-        <Tab.Navigator screenOptions={{headerShown:false ,
+        <Tab.Navigator screenOptions={{ headerStyle:{
+                backgroundColor:Colors.secondary,
+                elevation:20,
+                shadowColor:'black',
+                shadowRadius:20
+            },
+            headerShadowVisible:true,
+            headerTintColor:Colors.background,
+            headerTitle:'',
+            headerRight:()=>(
+                <Text style={styles.headerLeftTitle}>admin</Text>
+            ),
             tabBarActiveTintColor:Colors.primary,
             tabBarInactiveTintColor:'black',
             tabBarStyle:{
@@ -30,10 +44,39 @@ const SupervisorTabBar : React.FC<Props> = ({navigation}) => {
             },
         
         }}}>
-            <Tab.Screen name="SupervisorDashboard" component={SupervisorDashboard}/>
-            <Tab.Screen name="SupervisorProjectScreen" component={SupervisorProjectScreen}/>
+            <Tab.Screen name="SupervisorDashboard" component={SupervisorDashboard}
+                options={{
+                    tabBarLabel:'Dashboard',
+                    tabBarIcon:({color})=>(
+                        <Icon name='home' size={30} color={color} />
+                    )
+                }} />
+            <Tab.Screen name="SupervisorProjectScreen" component={SupervisorProjectScreen}
+                options={{
+                    tabBarLabel:'Projects',
+                    tabBarIcon:({color})=>(
+                        <Icon name='home' size={30} color={color} />
+                    )
+                }}  />
+            
+            <Tab.Screen name="EmployeeView" component={EmployeeView}
+                options={{
+                    tabBarLabel:'Employees',
+                    tabBarIcon:({color})=>(
+                        <Icon name='home' size={30} color={color} />
+                    )
+                }}  />
         </Tab.Navigator>
     )
 }
 
 export default SupervisorTabBar
+
+const styles = StyleSheet.create({
+    headerLeftTitle:{
+        fontFamily:'Poppins',
+        fontSize:20,
+        marginRight:30,
+        fontWeight:'600'
+    }
+})
