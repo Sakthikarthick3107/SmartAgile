@@ -29,7 +29,7 @@ const GlobalStyles = StyleSheet.create({
   textStyle:{
     color:'black',
     fontFamily:'Poppins',
-    fontSize:18
+    fontSize:20
   }
 });
 

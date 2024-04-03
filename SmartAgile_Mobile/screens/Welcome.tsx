@@ -21,7 +21,9 @@ const Welcome: React.FC<Props> = ({navigation}) => {
       <Text style={styles.heading}>Smart Agile</Text>
       <LottieView source={robot} autoPlay loop style={styles.lottie}/>
       
-      <Text style={{fontFamily:"Poppins",fontSize:18,textAlign:'center' , marginVertical:4}}> Revolutionizing Project Management with Seamless Efficiency.</Text>
+      <Text style={{fontFamily:"Poppins",fontSize:18,textAlign:'center',color:'white' , marginVertical:4}}> 
+        Revolutionizing Project Management with Seamless Efficiency.
+      </Text>
 
       <TouchableOpacity style={[styles.btn , styles.supervisorBtn]} onPress={() => navigation.navigate('SupervisorLogin')}>
         <Text style={[styles.btnText , {color:Colors.primary}]}>Supervisor</Text>
