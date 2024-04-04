@@ -1,54 +1,79 @@
 import React, { useState } from 'react';
+import LoginImage from '../Images/Login.png'; // Assuming Login.png is the image file for the login page
 
-const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+
+const Chat = () => {
+  const [Username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle login logic here (e.g., authentication)
-    console.log('Email:', email);
-    console.log('Password:', password);
+    const credentials = { Username, password };
+    console.log("Credentials:", credentials);
   };
 
+  const handleForgotPassword = () => {
+    alert("Please check your registered email for a password reset link.");
+  };
+
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
+    <div className="min-h-screen bg-gray-100">
+      <div className="container mx-auto flex">
+        {/* First Column - Image */}
+        <div className="flex-none w-1/2 p-4">
+          
+          <img src={LoginImage} alt="Login" className="h-[90%] bg-gradient-to-r from-pink-300 via-teal-500 to-pink-300 
+           ml-[110px] rounded-lg w-full object-cover" />
+            <h2 className="absolute font-Roboto top-[205PX] left-[590PX] transform -translate-x-1/2 -translate-y-1/2 text-white text-5xl font-bold">SMARTAGILE</h2>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label htmlFor="email-address" className="sr-only">Email address</label>
-              <input id="email-address" name="email" type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Email address" />
-            </div>
-            <div>
-              <label htmlFor="password" className="sr-only">Password</label>
-              <input id="password" name="password" type="password" autoComplete="current-password" required value={password} onChange={(e) => setPassword(e.target.value)} className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Password" />
-            </div>
-          </div>
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <input id="remember-me" name="remember-me" type="checkbox" className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">Remember me</label>
-            </div>
+        {/* Second Column - Login Form */}
+        <div className="flex-grow p-4">
+          <div className="flex-grow justify-center items-center px-16 py-20 w-full h-[90%] text-xl font-medium text-black bg-gray-200 rounded-[40px_0px_0px_40px] max-md:px-5 max-md:mt-2.5 max-md:max-w-full">
+            <h2 className="text-3xl mt-[21px] font-Roboto font-bold text-gray-800 mb-6">Login</h2>
+            <form className="">
+                  <fieldset className="border border-black border-solid h-[88px] rounded-[33px] max-md:max-w-full mt-16 flex ">
+                    <legend className="text-left mx-8">Username</legend>
+                    <input 
+                      type="text"
+                      name="text"
+                      className="w-95 rounded-[33px] bg-gray-200 border border-none outline-none flex-grow text-xl"
+                      value={Username}
+                      onChange={(e) => setUsername(e.target.value)}
+                    />
+                  </fieldset>
+                  <fieldset className="border border-black border-solid h-[88px] rounded-[33px] max-md:max-w-full mt-16 flex  ">
+                    <legend className="text-left mx-8">Password</legend>
+                    <input 
+                      type="password"
+                      name="password"
+                      className="w-95 rounded-[33px]  bg-gray-200 border border-none outline-none flex-grow text-xl"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </fieldset>
+                  <div className="flex items-center justify-between mt-4">
+                      <div className="flex items-center">
+                       <input id="remember-me" name="remember-me" type="checkbox" className="h-4 w-4 text-[#4d989d] focus:ring-[#4d989d] border-gray-300 rounded" />
+                        <label htmlFor="remember-me" className="ml-2 block text-sm text-black-900">Remember me</label>
+                       </div>
+                    <p className="text-[#4d989d] font-medium cursor-pointer" onClick={handleForgotPassword}>Forgot password?</p>
+                     
+                  </div>
 
-            <div className="text-sm">
-              <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">Forgot your password?</a>
-            </div>
+                  <div className="flex flex-col">
+                    <button className="justify-center items-center self-center px-16 py-5 mt-24 text-3xl text-white rounded-[33px] max-md:px-5 max-md:mt-10 max-md:max-w-full bg-[#4d989d] font-syne" onClick={handleSubmit}>Sign Up</button>
+                  </div>
+                  <div className="flex flex-col justify-end">
+                    <p className="text-center mt-5 text-[#4d989d] font-medium cursor-pointer" onClick={handleForgotPassword}><span className="text-black">New User</span> Signup</p>
+                  </div>
+                </form>
           </div>
-
-          <div>
-            <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-              Sign in
-            </button>
-          </div>
-        </form>
+        </div>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default Chat;
