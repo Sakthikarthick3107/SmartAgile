@@ -30,6 +30,13 @@ const GlobalStyles = StyleSheet.create({
     color:'black',
     fontFamily:'Poppins',
     fontSize:20
+  },
+  rowBetween:{
+    display:'flex',
+    flexDirection:'row',
+    width:'100%',
+    alignItems:'center',
+    justifyContent:'space-between'
   }
 });
 

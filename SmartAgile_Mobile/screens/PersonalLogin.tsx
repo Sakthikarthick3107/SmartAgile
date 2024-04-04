@@ -5,18 +5,18 @@ import Colors from '../styles/Colors';
 import { NavigationType } from '../navigation/NavigationTypes';
 
 type Props = {
-  navigation : NavigationType<'EmployeeLogin'>
+  navigation : NavigationType<'PersonalLogin'>
 }
 
-const EmployeeLogin: React.FC<Props> = ({navigation}) => {
+const PersonalLogin: React.FC<Props> = ({navigation}) => {
   return (
     <View style={GlobalStyles.container}>
-      <Text>EmployeeLogin</Text>
+      <Text>PersonalLogin</Text>
       <Button color={Colors.primary} title="Login" />
     </View>
   );
 };
 
-export default EmployeeLogin;
+export default PersonalLogin;
 
 const styles = StyleSheet.create({});

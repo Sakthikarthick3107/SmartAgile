@@ -13,22 +13,19 @@ import Config from 'react-native-config';
 const baseUrl = Config.BASE_URL;
 
 type Props = {
-  navigation : NavigationType<'SupervisorLogin'>
+  navigation : NavigationType<'OrganizationLogin'>
 }
 
 const {width,height} = Dimensions.get('window');
 
-const SupervisorLogin: React.FC<Props> = ({navigation}) => {
+const OrganizationLogin: React.FC<Props> = ({navigation}) => {
   const[username , setUserName] = useState<string>("");
   const[password , setPassword] = useState<string>("");
 
 
-  useEffect(()=>{
-    console.log(baseUrl)
-  },[])
 
   const login =async () => {
-    const response = await fetch(`https://8bd0-14-19r5-39-82.ngrok-free.app/users/login/`,{
+    const response = await fetch(`https://b98f-2409-40f4-a9-b6e7-cc4c-b03-2fc3-c619.ngrok-free.app/users/login/`,{
       method:'post',
       headers:{
         'Content-Type' : 'application/json'
@@ -42,19 +39,19 @@ const SupervisorLogin: React.FC<Props> = ({navigation}) => {
     const res = await response.json()
     if(response.status===200){
       navigation.navigate('SupervisorTabBar');
-      ToastModule.show(res.message)
+      ToastModule.showToast(res.message)
     }
     else{
-      ToastModule.show('Not')
+      ToastModule.showToast('Invalid Credentials')
     }
-    
+    console.log(res)
   }
 
   return (
     <LinearGradient colors={[ Colors.primary , Colors.secondary ]} style={GlobalStyles.container}>
       <Image source={tlogo}/>
       <LottieView source={robot} autoPlay loop style={styles.lottie}/>
-      <Text style={styles.heading}>Login as Supervisor</Text>
+      <Text style={styles.heading}>Organization credentials</Text>
 
       <View style={styles.form}>
         <TextInput onChangeText={(e)=>setUserName(e)} placeholder='Username' placeholderTextColor={'black'} style={styles.inputField} value={username}/>
@@ -63,13 +60,23 @@ const SupervisorLogin: React.FC<Props> = ({navigation}) => {
         <TouchableOpacity  style={[styles.btn , styles.employeeBtn]} onPress={login}>
           <Text style={[styles.btnText , {color:Colors.background}]}>Login</Text>
         </TouchableOpacity>
-
+        
+        <View style={GlobalStyles.rowBetween}>
+          <TouchableOpacity>
+            <Text>New Organization</Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Text>Forgot Password?</Text>
+          </TouchableOpacity>
+          
+        </View>
+        
       </View>
     </LinearGradient>
   );
 };
 
-export default SupervisorLogin;
+export default OrganizationLogin;
 
 const styles = StyleSheet.create({
   lottie: {
@@ -78,7 +85,7 @@ const styles = StyleSheet.create({
   },
   heading:{
     color:'white',
-    fontSize:26,
+    fontSize:20,
     fontFamily:'Poppins'
   },
   form:{
@@ -96,6 +103,7 @@ const styles = StyleSheet.create({
     padding:8,
     borderRadius:10,
     elevation:10,
+    marginVertical:5,
     fontFamily:'Poppins',
     color:'black'
   },

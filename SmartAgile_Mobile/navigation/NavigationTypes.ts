@@ -4,8 +4,8 @@ import { RouteProp } from "@react-navigation/native";
 
 export type RootStackParamList = {
     Welcome : undefined;
-    SupervisorLogin : undefined;
-    EmployeeLogin : undefined;
+    OrganizationLogin : undefined;
+    PersonalLogin : undefined;
     SupervisorTabBar : undefined
 }
 

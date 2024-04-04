@@ -25,11 +25,11 @@ const Welcome: React.FC<Props> = ({navigation}) => {
         Revolutionizing Project Management with Seamless Efficiency.
       </Text>
 
-      <TouchableOpacity style={[styles.btn , styles.supervisorBtn]} onPress={() => navigation.navigate('SupervisorLogin')}>
-        <Text style={[styles.btnText , {color:Colors.primary}]}>Supervisor</Text>
+      <TouchableOpacity style={[styles.btn , styles.organizationBtn]} onPress={() => navigation.navigate('OrganizationLogin')}>
+        <Text style={[styles.btnText , {color:Colors.primary}]}>Organization</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.btn , styles.employeeBtn]} onPress={() => navigation.navigate('EmployeeLogin')}>
-        <Text style={[styles.btnText , {color:Colors.background}]}>Employee</Text>
+      <TouchableOpacity style={[styles.btn , styles.personalBtn]} onPress={() => navigation.navigate('PersonalLogin')}>
+        <Text style={[styles.btnText , {color:Colors.background}]}>Personal</Text>
       </TouchableOpacity>
     </LinearGradient>
   );
@@ -56,10 +56,10 @@ const styles = StyleSheet.create({
     elevation:10,
     marginVertical:5,
   },
-  employeeBtn:{
+  personalBtn:{
     backgroundColor:Colors.primary,
   },
-  supervisorBtn:{
+  organizationBtn:{
     backgroundColor:Colors.background
   },
 
