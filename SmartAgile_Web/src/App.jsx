@@ -7,6 +7,7 @@ import Projects from "./pages/Employee/Projects";
 import TaskHub from "./pages/Employee/Taskhub";
 import Chat from "./pages/Employee/Chat";
 import Settings from "./pages/Employee/Settings";
+import Login from "./pages/Login";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="/settings" element={<Settings />} />
             {/* Define more routes as needed */}
           </Routes>
+          <Login/>
         </main>
       </div>
     </div>
