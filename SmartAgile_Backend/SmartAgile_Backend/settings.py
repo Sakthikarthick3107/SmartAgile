@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     'rest_framework',
     'Users',
-    'corsheaders'
+    'corsheaders',
+    'drf_spectacular'
 ]
 
 MIDDLEWARE = [
@@ -52,6 +53,19 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+REST_FRAMEWORK = {
+    
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'SmartAgile Project API',
+    'DESCRIPTION': 'API documentation',
+    'VERSION': '1.0.0',
+    # Other customizations
+}
+
 
 CORS_ORIGIN_ALLOW_ALL = True
 
