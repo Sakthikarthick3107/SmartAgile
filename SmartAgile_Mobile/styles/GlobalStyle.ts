@@ -9,7 +9,7 @@ const GlobalStyles = StyleSheet.create({
     display: 'flex',
     flexGrow: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent:'center'
     //backgroundColor: Colors.background,
   }as const,
 
@@ -23,9 +23,10 @@ const GlobalStyles = StyleSheet.create({
   scrollContainer:{
     display: 'flex',
     flexGrow: 1,
-    flexDirection:'column',
+    alignItems:'center',
+    justifyContent:'center',
     //backgroundColor: Colors.background,
-    width : width*0.9
+    width : width*0.9,
   },
   textStyle:{
     color:'black',

@@ -1,4 +1,4 @@
-import {Button, StyleSheet, Text, View, Dimensions, TextInput, TouchableOpacity, Image, NativeModules} from 'react-native';
+import {Button, StyleSheet, Text, View, Dimensions, TextInput, TouchableOpacity, Image, NativeModules, ScrollView} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import GlobalStyles from '../styles/GlobalStyle';
 import Colors from '../styles/Colors';
@@ -61,6 +61,7 @@ const OrganizationLogin: React.FC<Props> = ({navigation}) => {
 
   return (
     <LinearGradient colors={[ Colors.primary , Colors.secondary ]} style={GlobalStyles.container}>
+      <ScrollView showsVerticalScrollIndicator={false}  contentContainerStyle={GlobalStyles.scrollContainer}>
       <Image source={tlogo}/>
       <LottieView source={robot} autoPlay loop style={styles.lottie}/>
 
@@ -68,12 +69,13 @@ const OrganizationLogin: React.FC<Props> = ({navigation}) => {
         <TextInput onChangeText={(e)=>setUserName(e)} placeholder='Username' placeholderTextColor={'black'} style={styles.inputField} value={username}/>
         <TextInput secureTextEntry={true} onChangeText={(e)=>setPassword(e)} placeholder='Password' placeholderTextColor={'black'} style={styles.inputField} value={password}/>
         
+        
         <TouchableOpacity  style={[styles.btn , styles.employeeBtn]} onPress={login}>
           <Text style={[styles.btnText , {color:Colors.background}]}>Login</Text>
         </TouchableOpacity>
         
         <View style={GlobalStyles.rowBetween}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=> navigation.navigate('NewOrganization')} >
             <Text style={styles.subOptions}>New Organization</Text>
           </TouchableOpacity>
           <TouchableOpacity>
@@ -83,6 +85,8 @@ const OrganizationLogin: React.FC<Props> = ({navigation}) => {
         </View>
         
       </View>
+      
+      </ScrollView>
     </LinearGradient>
   );
 };

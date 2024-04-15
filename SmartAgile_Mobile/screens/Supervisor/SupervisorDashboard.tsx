@@ -8,7 +8,7 @@ import LottieView from 'lottie-react-native';
 const SupervisorDashboard = () => {
   return (
     <View style={GlobalStyles.authContainer}>
-      <ScrollView style={GlobalStyles.scrollContainer} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={GlobalStyles.scrollContainer} showsVerticalScrollIndicator={false}>
 
         <View style={styles.welcome}>
           <LottieView source={welcomeBot} loop autoPlay style={{height:250,width:250}} />
