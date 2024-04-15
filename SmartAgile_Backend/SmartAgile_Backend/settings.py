@@ -108,6 +108,7 @@ SPECTACULAR_SETTINGS = {
     'TITLE': 'SmartAgile Project API',
     'DESCRIPTION': 'API documentation',
     'VERSION': '1.0.0',
+    
     # Other customizations
 }
 
