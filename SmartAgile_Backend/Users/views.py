@@ -17,7 +17,7 @@ from rest_framework.generics import ListCreateAPIView , RetrieveUpdateDestroyAPI
 #     def get_token(cls, user):
 #         token =  super().get_token(user)
 #         token['username'] = user.username
-#         token['email'] = user.email
+#         token['username'] = user.username
 #         return token
     
 # class MyTokenObtainPairView(TokenObtainPairView):
@@ -34,10 +34,10 @@ class UserEditUpdateDeleteView(RetrieveUpdateDestroyAPIView):
 
 class LoginView(APIView):
     def post(self,request):
-        email = request.data.get('email')
+        username = request.data.get('username')
         password = request.data.get('password')
 
-        user = authenticate(email=email,password=password)
+        user = authenticate(username=username,password=password)
 
         if not user:
             return Response({'error' : 'Invalid Credentials'},status=status.HTTP_400_BAD_REQUEST)
@@ -47,7 +47,7 @@ class LoginView(APIView):
             return Response({
                     # 'access_token' : str(access_token),
                     # 'refresh_token' : str(refresh_token),
-                    'email' : email,
+                    'username' : username,
                     'message' : 'Logged in successfully',
                     'is_staff' : user.is_staff
                     },status=status.HTTP_200_OK)

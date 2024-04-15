@@ -4,19 +4,28 @@ import Welcome from '../screens/Welcome';
 import PersonalLogin from '../screens/PersonalLogin';
 import OrganizationLogin from '../screens/OrganizationLogin';
 import { RootStackParamList } from './NavigationTypes';
+import { useSelector } from 'react-redux';
 import SupervisorTabBar from './SupervisorTabBar';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const Navigation = () => {
+  const user = useSelector(state  => state.user);
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Welcome" screenOptions={{headerShown:false ,gestureDirection:'horizontal' , animation:'slide_from_right',animationDuration:50}}>
-        <Stack.Screen name="Welcome" component={Welcome}  />
-        <Stack.Screen name="OrganizationLogin" component={OrganizationLogin}  />
+      {user ?
+        <Stack.Navigator initialRouteName="SupervisorTabBar" screenOptions={{headerShown:false ,gestureDirection:'horizontal' , animation:'slide_from_right',animationDuration:50}}>
+            <Stack.Screen name="SupervisorTabBar" component={SupervisorTabBar}  />
+        </Stack.Navigator>
+        :
+        <Stack.Navigator initialRouteName="Welcome" screenOptions={{headerShown:false ,gestureDirection:'horizontal' , animation:'slide_from_right',animationDuration:50}}>
+          <Stack.Screen name="Welcome" component={Welcome}  />
+          <Stack.Screen name="OrganizationLogin" component={OrganizationLogin}  />
         <Stack.Screen name="PersonalLogin" component={PersonalLogin}  />
-        <Stack.Screen name="SupervisorTabBar" component={SupervisorTabBar}  />
+        
       </Stack.Navigator>
+    }
+      
     </NavigationContainer>
   );
 };

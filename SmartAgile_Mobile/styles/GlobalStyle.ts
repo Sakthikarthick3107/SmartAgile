@@ -10,7 +10,7 @@ const GlobalStyles = StyleSheet.create({
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.background,
+    //backgroundColor: Colors.background,
   }as const,
 
   authContainer:{
@@ -23,7 +23,8 @@ const GlobalStyles = StyleSheet.create({
   scrollContainer:{
     display: 'flex',
     flexGrow: 1,
-    backgroundColor: Colors.background,
+    flexDirection:'column',
+    //backgroundColor: Colors.background,
     width : width*0.9
   },
   textStyle:{

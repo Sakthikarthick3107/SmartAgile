@@ -9,6 +9,7 @@ import FontAwersome from 'react-native-vector-icons/FontAwesome';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import EmployeeView from "../screens/Supervisor/EmployeeView";
 import { StyleSheet, Text, View } from "react-native";
+import SupervisorSettings from "../screens/Supervisor/SupervisorSettings";
 
 
 const Tab = createBottomTabNavigator()
@@ -74,6 +75,13 @@ const SupervisorTabBar : React.FC<Props> = ({navigation}) => {
                     tabBarLabel:'Employees',
                     tabBarIcon:({color})=>(
                         <FontAwersome name='users' size={24} color={color} />
+                    )
+                }}  />
+            <Tab.Screen name="SupervisorSettings" component={SupervisorSettings}
+                options={{
+                    tabBarLabel:'Settings',
+                    tabBarIcon:({color})=>(
+                        <IonIcons name='settings-outline' size={24} color={color} />
                     )
                 }}  />
         </Tab.Navigator>

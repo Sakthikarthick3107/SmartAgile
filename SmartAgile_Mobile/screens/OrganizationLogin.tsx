@@ -9,8 +9,13 @@ import robot from '../assets/robot.json';
 import tlogo from '../assets/t-logo.png';
 const ToastModule = NativeModules.ToastModule;  
 import Config from 'react-native-config';
+import { UseDispatch, useDispatch } from 'react-redux';
+import { setUser } from '../redux/actions';
+import { baseUrl } from '../env';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { State } from '../redux/reducers';
 
-const baseUrl = Config.BASE_URL;
+
 
 type Props = {
   navigation : NavigationType<'OrganizationLogin'>
@@ -19,13 +24,14 @@ type Props = {
 const {width,height} = Dimensions.get('window');
 
 const OrganizationLogin: React.FC<Props> = ({navigation}) => {
+  const dispatch = useDispatch();
   const[username , setUserName] = useState<string>("");
   const[password , setPassword] = useState<string>("");
 
 
 
   const login =async () => {
-    const response = await fetch(`https://b98f-2409-40f4-a9-b6e7-cc4c-b03-2fc3-c619.ngrok-free.app/users/login/`,{
+    const response = await fetch(`${baseUrl}/users/login/`,{
       method:'post',
       headers:{
         'Content-Type' : 'application/json'
@@ -37,8 +43,14 @@ const OrganizationLogin: React.FC<Props> = ({navigation}) => {
 
     });
     const res = await response.json()
+    console.log(res)
     if(response.status===200){
-      navigation.navigate('SupervisorTabBar');
+      const userData : any = {
+        username : res.username,
+        is_staff : res.is_staff
+      }
+      await AsyncStorage.setItem('user' ,JSON.stringify(userData) );
+      dispatch(setUser(userData))
       ToastModule.showToast(res.message)
     }
     else{
@@ -51,7 +63,6 @@ const OrganizationLogin: React.FC<Props> = ({navigation}) => {
     <LinearGradient colors={[ Colors.primary , Colors.secondary ]} style={GlobalStyles.container}>
       <Image source={tlogo}/>
       <LottieView source={robot} autoPlay loop style={styles.lottie}/>
-      <Text style={styles.heading}>Organization credentials</Text>
 
       <View style={styles.form}>
         <TextInput onChangeText={(e)=>setUserName(e)} placeholder='Username' placeholderTextColor={'black'} style={styles.inputField} value={username}/>
@@ -63,10 +74,10 @@ const OrganizationLogin: React.FC<Props> = ({navigation}) => {
         
         <View style={GlobalStyles.rowBetween}>
           <TouchableOpacity>
-            <Text>New Organization</Text>
+            <Text style={styles.subOptions}>New Organization</Text>
           </TouchableOpacity>
           <TouchableOpacity>
-            <Text>Forgot Password?</Text>
+            <Text style={styles.subOptions}>Forgot Password?</Text>
           </TouchableOpacity>
           
         </View>
@@ -99,8 +110,8 @@ const styles = StyleSheet.create({
   inputField:{
     backgroundColor:Colors.background,
     width:'100%',
-    fontSize:15,
-    padding:8,
+    fontSize:14,
+    padding:6,
     borderRadius:10,
     elevation:10,
     marginVertical:5,
@@ -121,8 +132,11 @@ const styles = StyleSheet.create({
     backgroundColor:Colors.primary,
   },
   btnText:{
-    fontSize:20,
+    fontSize:16,
     fontFamily:'Poppins',
     fontWeight:'600'
+  },
+  subOptions:{
+    color : Colors.background
   }
 });
