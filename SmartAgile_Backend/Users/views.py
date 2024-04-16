@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import Token
-from .serializers import UserSerializer
+from .serializers import UserSerializer , SuperuserSerializer
 from rest_framework import status
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
@@ -54,6 +54,12 @@ class LoginView(APIView):
                     },status=status.HTTP_200_OK)
         
 
-class SuperuserView(APIView):
-    pass      
+class SuperuserCreate(ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = SuperuserSerializer   
+
+class SuperuserViewEditDelete(RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = SuperuserSerializer  
+    lookup_field = 'id'
     
