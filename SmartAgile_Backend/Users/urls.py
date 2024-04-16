@@ -1,5 +1,11 @@
 from django.urls import path
-from .views import UsersView , UserEditUpdateDeleteView, LoginView,SuperuserCreate , SuperuserViewEditDelete
+from .views import (
+    UsersView , 
+    UserEditUpdateDeleteView, 
+    LoginView,SuperuserCreate , 
+    SuperuserViewEditDelete,
+    UserProfileCreate
+    )
 
 # from .views import MyTokenObtainPairView
 
@@ -10,7 +16,9 @@ urlpatterns = [
     path('employees/<int:id>' ,UserEditUpdateDeleteView.as_view() , name="User Edits" ),
     path('login/', LoginView.as_view(), name='login'),
     path('employees/superuser/',SuperuserCreate.as_view(),name='superuser-create'),
-    path('employees/superuser/<int:id>', SuperuserViewEditDelete.as_view() , name="SuperUserViewEditDelete")
+    path('employees/superuser/<int:id>', SuperuserViewEditDelete.as_view() , name="SuperUserViewEditDelete"),
+    
+    path('employee/profile' , UserProfileCreate.as_view() , name="User-Profile Create")
     # path('token/', MyTokenObtainPairView.as_view(), name='token-obtain-pair'),
     # path('token/refresh/', TokenRefreshView.as_view(), name='token-refresh-view'),
 ]

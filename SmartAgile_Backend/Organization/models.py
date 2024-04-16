@@ -7,4 +7,7 @@ class Organization(models.Model):
     org_name = models.CharField(max_length=100)
     org_mail = models.EmailField(max_length=100)
     org_website = models.CharField(max_length=200)
-    owner = models.ForeignKey(User,related_name='user',on_delete=models.CASCADE)
+    owner = models.ForeignKey(User,related_name='owned_organizations',on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.org_name
