@@ -69,7 +69,7 @@ class LoginView(APIView):
 
 class SuperuserCreate(ListCreateAPIView):
     queryset = User.objects.all()
-    serializer_class = SuperuserSerializer   
+    serializer_class = SuperuserSerializer
 
 class SuperuserViewEditDelete(RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
