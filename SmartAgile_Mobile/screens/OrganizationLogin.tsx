@@ -25,38 +25,50 @@ const {width,height} = Dimensions.get('window');
 
 const OrganizationLogin: React.FC<Props> = ({navigation}) => {
   const dispatch = useDispatch();
-  const[username , setUserName] = useState<string>("");
+  const[email , setEmail] = useState<string>("");
   const[password , setPassword] = useState<string>("");
 
 
 
   const login =async () => {
-    const response = await fetch(`${baseUrl}/users/login/`,{
-      method:'post',
-      headers:{
-        'Content-Type' : 'application/json'
-      },
-      body:JSON.stringify({
-        username:username,
-        password:password
-      })
-
-    });
-    const res = await response.json()
-    console.log(res)
-    if(response.status===200){
-      const userData : any = {
-        username : res.username,
-        is_staff : res.is_staff
-      }
-      await AsyncStorage.setItem('user' ,JSON.stringify(userData) );
-      dispatch(setUser(userData))
-      ToastModule.showToast(res.message)
+    if(!email && !password){
+      ToastModule.showToast('Fields must not be empty!')
     }
     else{
-      ToastModule.showToast('Invalid Credentials')
+      try {
+        const response = await fetch(`${baseUrl}/users/login/`,{
+          method:'post',
+          headers:{
+            'Content-Type' : 'application/json'
+          },
+          body:JSON.stringify({
+            email:email,
+            password:password
+          })
+    
+        });
+        const res = await response.json()
+        //console.log(res)
+        if(response.status===200){
+          const userData : any = {
+            username : res.username,
+            email : res.email,
+            is_staff : res.is_staff
+          }
+          await AsyncStorage.setItem('user' ,JSON.stringify(userData) );
+          dispatch(setUser(userData))
+          ToastModule.showToast(res.message)
+        }
+        else{
+          ToastModule.showToast('Invalid Credentials')
+        }
+      } catch (error) {
+        
+      }
     }
-    console.log(res)
+    
+    
+    //console.log(res)
   }
 
   return (
@@ -66,7 +78,7 @@ const OrganizationLogin: React.FC<Props> = ({navigation}) => {
       <LottieView source={robot} autoPlay loop style={styles.lottie}/>
 
       <View style={styles.form}>
-        <TextInput onChangeText={(e)=>setUserName(e)} placeholder='Username' placeholderTextColor={'black'} style={styles.inputField} value={username}/>
+        <TextInput onChangeText={(e)=>setEmail(e)} placeholder='Email' placeholderTextColor={'black'} style={styles.inputField} value={email}/>
         <TextInput secureTextEntry={true} onChangeText={(e)=>setPassword(e)} placeholder='Password' placeholderTextColor={'black'} style={styles.inputField} value={password}/>
         
         

@@ -6,7 +6,7 @@ interface Action{
 }
 
 export interface State{
-    user : null | { username : string; is_staff : boolean }
+    user : null | { username : string; email:string ; is_staff : boolean }
 }
 
 const initialState : State = {
