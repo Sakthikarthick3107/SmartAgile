@@ -53,4 +53,7 @@ class LoginView(APIView):
                     'is_staff' : user.is_staff
                     },status=status.HTTP_200_OK)
         
+
+class SuperuserView(APIView):
+    pass      
     
