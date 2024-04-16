@@ -34,10 +34,10 @@ class UserEditUpdateDeleteView(RetrieveUpdateDestroyAPIView):
 
 class LoginView(APIView):
     def post(self,request):
-        username = request.data.get('username')
+        email = request.data.get('email')
         password = request.data.get('password')
 
-        user = authenticate(username=username,password=password)
+        user = authenticate(username=email,password=password)
 
         if not user:
             return Response({'error' : 'Invalid Credentials'},status=status.HTTP_400_BAD_REQUEST)
@@ -47,7 +47,8 @@ class LoginView(APIView):
             return Response({
                     # 'access_token' : str(access_token),
                     # 'refresh_token' : str(refresh_token),
-                    'username' : username,
+                    'user' : user.username,
+                    'email' : email,
                     'message' : 'Logged in successfully',
                     'is_staff' : user.is_staff
                     },status=status.HTTP_200_OK)
