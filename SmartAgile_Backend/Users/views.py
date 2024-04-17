@@ -69,56 +69,11 @@ class LoginView(APIView):
             # 'refresh_token' : str(refresh_token),
             'username' : user.username,
             'email' : email,
-            'organization':organization,
+            'organization':organization.org_id,
             'is_owner' : is_owner,
             'message' : 'Logged in successfully',
             'is_staff' : user.is_staff
                     },status=status.HTTP_200_OK)
-    
-class PasswordResetRequestView(GenericAPIView):
-    serializer_class = PasswordResetRequestSerializer
-
-    def post(self, request):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            email = serializer.validated_data['email']
-            user = User.objects.filter(email=email).first()
-            if user:
-                otp = generate_password_reset_otp()
-                user.otp = otp
-                user.save()
-
-                subject = 'Password Reset Requested'
-                text_content = f"""Your password reset code is : {otp}
-                Click here to reset your password : {base_url}/auth/password_reset/confirm/{user.id}/{otp}/""",
-                from_email = settings.EMAIL_HOST_USER
-                to_email = [user.email]
-
-                send_mail(subject, text_content, from_email, to_email)
-                
-            return Response({'message' : 'Password reset link has been sent to your email'},status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-class PasswordResetConfirmView(UpdateAPIView):
-    serializer_class = PasswordResetConfirmSerializer
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid()
-
-        validated_data = serializer.validated_data
-        user = User.objects.get(pk=validated_data['uid'])
-
-        if user.otp != validated_data['code']:
-            raise serializers.ValidationError('Invalid OTP')
-        
-        user.set_password(validated_data['new_password'])
-        user.otp = None
-        user.save()
-        serializer.save()
-
-        return Response({'message' : 'Password Reset Successful'}, status=status.HTTP_200_OK)
-        
 
 class SuperuserCreate(ListCreateAPIView):
     queryset = User.objects.all()
