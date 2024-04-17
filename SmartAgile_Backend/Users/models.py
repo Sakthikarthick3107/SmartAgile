@@ -10,6 +10,7 @@ class UserProfile(models.Model):
         return f"{self.user.username}  {self.organization.org_name}"
     
 class User(AbstractUser):
+    email = models.EmailField(unique=True)
     otp = models.CharField(max_length=6, blank=True, null=True)
     groups = models.ManyToManyField(
         'auth.Group',

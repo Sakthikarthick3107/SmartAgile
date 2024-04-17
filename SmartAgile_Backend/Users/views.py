@@ -6,7 +6,7 @@ from .models import UserProfile
 from .serializers import UserSerializer , SuperuserSerializer, UserProfileSerializer , LoginSerializer, PasswordResetConfirmSerializer, PasswordResetRequestSerializer
 from rest_framework import status
 from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
+from .models import User
 from drf_spectacular.utils import extend_schema
 from rest_framework.generics import ListCreateAPIView , RetrieveUpdateDestroyAPIView, GenericAPIView, UpdateAPIView
 from django.core.mail import send_mail

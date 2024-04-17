@@ -5,6 +5,7 @@ from rest_framework.generics import GenericAPIView, UpdateAPIView
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.views import APIView 
 from rest_framework import serializers
 
 class PasswordResetRequestView(GenericAPIView):
@@ -24,13 +25,18 @@ class PasswordResetRequestView(GenericAPIView):
             return Response({'message' : 'Password reset link has been sent to your email'},status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-class PasswordResetConfirmOtpView(UpdateAPIView):
+class PasswordResetConfirmOtpView(APIView):
+    serializer_class = PasswordResetConfirmOtpSerializer
 
-    def post(self, request):
-        serializer = PasswordResetConfirmOtpSerializer(data=request.data)
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
-            validated_data = serializer.validated_data
-            otp = validated_data['otp']
+            errors = serializer.errors
+            error_message = str(errors)  # Convert errors to string for better readability
+            raise serializers.ValidationError(error_message)
+       
+        validated_data = serializer.validated_data
+        otp = validated_data['otp']
 
         try:
             user = User.objects.get(otp=otp)
@@ -47,7 +53,6 @@ class PasswordResetConfirmView(UpdateAPIView):
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-
             validated_data = serializer.validated_data
             otp = validated_data['otp']
 
@@ -59,4 +64,5 @@ class PasswordResetConfirmView(UpdateAPIView):
                 return Response({'message' : 'Password Reset Successful'}, status=status.HTTP_200_OK)
             except User.DoesNotExist:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
