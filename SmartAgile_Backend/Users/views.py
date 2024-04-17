@@ -88,7 +88,7 @@ class PasswordResetRequestView(GenericAPIView):
                 user.otp = otp
                 user.save()
 
-                subject = 'Password Reset Request'
+                subject = 'Password Reset Requested'
                 text_content = f"""Your password reset code is : {otp}
                 Click here to reset your password : {base_url}/auth/password_reset/confirm/{user.id}/{otp}/""",
                 from_email = settings.EMAIL_HOST_USER
