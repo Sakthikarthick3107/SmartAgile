@@ -4,7 +4,9 @@ from .views import (
     UserEditUpdateDeleteView, 
     LoginView,SuperuserCreate , 
     SuperuserViewEditDelete,
-    UserProfileCreate
+    UserProfileCreate,
+    PasswordResetConfirmView,
+    PasswordResetRequestView,
     )
 
 # from .views import MyTokenObtainPairView
@@ -18,7 +20,10 @@ urlpatterns = [
     path('employees/superuser/',SuperuserCreate.as_view(),name='superuser-create'),
     path('employees/superuser/<int:id>', SuperuserViewEditDelete.as_view() , name="SuperUserViewEditDelete"),
     
-    path('employee/profile' , UserProfileCreate.as_view() , name="User-Profile Create")
+    path('employee/profile' , UserProfileCreate.as_view() , name="User-Profile Create"),
+
+    path('auth/password_reset/', PasswordResetRequestView.as_view(), name='password-reset-request'),
+    path('auth/password_reset/confirm/<int:pk>/<str:code>/', PasswordResetConfirmView.as_view(), name='password-reset-confirm'),
     # path('token/', MyTokenObtainPairView.as_view(), name='token-obtain-pair'),
     # path('token/refresh/', TokenRefreshView.as_view(), name='token-refresh-view'),
 ]
