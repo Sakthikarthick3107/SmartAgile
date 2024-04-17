@@ -19,8 +19,12 @@ urlpatterns = [
     path('employees/superuser/',SuperuserCreate.as_view(),name='superuser-create'),
     path('employees/superuser/<int:id>', SuperuserViewEditDelete.as_view() , name="SuperUserViewEditDelete"),
     
+<<<<<<< HEAD
     path('employee/profile' , UserProfileCreate.as_view() , name="User-Profile Create"),
     path('employee/profile/<int:id>' , UserProfileCreate.as_view() , name="User-Profile Create id"),
+=======
+    path('employee/profile' , UserProfileCreate.as_view() , name="User-Profile Created"),
+>>>>>>> 2f6dc7334d9ef18172785bee0d2691deeb8d3dfb
 
     path('auth/password_reset/', PasswordResetRequestView.as_view(), name='password-reset-request'),
     path('auth/password/reset/confirm/otp/<int:pk>/<str:code>/', PasswordResetConfirmOtpView.as_view(), name='password-reset-otp'),
