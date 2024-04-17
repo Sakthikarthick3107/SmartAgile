@@ -18,7 +18,9 @@ urlpatterns = [
     path('employees/superuser/',SuperuserCreate.as_view(),name='superuser-create'),
     path('employees/superuser/<int:id>', SuperuserViewEditDelete.as_view() , name="SuperUserViewEditDelete"),
     
-    path('employee/profile' , UserProfileCreate.as_view() , name="User-Profile Create")
+    path('employee/profile' , UserProfileCreate.as_view() , name="User-Profile Create"),
+    path('employee/profile/<int:id>' , UserProfileCreate.as_view() , name="User-Profile Create id")
+
     # path('token/', MyTokenObtainPairView.as_view(), name='token-obtain-pair'),
     # path('token/refresh/', TokenRefreshView.as_view(), name='token-refresh-view'),
 ]

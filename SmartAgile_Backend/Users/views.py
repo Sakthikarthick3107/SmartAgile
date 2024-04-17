@@ -60,7 +60,7 @@ class LoginView(APIView):
             # 'refresh_token' : str(refresh_token),
             'username' : user.username,
             'email' : email,
-            'organization':organization.org_name,
+            'organization':organization,
             'is_owner' : is_owner,
             'message' : 'Logged in successfully',
             'is_staff' : user.is_staff
@@ -76,6 +76,57 @@ class SuperuserViewEditDelete(RetrieveUpdateDestroyAPIView):
     serializer_class = SuperuserSerializer  
     lookup_field = 'id'
     
-class UserProfileCreate(ListCreateAPIView):
-    queryset = UserProfile.objects.all()
-    serializer_class = UserProfileSerializer
+# class UserProfileCreate(ListCreateAPIView):
+#     queryset = UserProfile.objects.all()
+#     serializer_class = UserProfileSerializer
+@extend_schema(request=UserProfileSerializer,responses=UserProfileSerializer)
+class UserProfileCreate(APIView):
+    def get(self,request,id=None):
+        if id is not None:
+            try:
+                user_profile_id = UserProfile.objects.get(id=id)
+                user_serialize_id = UserProfileSerializer(user_profile_id)
+                return Response(user_serialize_id.data)
+            except UserProfile.DoesNotExist:
+                return Response({"error":"Invalid Credentials"},status=status.HTTP_400_BAD_REQUEST)
+            
+        user_profile = UserProfile.objects.all()
+        user_serializer = UserProfileSerializer(user_profile,many=True)
+        return Response(user_serializer.data)
+    
+    def post(self,request):
+        user_profile_post = UserProfileSerializer(data=request.data)
+        if user_profile_post.is_valid():
+            user_profile_post.save()
+            return Response({"message":"Successfully created"},status=status.HTTP_201_CREATED)
+        return Response(user_profile_post.errors)
+    
+    def put(self,request,id):
+        try:
+            user_profile_put = UserProfile.objects.get(id=id)
+        except user_profile_put.DoesNotExist:
+            return Response({"error":"Invalid Credentials"},status=status.HTTP_400_BAD_REQUEST)
+            
+        user_serializer_put = UserProfileSerializer(user_profile_put,data=request.data)
+        if user_serializer_put.is_valid():
+            user_serializer_put.save()
+            return Response({
+                "message":"Updated Successfully",
+                "data":user_profile_put.data})
+        return Response(user_serializer_put.errors)
+    
+    def delete(self,request,id):
+        user_profile_delete = UserProfile.objects.get(id=id)
+        try:
+            user_profile_delete.delete()
+            return Response({
+                "message":"Successfully deleted"
+            })
+        except user_profile_delete.DoesNotExist:
+            return Response({
+                "error":"Invalid Credentials"
+            },status=status.HTTP_400_BAD_REQUEST)
+            
+        
+    
+        
