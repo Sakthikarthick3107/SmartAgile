@@ -28,6 +28,13 @@ const GlobalStyles = StyleSheet.create({
     //backgroundColor: Colors.background,
     width : width*0.9,
   },
+  scrollAuthContainer:{
+    display: 'flex',
+    flexGrow: 1,
+    //alignItems:'center',
+    //backgroundColor: Colors.background,
+    width : width*0.9,
+  },
   textStyle:{
     color:'black',
     fontFamily:'Poppins',

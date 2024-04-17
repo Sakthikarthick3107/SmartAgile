@@ -30,6 +30,10 @@ const SupervisorTabBar : React.FC<Props> = ({navigation}) => {
             headerShadowVisible:true,
             headerTintColor:Colors.background,
             headerTitle:'',
+            headerTitleStyle:{
+                fontWeight :'thin',
+                fontSize:24
+            },
             headerRight:()=>(
                 <View style={styles.headerLeft}>
                     <Text style={styles.headerLeftTitle}>admin</Text>
@@ -42,12 +46,12 @@ const SupervisorTabBar : React.FC<Props> = ({navigation}) => {
             tabBarInactiveTintColor:'black',
             tabBarStyle:{
             backgroundColor:'white',
-            position:'relative',
+            // position:'relative',
             
-            bottom:20,
+            // bottom:20,
             height:60,
-            marginHorizontal: 20,
-            borderRadius:30,
+            // marginHorizontal: 20,
+            // borderRadius:30,
             paddingBottom:10,
             shadowOffset:{
                 height:4,
@@ -80,6 +84,7 @@ const SupervisorTabBar : React.FC<Props> = ({navigation}) => {
             <Tab.Screen name="SupervisorSettings" component={SupervisorSettings}
                 options={{
                     tabBarLabel:'Settings',
+                    headerTitle: 'Settings',
                     tabBarIcon:({color})=>(
                         <IonIcons name='settings-outline' size={24} color={color} />
                     )
