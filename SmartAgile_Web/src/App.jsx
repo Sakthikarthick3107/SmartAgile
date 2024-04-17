@@ -1,35 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
+import { Routes, Route,Outlet } from "react-router-dom";
+import Login from "./pages/Login";
+import Organization from "./pages/Organization";
+import FirstPage from "./pages/FirstPage";
+import Navbar from "./components/EmployeeComponents/NavBar";
+import Sidebar from "./components/EmployeeComponents/Sidebar";
+// index.js or App.js
+import '@fortawesome/fontawesome-free/css/all.min.css';
+// import { Chat, Dashboard, Settings } from "@mui/icons-material";
+import Projects from "./pages/EmployeePages/Projects";
+import TaskHub from "./pages/EmployeePages/Taskhub";
+import Chat from "./pages/EmployeePages/Chat";
+import Settings from "./pages/EmployeePages/Settings";
+import Dashboard from "./pages/EmployeePages/Dashboard";
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  function DashboardLayout() {
+    return (
+      <div className="flex flex-col h-screen">
+        <Navbar />
+        <div className="flex flex-grow">
+        <Sidebar />
+        <Outlet />
+      </div>
+      </div>
+    );
+  }
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+      <Routes>
+        <Route path="/" element={<FirstPage />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/Organization" element={<Organization />} />
+        <Route path="/Login/*" element={<DashboardLayout />} >
+        <Route path="dashboard" element={<Dashboard/>} />
+            <Route path="projects" element={<Projects />} />
+            <Route path="tasks" element={<TaskHub />} />
+            <Route path="chat" element={<Chat />} />
+            <Route path="settings" element={<Settings/>} />
+        </Route>
+      </Routes>
+    
+  );
 }
 
-export default App
+export default App;
