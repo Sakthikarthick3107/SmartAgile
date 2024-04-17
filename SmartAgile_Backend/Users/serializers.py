@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from .models import UserProfile
 from rest_framework.exceptions import ValidationError
 
 class UserSerializer(serializers.ModelSerializer):
@@ -22,11 +23,15 @@ class UserSerializer(serializers.ModelSerializer):
             raise ValidationError('A user with that email already exist!')
         return value
     
-
+class LoginSerializer(serializers.Serializer):
+    
+     username = serializers.EmailField()
+     password = serializers.CharField(style={'input_type': 'password'})
+         
 class SuperuserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username','password','email']
+        fields = ['id','username','password','email']
 
     def create(self,validated_data):
         user = User.objects.create_superuser(
@@ -41,3 +46,8 @@ class SuperuserSerializer(serializers.ModelSerializer):
         if User.objects.filter(email = value).exists():
             raise ValidationError('A Superuser with that email already exist!')
         return value  
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = '__all__'
