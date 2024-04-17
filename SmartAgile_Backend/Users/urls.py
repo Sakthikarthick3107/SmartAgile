@@ -4,7 +4,9 @@ from .views import (
     UserEditUpdateDeleteView, 
     LoginView,SuperuserCreate , 
     SuperuserViewEditDelete,
-    UserProfileCreate
+    UserProfileCreate,
+    PasswordResetConfirmView,
+    PasswordResetRequestView,
     )
 
 # from .views import MyTokenObtainPairView
