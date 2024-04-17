@@ -39,7 +39,7 @@ class PasswordResetRequestSerializer(serializers.Serializer):
             if not user.has_usable_password():
                 raise serializers.ValidationError('Invalid data')
         except User.DoesNotExist:
-            raise serializers.ValidationError('Email address not found')
+            raise serializers.ValidationError('Email address not found !')
         return data
 
 class PasswordResetConfirmSerializer(serializers.Serializer):
