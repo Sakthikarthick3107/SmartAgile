@@ -7,7 +7,9 @@ export type RootStackParamList = {
     OrganizationLogin : undefined;
     NewOrganization : undefined;
     PersonalLogin : undefined;
-    SupervisorTabBar : undefined
+    SupervisorTabBar : undefined;
+    SupervisorSettings:undefined;
+    SupervisorProfile  : undefined;
 }
 
 export type NavigationType<T extends keyof RootStackParamList> = NativeStackNavigationProp<RootStackParamList , T>;

@@ -12,7 +12,7 @@ class ToastService(private val reactContext : ReactApplicationContext) : ReactCo
 
     @ReactMethod
     fun showToast(message : String){
-        val toast = Toast.makeText(reactContext , message , Toast.LENGTH_SHORT)
+        val toast = Toast.makeText(reactContext , message , Toast.LENGTH_LONG)
         toast.setGravity(Gravity.CENTER , 0 ,0)
         toast.show()
     }

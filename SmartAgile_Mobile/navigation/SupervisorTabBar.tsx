@@ -10,7 +10,7 @@ import IonIcons from 'react-native-vector-icons/Ionicons';
 import EmployeeView from "../screens/Supervisor/EmployeeView";
 import { StyleSheet, Text, View } from "react-native";
 import SupervisorSettings from "../screens/Supervisor/SupervisorSettings";
-
+import { useSelector } from "react-redux";
 
 const Tab = createBottomTabNavigator()
 
@@ -19,6 +19,8 @@ type Props = {
   }
 
 const SupervisorTabBar : React.FC<Props> = ({navigation}) => {
+    const user = useSelector(state => state.user);
+
     return(
         <Tab.Navigator   screenOptions={{ headerStyle:{
                 backgroundColor:Colors.secondary,
@@ -36,7 +38,7 @@ const SupervisorTabBar : React.FC<Props> = ({navigation}) => {
             },
             headerRight:()=>(
                 <View style={styles.headerLeft}>
-                    <Text style={styles.headerLeftTitle}>admin</Text>
+                    <Text style={styles.headerLeftTitle}>{user && user.username}</Text>
                     <IonIcons name="notifications-sharp" size={24} color='white' />
                 </View>
                 
@@ -105,7 +107,7 @@ const styles = StyleSheet.create({
     },
     headerLeftTitle:{
         fontFamily:'Poppins',
-        fontSize:20,
+        fontSize:16,
         fontWeight:'600',
         color:'white'
     }

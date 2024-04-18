@@ -38,7 +38,7 @@ const GlobalStyles = StyleSheet.create({
   textStyle:{
     color:'black',
     fontFamily:'Poppins',
-    fontSize:20
+    fontSize:20,
   },
   rowBetween:{
     display:'flex',
