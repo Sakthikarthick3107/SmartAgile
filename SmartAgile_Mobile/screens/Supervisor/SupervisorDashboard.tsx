@@ -10,7 +10,7 @@ const SupervisorDashboard = () => {
   const user = useSelector(state => state.user);
   return (
     <View style={GlobalStyles.authContainer}>
-      <ScrollView contentContainerStyle={GlobalStyles.scrollContainer} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={GlobalStyles.scrollAuthContainer} showsVerticalScrollIndicator={false}>
 
         <View style={styles.welcome}>
           <LottieView source={welcomeBot} loop autoPlay style={{height:250,width:250}} />

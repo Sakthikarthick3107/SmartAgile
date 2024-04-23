@@ -53,7 +53,10 @@ const OrganizationLogin: React.FC<Props> = ({navigation}) => {
           const userData : any = {
             username : res.username,
             email : res.email,
-            is_staff : res.is_staff
+            organization : res.organization,
+            is_staff : res.is_staff,
+            is_superuser : res.is_superuser,
+
           }
           await AsyncStorage.setItem('user' ,JSON.stringify(userData) );
           dispatch(setUser(userData))

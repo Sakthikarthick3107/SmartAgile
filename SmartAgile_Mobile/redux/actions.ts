@@ -3,7 +3,11 @@ export const SET_USER : string = 'SET_USER';
 interface UserData{
     username : string;
     email:string;
-    is_staff : boolean
+    organization:number;
+    is_owner:boolean;
+    is_staff : boolean;
+    
+
 }
 
 export const setUser = (userData : UserData) => ({

@@ -7,6 +7,9 @@ import { RootStackParamList } from './NavigationTypes';
 import { useSelector } from 'react-redux';
 import SupervisorTabBar from './SupervisorTabBar';
 import NewOrganization from '../screens/NewOrganization';
+import SupervisorProfile from '../screens/Supervisor/SupervisorProfile';
+import Colors from '../styles/Colors';
+import { StyleSheet, Text, View } from 'react-native';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -15,8 +18,21 @@ const Navigation = () => {
   return (
     <NavigationContainer>
       {user ?
-        <Stack.Navigator initialRouteName="SupervisorTabBar" screenOptions={{headerShown:false ,gestureDirection:'horizontal' , animation:'slide_from_right',animationDuration:50}}>
-            <Stack.Screen name="SupervisorTabBar" component={SupervisorTabBar}  />
+        <Stack.Navigator initialRouteName="SupervisorTabBar" screenOptions={{gestureDirection:'horizontal' , animation:'slide_from_right',animationDuration:50}}>
+            <Stack.Screen name="SupervisorTabBar" options={{headerShown:false}} component={SupervisorTabBar}  />
+            <Stack.Screen name="SupervisorProfile" options={{
+              headerStyle:{
+                backgroundColor:Colors.primary,
+                
+              },
+              headerTitle:'',
+              headerLeft:()=>(<View>
+                <Text style={styles.headerLeftTitle}> Profile</Text>
+              </View>),
+              headerTitleStyle:{
+                color:Colors.White
+              }
+            }} component={SupervisorProfile}/>
         </Stack.Navigator>
         :
         <Stack.Navigator initialRouteName="Welcome" screenOptions={{headerShown:false ,gestureDirection:'horizontal' , animation:'slide_from_right',animationDuration:50}}>
@@ -33,3 +49,12 @@ const Navigation = () => {
 };
 
 export default Navigation;
+
+const styles = StyleSheet.create({
+  headerLeftTitle:{
+    fontFamily:'Poppins',
+    fontSize:22,
+    fontWeight:'600',
+    color:'white'
+}
+})
