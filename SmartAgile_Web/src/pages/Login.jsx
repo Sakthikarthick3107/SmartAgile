@@ -6,14 +6,14 @@ import slogo from '../assets/slogo.png';
 
 function Login() {
     const navigate = useNavigate(); // Initialize navigate function
-    const [userId, setUserId] = useState('');
+    const [username, setusername] = useState('');
     const [password, setPassword] = useState('');
-    const [userIdError, setUserIdError] = useState('');
+    const [usernameError, setUsernameError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     
 
     // Regular expression for validating email or employee ID format
-    const userIdRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$|^([a-zA-Z]{3})_([0-9]{3})$/;
+    const usernameRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$|^([a-zA-Z]{3})_([0-9]{3})$/;
 
     // Function to handle organizational option click
     const handleOrganizationalClick = () => {
@@ -23,40 +23,62 @@ function Login() {
 
     // Function to handle form submission
     // Function to handle form submission
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         // Reset errors
-        setUserIdError('');
+        setUsernameError('');
         setPasswordError('');
-
-        // Validate user ID
-        if (!userId) {
-            setUserIdError('User ID is required');
-        } else if (!userId.match(userIdRegex)) {
-            setUserIdError('Invalid email or employee ID format');
+    
+        // Validate username
+        if (!username) {
+            setUsernameError('Username is required');
+            return;
         }
-
+    
         // Validate password
         if (!password) {
             setPasswordError('Password is required');
-        } else if (password.length < 8) {
-            setPasswordError('Password must be at least 8 characters long');
+            return;
         }
-
-        // Check if both fields meet the correct specifications
-        if (userId && password && !userIdError && !passwordError) {
-            // Perform sign in
-            handleOrganizationalClick();
+    
+        try {
+            const response = await fetch('http://localhost:8000/users/login/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: username,
+                    password: password
+                })
+            });
+    
+            const data = await response.json();
+            console.log(data)
+    
+            if (response.ok) {
+                // Authentication successful
+                console.log(data)
+                console.log('Login successful');
+                navigate('/dashboard')
+            } else {
+                // Authentication failed
+                console.error('Login failed:', data.error);
+                // Update state to display error message to the user
+            }
+        } catch (error) {
+            console.error('Error during login:', error);
+            // Handle network errors or other exceptions
         }
     };
-
+    
     const handleRegisterClick = () => {
         // Navigate to the Register page
         navigate('/Organization');
     };
     return (
-        <div className="flex justify-center items-center w-[100vw] h-screen bg-[#46B2B8] bg-opacity-40">
+        <div className="flex justify-center items-center w-[100vw] h-screen bg-bgfirst bg-opacity-80">
             <div className="bg-white rounded-lg shadow-md p-8 w-96">
                 <div className="flex justify-center mb-6">
                     <img src={slogo} alt="Logo" className="w-20" />
@@ -64,10 +86,10 @@ function Login() {
                 <div className="text-center text-lg mb-6">Welcome! Please sign in to continue.</div>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <label htmlFor="userId" className="block text-sm font-semibold ml-2 mb-2">User ID</label>
-                        <input type="text" id="userId" placeholder="Enter your user ID" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-                            value={userId} onChange={(e) => setUserId(e.target.value)} />
-                        {userIdError && <p className="text-red-500 text-sm">{userIdError}</p>}
+                        <label htmlFor="username" className="block text-sm font-semibold ml-2 mb-2">User Name</label>
+                        <input type="text" id="username" placeholder="Enter your user Name" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                            value={username} onChange={(e) => setusername(e.target.value)} />
+                        {usernameError && <p className="text-red-500 text-sm">{usernameError}</p>}
                     </div>
                     <div className="mb-4">
                         <label htmlFor="password" className="block text-sm font-semibold ml-2 mb-2">Password</label>
@@ -95,4 +117,3 @@ function Login() {
 }
 
 export default Login;
-
