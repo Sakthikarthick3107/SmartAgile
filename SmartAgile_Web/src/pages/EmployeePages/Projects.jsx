@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Smart_agile from '../../assets/Smart_agile.png';
 import Eye_point from '../../assets/Eye_point.png';
@@ -80,4 +79,4 @@ const Project = () => {
     </div>
   );
 };
-
+export default Project;
