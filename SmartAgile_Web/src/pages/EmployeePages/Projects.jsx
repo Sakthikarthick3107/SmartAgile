@@ -1,3 +1,13 @@
+<<<<<<< HEAD
+// Projects.js
+import React from "react";
+
+const Projects = () => {
+  return (
+    <div>
+      <h2>Projects</h2>
+      {/* Add Projects content */}
+=======
 import React from 'react';
 import Smart_agile from '../../assets/Smart_agile.png';
 import Eye_point from '../../assets/Eye_point.png';
@@ -76,8 +86,13 @@ const Project = () => {
           <img src={Team_member} alt="Team_member" className="team1 p-3" />
         </div>
       </div>
+>>>>>>> 375a21e17915ad3a72225585d32f9b0de8eed863
     </div>
   );
 };
 
+<<<<<<< HEAD
+export default Projects;
+=======
 export default Project;
+>>>>>>> 375a21e17915ad3a72225585d32f9b0de8eed863
