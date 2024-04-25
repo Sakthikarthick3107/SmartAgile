@@ -33,7 +33,7 @@ const SupervisorTabBar : React.FC<Props> = ({navigation}) => {
             headerTintColor:Colors.background,
             headerTitle:'',
             headerTitleStyle:{
-                fontWeight :'thin',
+                fontWeight :'normal',
                 fontSize:24
             },
             headerRight:()=>(
@@ -48,12 +48,7 @@ const SupervisorTabBar : React.FC<Props> = ({navigation}) => {
             tabBarInactiveTintColor:'black',
             tabBarStyle:{
             backgroundColor:'white',
-            // position:'relative',
-            
-            // bottom:20,
             height:60,
-            // marginHorizontal: 20,
-            // borderRadius:30,
             paddingBottom:10,
             shadowOffset:{
                 height:4,
