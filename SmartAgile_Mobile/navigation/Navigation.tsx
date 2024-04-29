@@ -10,6 +10,7 @@ import NewOrganization from '../screens/NewOrganization';
 import SupervisorProfile from '../screens/Supervisor/SupervisorProfile';
 import Colors from '../styles/Colors';
 import { StyleSheet, Text, View } from 'react-native';
+//import SupervisorMenu from './SupervisorMenu';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -19,6 +20,7 @@ const Navigation = () => {
     <NavigationContainer>
       {user ?
         <Stack.Navigator initialRouteName="SupervisorTabBar" screenOptions={{gestureDirection:'horizontal' , animation:'slide_from_right',animationDuration:50}}>
+            {/* <Stack.Screen name="SupervisorTabBar" options={{headerShown:false}} component={SupervisorTabBar}  /> */}
             <Stack.Screen name="SupervisorTabBar" options={{headerShown:false}} component={SupervisorTabBar}  />
             <Stack.Screen name="SupervisorProfile" options={{
               headerStyle:{

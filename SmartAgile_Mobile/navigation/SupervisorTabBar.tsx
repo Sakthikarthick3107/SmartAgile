@@ -49,7 +49,7 @@ const SupervisorTabBar : React.FC<Props> = ({navigation}) => {
             tabBarStyle:{
             backgroundColor:'white',
             height:60,
-            paddingBottom:10,
+            paddingTop:10,
             shadowOffset:{
                 height:4,
                 width:4
@@ -58,14 +58,14 @@ const SupervisorTabBar : React.FC<Props> = ({navigation}) => {
         }}}>
             <Tab.Screen name="SupervisorDashboard" component={SupervisorDashboard}
                 options={{
-                    tabBarLabel:'Dashboard',
+                    tabBarLabel:'',
                     tabBarIcon:({color})=>(
                         <MaterialCommunityIcons name='view-dashboard' size={24} color={color} />
                     )
                 }} />
             <Tab.Screen name="SupervisorProjectScreen" component={SupervisorProjectScreen}
                 options={{
-                    tabBarLabel:'Projects',
+                    tabBarLabel:'',
                     tabBarIcon:({color})=>(
                         <Octicons name='project' size={24} color={color} />
                     )
@@ -73,14 +73,14 @@ const SupervisorTabBar : React.FC<Props> = ({navigation}) => {
             
             <Tab.Screen name="EmployeeView" component={EmployeeView}
                 options={{
-                    tabBarLabel:'Employees',
+                    tabBarLabel:'',
                     tabBarIcon:({color})=>(
                         <FontAwersome name='users' size={24} color={color} />
                     )
                 }}  />
             <Tab.Screen name="SupervisorSettings" component={SupervisorSettings}
                 options={{
-                    tabBarLabel:'Settings',
+                    tabBarLabel:'',
                     headerTitle: 'Settings',
                     tabBarIcon:({color})=>(
                         <IonIcons name='settings-outline' size={24} color={color} />
