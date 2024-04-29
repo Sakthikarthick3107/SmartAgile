@@ -62,24 +62,4 @@ class UserProfile(models.Model):
     role = models.CharField(max_length=100, null=True)
     date_joined = models.CharField(max_length=20,null=True)
     def __str__(self):
-<<<<<<< HEAD
         return f"{self.user.username}  {self.organization.org_name}"
-=======
-        return f"{self.user.username}  {self.organization.org_name}"
-    
-class User(AbstractUser):
-    email = models.EmailField(unique=True)
-    otp = models.CharField(max_length=6, blank=True, null=True)
-    groups = models.ManyToManyField(
-        'auth.Group',
-        related_name='custom_users',  # Unique related name
-        blank=True,
-        help_text='The groups this user belongs to. A user can belong to multiple groups.'
-    )
-    user_permissions = models.ManyToManyField(
-        'auth.Permission',
-        related_name='custom_users',  # Unique related name
-        blank=True,
-        help_text='Specific permissions for this user.'
-    )
->>>>>>> 032554f6ade1dcabae31517cbc1d1a6edcc9cbe9

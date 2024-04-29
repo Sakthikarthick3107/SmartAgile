@@ -6,10 +6,6 @@ from .models import UserProfile, User
 from .serializers import UserSerializer , SuperuserSerializer , LoginSerializer, UserProfileSerializer
 from rest_framework import status
 from django.contrib.auth import authenticate
-<<<<<<< HEAD
-=======
-from .models import User
->>>>>>> 032554f6ade1dcabae31517cbc1d1a6edcc9cbe9
 from drf_spectacular.utils import extend_schema
 from rest_framework.generics import ListCreateAPIView , RetrieveUpdateDestroyAPIView
 

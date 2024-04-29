@@ -25,7 +25,6 @@ class PasswordResetRequestView(GenericAPIView):
             return Response({'message' : 'Password reset link has been sent to your email'},status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-<<<<<<< HEAD
 class PasswordResetConfirmOtpView(UpdateAPIView):
     serializer_class = PasswordResetConfirmOtpSerializer
 
@@ -36,20 +35,6 @@ class PasswordResetConfirmOtpView(UpdateAPIView):
         else:
             validated_data = serializer.validated_data
             otp = validated_data['otp']
-=======
-class PasswordResetConfirmOtpView(APIView):
-    serializer_class = PasswordResetConfirmOtpSerializer
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data)
-        if not serializer.is_valid():
-            errors = serializer.errors
-            error_message = str(errors)  # Convert errors to string for better readability
-            raise serializers.ValidationError(error_message)
-       
-        validated_data = serializer.validated_data
-        otp = validated_data['otp']
->>>>>>> 032554f6ade1dcabae31517cbc1d1a6edcc9cbe9
 
         try:
             user = User.objects.get(otp=otp)
@@ -76,10 +61,4 @@ class PasswordResetConfirmView(UpdateAPIView):
                 user.save()
                 return Response({'message' : 'Password Reset Successful'}, status=status.HTTP_200_OK)
             except User.DoesNotExist:
-<<<<<<< HEAD
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-=======
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
->>>>>>> 032554f6ade1dcabae31517cbc1d1a6edcc9cbe9
