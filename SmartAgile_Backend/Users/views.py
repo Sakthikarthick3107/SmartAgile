@@ -2,21 +2,12 @@ from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import Token
-from .models import UserProfile
-from .serializers import UserSerializer , SuperuserSerializer, UserProfileSerializer , LoginSerializer, PasswordResetConfirmSerializer, PasswordResetRequestSerializer
+from .models import UserProfile, User
+from .serializers import UserSerializer , SuperuserSerializer , LoginSerializer, UserProfileSerializer
 from rest_framework import status
 from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
 from drf_spectacular.utils import extend_schema
-from rest_framework.generics import ListCreateAPIView , RetrieveUpdateDestroyAPIView, GenericAPIView, UpdateAPIView
-from django.core.mail import send_mail
-import secrets
-from rest_framework import serializers
-
-base_url = 'http://127.0.0.1:8000'
-
-def generate_password_reset_otp():
-    return ''.join([str(secrets.choice('0123456789')) for i in range(6)])
+from rest_framework.generics import ListCreateAPIView , RetrieveUpdateDestroyAPIView
 
 # from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 # from rest_framework_simplejwt.views import TokenObtainPairView
@@ -28,7 +19,7 @@ def generate_password_reset_otp():
 #     def get_token(cls, user):
 #         token =  super().get_token(user)
 #         token['username'] = user.username
-#         token['username'] = user.username
+#         token['email'] = user.email
 #         return token
     
 # class MyTokenObtainPairView(TokenObtainPairView):
@@ -49,7 +40,7 @@ class LoginView(APIView):
         email = request.data.get('email')
         password = request.data.get('password')
 
-        user = authenticate(username=email,password=password)
+        user = authenticate(email=email,password=password)
 
         if not user:
             return Response({'error' : 'Invalid Credentials'},status=status.HTTP_400_BAD_REQUEST)
@@ -86,7 +77,8 @@ class SuperuserViewEditDelete(RetrieveUpdateDestroyAPIView):
     
 # class UserProfileCreate(ListCreateAPIView):
 #     queryset = UserProfile.objects.all()
-#     serializer_class = UserProfileSerializer
+#     serializer_class = UserProfileSerializers
+
 @extend_schema(request=UserProfileSerializer,responses=UserProfileSerializer)
 class UserProfileCreate(APIView):
     def get(self,request,id=None):
@@ -134,7 +126,3 @@ class UserProfileCreate(APIView):
             return Response({
                 "error":"Invalid Credentials"
             },status=status.HTTP_400_BAD_REQUEST)
-            
-        
-    
-        

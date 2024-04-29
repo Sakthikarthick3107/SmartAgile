@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
-from .models import UserProfile
+from .models import User, UserProfile
 from rest_framework.exceptions import ValidationError
 
 class UserSerializer(serializers.ModelSerializer):
@@ -8,7 +7,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username','password','email']
+        fields = ['id','username','password','email']
 
     def create(self, validated_data):
         user = User.objects.create(
@@ -18,6 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
+    
     def validate_email(self,value):
         if User.objects.filter(email = value).exists():
             raise ValidationError('A user with that email already exist!')
@@ -42,7 +42,7 @@ class PasswordResetRequestSerializer(serializers.Serializer):
         return data
     
 class PasswordResetConfirmOtpSerializer(serializers.Serializer):
-    otp = serializers.IntegerField(required=True)
+    otp = serializers.CharField(max_length=6,required=True)
 
     def validate(self, data):
         try:
@@ -72,32 +72,36 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
         
         if new_password != confirm_password:
             raise serializers.ValidationError('Passwords do not match')
+        
         try:
-            user = User.objects.get(otp=otp)
+            user = User.objects.get(otp = otp)
         except User.DoesNotExist:
-            raise serializers.ValidationError('Invalid OTP')
+            raise serializers.ValidationError('Invalid User')
         return data
     
     def update(self, instance, validated_data):
-        user = User.objects.get(otp=validated_data['otp'])
+        user = User.objects.get(pk = validated_data['otp'])
         user.set_password(validated_data['new_password'])
         user.otp = None
         user.save()
         return user
          
 class SuperuserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
     class Meta:
         model = User
-        fields = ['id','username','password','email']
+        fields = ['id','username', 'password' ,'email']
 
-    def create(self,validated_data):
-        user = User.objects.create_superuser(
+    def create(self, validated_data):
+        user = User.objects.create(
             username = validated_data['username'],
-            email = validated_data['email']
+            email = validated_data['email'],
+            is_superuser = True,
+            is_staff = True
         )
         user.set_password(validated_data['password'])
         user.save()
-        return user 
+        return user
 
     def validate_email(self,value):
         if User.objects.filter(email = value).exists():
