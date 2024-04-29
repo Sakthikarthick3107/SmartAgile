@@ -1,5 +1,11 @@
 from rest_framework import serializers
+<<<<<<< HEAD
 from .models import User, UserProfile
+=======
+from django.contrib.auth.models import User
+from .models import User
+from .models import UserProfile
+>>>>>>> 032554f6ade1dcabae31517cbc1d1a6edcc9cbe9
 from rest_framework.exceptions import ValidationError
 
 class UserSerializer(serializers.ModelSerializer):
@@ -42,7 +48,11 @@ class PasswordResetRequestSerializer(serializers.Serializer):
         return data
     
 class PasswordResetConfirmOtpSerializer(serializers.Serializer):
+<<<<<<< HEAD
     otp = serializers.CharField(max_length=6,required=True)
+=======
+    otp = serializers.CharField(max_length=6)
+>>>>>>> 032554f6ade1dcabae31517cbc1d1a6edcc9cbe9
 
     def validate(self, data):
         try:
