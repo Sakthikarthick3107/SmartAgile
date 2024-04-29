@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Organization
-from .serializer import OrganizationSerializer
+from .serializers import OrganizationSerializer
 from rest_framework import status
 from drf_spectacular.utils import extend_schema
 

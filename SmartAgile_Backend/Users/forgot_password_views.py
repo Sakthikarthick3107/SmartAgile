@@ -2,7 +2,7 @@ from .utils import generate_password_reset_otp, send_password_reset_email
 import os
 from .serializers import PasswordResetConfirmSerializer, PasswordResetRequestSerializer, PasswordResetConfirmOtpSerializer
 from rest_framework.generics import GenericAPIView, UpdateAPIView
-from django.contrib.auth.models import User
+from .models import User
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import serializers
@@ -25,10 +25,13 @@ class PasswordResetRequestView(GenericAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class PasswordResetConfirmOtpView(UpdateAPIView):
+    serializer_class = PasswordResetConfirmOtpSerializer
 
-    def post(self, request):
-        serializer = PasswordResetConfirmOtpSerializer(data=request.data)
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
         if not serializer.is_valid():
+            return Response({'message' : 'Invalid Otp'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
             validated_data = serializer.validated_data
             otp = validated_data['otp']
 
@@ -47,7 +50,6 @@ class PasswordResetConfirmView(UpdateAPIView):
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-
             validated_data = serializer.validated_data
             otp = validated_data['otp']
 
@@ -59,4 +61,3 @@ class PasswordResetConfirmView(UpdateAPIView):
                 return Response({'message' : 'Password Reset Successful'}, status=status.HTTP_200_OK)
             except User.DoesNotExist:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
