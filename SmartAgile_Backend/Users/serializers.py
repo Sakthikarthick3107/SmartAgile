@@ -80,7 +80,7 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
         return data
     
     def update(self, instance, validated_data):
-        user = User.objects.get(pk = validated_data['otp'])
+        user = User.objects.get(otp = validated_data['otp'])
         user.set_password(validated_data['new_password'])
         user.otp = None
         user.save()
