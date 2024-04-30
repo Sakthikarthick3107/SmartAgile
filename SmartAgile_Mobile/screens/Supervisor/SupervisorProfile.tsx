@@ -16,25 +16,26 @@ type Props = {
 const SupervisorProfile : React.FC<Props> = ({navigation}) => {
   const user = useSelector(state => state.user);
   const userName = user.username[0].toUpperCase() + user.username.substring(1);
-  const[orgDetails , setOrgDetails] = useState([]);
+  const[orgDetails , setOrgDetails] = useState({});
 
   const getOrganizationDetails = async() =>{
     try{
       const org_details = await fetch(`${baseUrl}/organization/${user.organization}/`);
       const response = await org_details.json();
-      //setOrgDetails(response);
-      console.error(response);
+      setOrgDetails(response);
+      
     }
     catch(e){
       ToastModule.showToast(e)
       console.log(user.organization)
     }
 
-    useEffect(()=>{
-      getOrganizationDetails();
-    },[])
+   
 
   }
+  useEffect(()=>{
+    getOrganizationDetails();
+  },[])
 
   return (
     <View style={GlobalStyles.authContainer}>
@@ -45,7 +46,7 @@ const SupervisorProfile : React.FC<Props> = ({navigation}) => {
         </View>
         <Text style={GlobalStyles.textStyle}>{userName}</Text>
         {/* <Text style={GlobalStyles.textStyle}>{user.email}</Text> */}
-        <Text style={GlobalStyles.textStyle}>{orgDetails.org_id}</Text>
+        <Text style={GlobalStyles.textStyle}>{orgDetails.org_name}</Text>
       </ScrollView>
       
     </View>
