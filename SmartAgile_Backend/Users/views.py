@@ -86,20 +86,20 @@ class UserProfileCreate(APIView):
             try:
                 user_profile_id = UserProfile.objects.get(id=id)
                 user_serialize_id = UserProfileSerializer(user_profile_id)
-                return Response(user_serialize_id.data)
+                return Response(user_serialize_id.data,status=status.HTTP_200_OK)
             except UserProfile.DoesNotExist:
                 return Response({"error":"Invalid Credentials"},status=status.HTTP_400_BAD_REQUEST)
             
         user_profile = UserProfile.objects.all()
         user_serializer = UserProfileSerializer(user_profile,many=True)
-        return Response(user_serializer.data)
+        return Response(user_serializer.data, status=status.HTTP_200_OK)
     
     def post(self,request):
         user_profile_post = UserProfileSerializer(data=request.data)
         if user_profile_post.is_valid():
             user_profile_post.save()
             return Response({"message":"Successfully created"},status=status.HTTP_201_CREATED)
-        return Response(user_profile_post.errors)
+        return Response(user_profile_post.errors,status=status.HTTP_400_BAD_REQUEST)
     
     def put(self,request,id):
         try:
@@ -112,8 +112,8 @@ class UserProfileCreate(APIView):
             user_serializer_put.save()
             return Response({
                 "message":"Updated Successfully",
-                "data":user_profile_put.data})
-        return Response(user_serializer_put.errors)
+                "data":user_profile_put.data},status=status.HTTP_200_OK)
+        return Response(user_serializer_put.errors,status=status.HTTP_400_BAD_REQUEST)
     
     def delete(self,request,id):
         user_profile_delete = UserProfile.objects.get(id=id)
@@ -121,7 +121,7 @@ class UserProfileCreate(APIView):
             user_profile_delete.delete()
             return Response({
                 "message":"Successfully deleted"
-            })
+            },status=status.HTTP_200_OK)
         except user_profile_delete.DoesNotExist:
             return Response({
                 "error":"Invalid Credentials"

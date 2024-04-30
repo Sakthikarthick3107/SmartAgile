@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'Users',
     'rest_framework',
     'Organization',
+    'Projects',
+    'Tasks',
     'corsheaders',
     'drf_spectacular',
     'rest_framework_simplejwt',
