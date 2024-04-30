@@ -23,7 +23,7 @@ const SupervisorProfile : React.FC<Props> = ({navigation}) => {
       const org_details = await fetch(`${baseUrl}/organization/${user.organization}/`);
       const response = await org_details.json();
       setOrgDetails(response);
-      
+      console.log(response )
     }
     catch(e){
       ToastModule.showToast(e)
@@ -44,7 +44,7 @@ const SupervisorProfile : React.FC<Props> = ({navigation}) => {
         <View style={styles.imageContainer}>
 
         </View>
-        <Text style={GlobalStyles.textStyle}>{userName}</Text>
+        <Text style={[GlobalStyles.textStyle , styles.username]}>{userName}</Text>
         {/* <Text style={GlobalStyles.textStyle}>{user.email}</Text> */}
         <Text style={GlobalStyles.textStyle}>{orgDetails.org_name}</Text>
       </ScrollView>
@@ -57,7 +57,11 @@ export default SupervisorProfile;
 
 const styles = StyleSheet.create({
   imageContainer:{
-    height : height*0.2,
+    height : height*0.15,
     backgroundColor: Colors.White
+  },
+  username:{
+    fontSize : 28,
+    //fontWeight:'bold'
   }
 })
