@@ -1,3 +1,4 @@
+// Import statements to include necessary React Native components and styles
 import {StyleSheet, Text, View , Dimensions, TouchableOpacity, Image} from 'react-native';
 import React from 'react';
 import GlobalStyles from '../styles/GlobalStyle';
@@ -8,12 +9,16 @@ import robot from '../assets/robot.json';
 import LinearGradient from 'react-native-linear-gradient';
 import tlogo from '../assets/t-logo.png';
 
+
+// Type definition for navigation prop
 type Props = {
   navigation : NavigationType<'Welcome'>
 }
 
+// Retrieve screen dimensions to use for responsive layout
 const {width,height} = Dimensions.get('window');
 
+// Functional component definition using React.FC with destructured navigation prop
 const Welcome: React.FC<Props> = ({navigation}) => {
   return (
     <LinearGradient colors={[ Colors.secondary ,Colors.primary  ]} style={GlobalStyles.container}>

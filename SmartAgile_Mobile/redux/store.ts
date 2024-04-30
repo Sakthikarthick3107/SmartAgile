@@ -7,9 +7,10 @@ async function initializeUser(){
     try {
         const user = await AsyncStorage.getItem('user');
         if(user){
+            const userData = JSON.parse(user);
             store.dispatch({
                 type : 'SET_USER',
-                payload : user
+                payload : userData
             })
             console.log(user)
         }

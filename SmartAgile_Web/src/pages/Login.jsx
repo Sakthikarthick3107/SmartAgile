@@ -10,6 +10,8 @@ function Login() {
     const [password, setPassword] = useState('');
     const [usernameError, setUsernameError] = useState('');
     const [passwordError, setPasswordError] = useState('');
+    const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
+    const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
     
 
     // Regular expression for validating email or employee ID format
@@ -20,6 +22,10 @@ function Login() {
         // Redirect to the dashboard
         navigate('dashboard');
     };
+
+    const alertMsg=()=>{
+        alert("Otp has been sent successfully.")
+    }
 
     // Function to handle form submission
     // Function to handle form submission
@@ -54,12 +60,16 @@ function Login() {
                 })
             });
     
-            const data = await response.json();
-            console.log(data)
+            const res = await response.json();
+            console.log(res)
     
             if (response.ok) {
                 // Authentication successful
                 console.log('Login successful');
+                const userData = {
+                    username : res.email
+                } 
+                localStorage.setItem('user',JSON.stringify(userData));
                 navigate('/dashboard')
             } else {
                 // Authentication failed
@@ -68,6 +78,39 @@ function Login() {
             }
         } catch (error) {
             console.error('Error during login:', error);
+            // Handle network errors or other exceptions
+        }
+    };
+    const handleForgotPassword = () => {
+        setShowForgotPasswordModal(true);
+    };
+
+    const handleForgotPasswordSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('http://127.0.0.1:8000/users/auth/password_reset/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: forgotPasswordEmail
+                })
+            });
+    
+            const data = await response.json();
+    
+            if (response.ok) {
+                console.log('OTP sent successfully');
+               setShowForgotPasswordModal(false);
+               alertMsg()
+                // Optionally, you can show a message to the user indicating that the OTP has been sent
+            } else {
+                console.error('Failed to send OTP:', data.error);
+                // Optionally, you can show an error message to the user
+            }
+        } catch (error) {
+            console.error('Error sending OTP:', error);
             // Handle network errors or other exceptions
         }
     };
@@ -97,20 +140,31 @@ function Login() {
                         {passwordError && <p className="text-red-500 text-sm">{passwordError}</p>}
                     </div>
                     <div className="flex items-center justify-between mb-4">
-                        {/* Remember Me Checkbox */}
                         <div className="flex items-center">
-                        <input type="checkbox" id="rememberMe" className="mr-2" />
+                            <input type="checkbox" id="rememberMe" className="mr-2" />
                             <label htmlFor="rememberMe" className="text-sm">Remember Me</label>
                         </div>
-                        {/* Forgot Password Link */}
-                        <a href="#" className="text-blue-700 text-sm">Forgot Password?</a>
+                        <a href="#" className="text-blue-700 text-sm" onClick={handleForgotPassword}>Forgot Password?</a>
                     </div>
                     <button type="submit" className="w-full bg-[#4D989D] text-white px-4 py-2 rounded-md mt-3 ">Sign In</button>
                 </form>
                 <div className="text-center mt-4">New Organization?
-                <button onClick={handleRegisterClick} className="text-blue-700 ml-2 font-semibold hover:underline">Register</button>
+                    <button onClick={handleRegisterClick} className="text-blue-700 ml-2 font-semibold hover:underline">Register</button>
                 </div>
             </div>
+            {showForgotPasswordModal && (
+                <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-900 bg-opacity-50">
+                    <div className="bg-white p-8 rounded-md">
+                        <h2 className="text-lg font-semibold mb-4">Forgot Password?</h2>
+                        <form onSubmit={handleForgotPasswordSubmit} >
+                            <input type="email" placeholder="Enter your email" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                                value={forgotPasswordEmail} onChange={(e) => setForgotPasswordEmail(e.target.value)} />
+                            <button type="submit" className="w-full bg-[#4D989D] text-white px-4 py-2 rounded-md mt-3">Submit</button>
+                        </form>
+                        <button className="text-blue-700 mt-2" onClick={() => setShowForgotPasswordModal(false)}>Cancel</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

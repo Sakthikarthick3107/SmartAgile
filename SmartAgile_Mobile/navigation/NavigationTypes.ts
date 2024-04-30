@@ -8,6 +8,7 @@ export type RootStackParamList = {
     NewOrganization : undefined;
     PersonalLogin : undefined;
     SupervisorTabBar : undefined;
+    //SupervisorMenu : undefined;
     SupervisorSettings:undefined;
     SupervisorProfile  : undefined;
 }

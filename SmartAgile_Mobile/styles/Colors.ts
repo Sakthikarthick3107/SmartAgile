@@ -3,6 +3,7 @@ interface Color {
   secondary:string;
   background: string;
   White:string;
+  error:string;
   text:string;
 }
 
@@ -11,6 +12,7 @@ const Colors: Color = {
   secondary :'#1f9fa5',
   background: '#F0F8FF',
   White:'#FFFFFF',
+  error:'#FF0000',
   text : '#000000'
 };
 
