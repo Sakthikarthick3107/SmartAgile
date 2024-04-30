@@ -61,4 +61,5 @@ class PasswordResetConfirmView(UpdateAPIView):
                 user.save()
                 return Response({'message' : 'Password Reset Successful'}, status=status.HTTP_200_OK)
             except User.DoesNotExist:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'message' : 'User not found'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
