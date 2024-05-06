@@ -13,7 +13,10 @@ const Colors: Color = {
   background: '#F0F8FF',
   White:'#FFFFFF',
   error:'#FF0000',
-  text : '#000000'
+  text : '#000000',
 };
+
+
+
 
 export default Colors;

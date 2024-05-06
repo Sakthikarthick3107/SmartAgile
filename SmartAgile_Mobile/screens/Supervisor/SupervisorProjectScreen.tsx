@@ -1,9 +1,10 @@
-import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Image, ScrollView, StyleSheet, Text, View , Dimensions} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import GlobalStyles from '../../styles/GlobalStyle';
 import { baseUrl } from '../../env';
 import { useSelector } from 'react-redux';
 import Colors from '../../styles/Colors';
+import StatusColor from '../../styles/StatusColor';
 
 type ProjectType = {
   proj_id: number,
@@ -14,6 +15,8 @@ type ProjectType = {
   status: string,
   organization: number
 }
+
+const {width , height} =  Dimensions.get('window')
 
 const SupervisorProjectScreen : React.FC = () => {
   const user = useSelector(state => state.user);
@@ -36,7 +39,7 @@ const SupervisorProjectScreen : React.FC = () => {
       const status_types = await fetch(`${baseUrl}/projects/status-choices/`);
       const status_response = await status_types.json();
       setStatus(status_response)
-      console.log(status_response)
+      //console.log(status_response)
     } catch (error) {
       
     }
@@ -58,9 +61,14 @@ const SupervisorProjectScreen : React.FC = () => {
             </View> 
             <Text style={[GlobalStyles.textStyle , styles.description]}> {project.proj_desc}</Text>
 
-            <View style={styles.chip}>
-              <Text style={[GlobalStyles.textStyle , styles.description]}> {status[project.status]}</Text>
-            </View>            
+            <View style={GlobalStyles.rowBetween}>
+            
+              <View style={[styles.chip , {backgroundColor:StatusColor[project.status]}]}>
+                <Text style={[GlobalStyles.textStyle , styles.chipText]}> {status[project.status]}</Text>
+              </View> 
+              <Text style={[GlobalStyles.textStyle , styles.description]}>{project.proj_deadline}</Text>
+            </View>
+                       
             
           </View>
         ))}
@@ -87,11 +95,17 @@ const styles = StyleSheet.create({
     fontSize:14
   },
   chip:{
-    padding:2,
-    backgroundColor:Colors.background,
-    elevation:2,
+    paddingVertical:2,
+    paddingHorizontal:10,
+    // backgroundColor:Colors.background,
+    elevation:1,
     borderRadius:30,
     display:'flex',
-    maxWidth:80
+    width:'auto'
+  },
+  chipText:{
+    color:Colors.White,
+    fontSize:12,
+    fontWeight:'bold'
   }
 });

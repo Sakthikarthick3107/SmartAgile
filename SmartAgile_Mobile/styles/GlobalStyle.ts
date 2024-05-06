@@ -46,6 +46,20 @@ const GlobalStyles = StyleSheet.create({
     width:'100%',
     alignItems:'center',
     justifyContent:'space-between'
+  },
+
+  employeeIcon:{
+    height: width*0.1,
+    width:width*0.1,
+    borderRadius:50
+  },
+  searchBar:{
+    borderRadius:20,
+    backgroundColor:Colors.White,
+    paddingVertical:7,
+    paddingHorizontal:20,
+    marginVertical:10,
+    elevation:2
   }
 });
 
