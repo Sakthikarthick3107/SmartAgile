@@ -10,4 +10,4 @@ class Organization(models.Model):
     owner = models.ForeignKey(User,related_name='owned_organizations',on_delete=models.CASCADE)
     
     def __str__(self):
-        return self.org_name
+        return f"{self.org_name}  {self.org_id}"
