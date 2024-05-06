@@ -109,6 +109,9 @@ class SuperuserSerializer(serializers.ModelSerializer):
         return value  
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(source = 'user.email')
+    username = serializers.CharField(source = 'user.username')
+    image = serializers.CharField(source = 'user.image')
     class Meta:
         model = UserProfile
         fields = '__all__'

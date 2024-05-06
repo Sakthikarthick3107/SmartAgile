@@ -45,7 +45,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     is_staff = models.BooleanField(default=False) # must needed, otherwise you won't be able to log into django-admin.
     is_active = models.BooleanField(default=True) # must needed, otherwise you won't be able to log into django-admin.
     is_superuser = models.BooleanField(default=False) # this field we inherit from PermissionsMixin.
-    
+    image =  models.ImageField(upload_to='profile-image/',blank=True,null=True)
     otp = models.CharField(max_length=6, blank=True, null=True)
 
     objects = CustomUserManager()

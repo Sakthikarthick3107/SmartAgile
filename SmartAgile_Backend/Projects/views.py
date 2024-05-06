@@ -1,10 +1,11 @@
 from rest_framework.response import Response
 from rest_framework import status
 from drf_spectacular.utils import extend_schema
-from .serializers import ProjectSerializer
+from .serializers import ProjectSerializer , ProjectMemberSerializer
 from rest_framework.views import APIView
-from .models import Project
+from .models import Project , ProjectMembers
 from rest_framework.decorators import api_view
+from rest_framework.generics import ListCreateAPIView , RetrieveAPIView,ListAPIView
 
 
 @api_view(['GET'])
@@ -12,6 +13,11 @@ def status_choices(request):
     statuses = dict(Project.STATUS_CHOICES)
     return Response(statuses)
 
+
+class ProjectMemberView(ListAPIView):
+    queryset = ProjectMembers.objects.all()
+    serializer_class = ProjectMemberSerializer
+    lookup_field = 'project'
 
 @extend_schema(request=ProjectSerializer, responses=ProjectSerializer)
 class ProjectView(APIView):

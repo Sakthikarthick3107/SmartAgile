@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 from Organization.models import Organization
+from Users.models import UserProfile
 
 class Project(models.Model):
     STATUS_CHOICES = (
@@ -19,3 +20,14 @@ class Project(models.Model):
     proj_deadline = models.CharField(max_length=10)
     proj_desc = models.CharField(max_length=255)
     status = models.CharField(max_length=2 , choices= STATUS_CHOICES , default='PL')
+    
+    def __str__(self):
+        return self.proj_name
+    
+class ProjectMembers(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE , related_name='proj_members')
+    profile = models.OneToOneField(UserProfile , on_delete=models.CASCADE , related_name='project_membership')
+    role_within_project = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return f"{self.project.proj_name} {self.profile.user.username}"

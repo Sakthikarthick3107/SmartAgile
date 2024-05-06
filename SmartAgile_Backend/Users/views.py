@@ -81,16 +81,16 @@ class SuperuserViewEditDelete(RetrieveUpdateDestroyAPIView):
 
 @extend_schema(request=UserProfileSerializer,responses=UserProfileSerializer)
 class UserProfileCreate(APIView):
-    def get(self,request,id=None):
+    def get(self,request,organization,id=None):
         if id is not None:
             try:
-                user_profile_id = UserProfile.objects.get(id=id)
+                user_profile_id = UserProfile.objects.get(id=id , organization=organization)
                 user_serialize_id = UserProfileSerializer(user_profile_id)
                 return Response(user_serialize_id.data,status=status.HTTP_200_OK)
             except UserProfile.DoesNotExist:
                 return Response({"error":"Invalid Credentials"},status=status.HTTP_400_BAD_REQUEST)
             
-        user_profile = UserProfile.objects.all()
+        user_profile = UserProfile.objects.filter(organization=organization)
         user_serializer = UserProfileSerializer(user_profile,many=True)
         return Response(user_serializer.data, status=status.HTTP_200_OK)
     
