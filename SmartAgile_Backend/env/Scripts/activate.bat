@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=E:\T-Machine\SmartAgile\SmartAgile_Backend\env
+set VIRTUAL_ENV=D:\T Machine\AI-AWAM\T-Machine-SmartAgile\SmartAgile_Backend\env
 
 if not defined PROMPT set PROMPT=$P$G
 
