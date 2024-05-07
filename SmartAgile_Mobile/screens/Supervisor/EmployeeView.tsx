@@ -4,6 +4,8 @@ import GlobalStyles from '../../styles/GlobalStyle';
 import { baseUrl } from '../../env';
 import { useSelector } from 'react-redux';
 import Colors from '../../styles/Colors';
+import EmployeeListCard from '../../components/SupervisorComponents/EmployeeListCard';
+import RNPickerSelect from 'react-native-picker-select';
 
 type Employee = {
     id: number,
@@ -22,10 +24,15 @@ const EmployeeView = () => {
   const user = useSelector(state => state.user);
   const[employees,setEmployees] = useState<Employee[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const[pos , setPos] = useState<any>([]);
+  const[selectedPos , setSelectedPos] = useState<string>('');
+
+  const positionItems = Object.entries(pos).map(([value,label]) =>({
+    label , value
+  }))
 
   const onRefresh = () => {
     setRefreshing(true);
-    // Simulate fetching data and wait for 2 seconds
     setTimeout(() => {
       getEmployees()
       setRefreshing(false);
@@ -34,7 +41,7 @@ const EmployeeView = () => {
 
   const getEmployees = async() =>{
     try {
-      const fetchEmployees = await fetch(`${baseUrl}//users/employee/profile/org=${user.organization}`);
+      const fetchEmployees = await fetch(`${baseUrl}/users/employee/profile/org=${user.organization}/${selectedPos}`);
       const response = await fetchEmployees.json();
       //console.log(response)
       setEmployees(response)
@@ -42,9 +49,29 @@ const EmployeeView = () => {
       
     }
   }
-  useEffect(() =>{
+
+  const getPositions = async() =>{
+    try {
+      const positions = await fetch(`${baseUrl}/users/employee/position-choices/`);
+      const response = await positions.json();
+    
+      setPos(response);
+
+      console.log(response)
+    } catch (error) {
+      
+    }
+  }
+  useEffect(()=>{
     getEmployees();
+  },[selectedPos])
+
+  useEffect(() =>{
+    
+    getPositions();
   },[])
+
+  
 
 
   return (
@@ -61,15 +88,35 @@ const EmployeeView = () => {
         
         <TextInput placeholder='Seach...' placeholderTextColor={'#000'} style={GlobalStyles.searchBar} />
 
+        <RNPickerSelect   onValueChange={(value)=>{setSelectedPos(value) ; console.log(value)}}
+            items={positionItems}
+            value={selectedPos}
+            style={{
+              inputAndroid:{
+                //backgroundColor:Colors.primary,
+                color:Colors.text,
+                width:200,
+                borderRadius:50,
+                backgroundColor:Colors.White,
+                
+              },
+              placeholder:{
+                color:Colors.text,
+                //fontFamily:'Poppins-Bold'
+              }
+              
+            }}
+
+            placeholder={{
+              label : 'Positions',
+              value:''
+            }}
+
+          
+          />
+
         {employees.map((employee , index) =>  (
-          <View key={index} style={styles.employeeCard}>
-            <Image source={{uri : `${baseUrl}/media/${employee.image}`}} style={GlobalStyles.employeeIcon} />
-            <View>
-              <Text style={GlobalStyles.textStyle}>{employee.username}</Text>
-              <Text style={styles.sideText}>{employee.email}</Text>
-            </View>
-            
-          </View>
+          <EmployeeListCard  employee={employee} key={index}/>
         ))}
 
       </ScrollView>
@@ -79,20 +126,4 @@ const EmployeeView = () => {
 
 export default EmployeeView;
 
-const styles = StyleSheet.create({
-  employeeCard:{
-    display:'flex',
-    flexDirection:'row',
-    padding:6,
-    marginVertical:2,
-    gap:10,
-    borderBottomWidth:0.2,
-    borderBottomColor:Colors.text,
-    borderStyle:'dashed'
-  },
-  sideText:{
-    color:'black',
-    fontFamily:'Poppins',
-    fontSize:12
-  }
-});
+const styles = StyleSheet.create({});

@@ -36,6 +36,7 @@ const SupervisorTabBar : React.FC<Props> = ({navigation}) => {
                 fontWeight :'normal',
                 fontSize:24
             },
+            tabBarHideOnKeyboard:true,
             headerRight:()=>(
                 <View style={styles.headerLeft}>
                     <Text style={styles.headerLeftTitle}>{user && user.username}</Text>

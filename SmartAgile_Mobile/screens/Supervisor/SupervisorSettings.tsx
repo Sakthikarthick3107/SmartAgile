@@ -62,8 +62,8 @@ const styles = StyleSheet.create({
     alignItems:'center',
     gap:20,
     padding:10,
-    backgroundColor:Colors.White,
-    elevation:2,
+    //backgroundColor:Colors.White,
+    //elevation:1,
     shadowOffset:{
       height:5,
       width:-2

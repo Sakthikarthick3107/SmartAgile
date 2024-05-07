@@ -8,6 +8,7 @@ from rest_framework import status
 from django.contrib.auth import authenticate
 from drf_spectacular.utils import extend_schema
 from rest_framework.generics import ListCreateAPIView , RetrieveUpdateDestroyAPIView
+from rest_framework.decorators import api_view
 
 # from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 # from rest_framework_simplejwt.views import TokenObtainPairView
@@ -24,6 +25,10 @@ from rest_framework.generics import ListCreateAPIView , RetrieveUpdateDestroyAPI
     
 # class MyTokenObtainPairView(TokenObtainPairView):
 #     serializer_class = MyTokenObtainPairSerializer
+@api_view(['GET'])
+def position_choices(request):
+    positions = dict(UserProfile.POSITION_CHOICES)
+    return Response(positions)
 
 class UsersView(ListCreateAPIView):
     queryset = User.objects.all()
@@ -81,7 +86,7 @@ class SuperuserViewEditDelete(RetrieveUpdateDestroyAPIView):
 
 @extend_schema(request=UserProfileSerializer,responses=UserProfileSerializer)
 class UserProfileCreate(APIView):
-    def get(self,request,organization,id=None):
+    def get(self,request,organization,id=None,position=None):
         if id is not None:
             try:
                 user_profile_id = UserProfile.objects.get(id=id , organization=organization)
@@ -90,6 +95,15 @@ class UserProfileCreate(APIView):
             except UserProfile.DoesNotExist:
                 return Response({"error":"Invalid Credentials"},status=status.HTTP_400_BAD_REQUEST)
             
+        elif position is not None:
+            try:
+               user_position = UserProfile.objects.filter(position = position,organization=organization)
+               profile_serializer = UserProfileSerializer(user_position , many=True)
+               return Response(profile_serializer.data ,status=status.HTTP_200_OK)
+           
+            except UserProfile.DoesNotExist:
+                return Response({"error":"Failed to get request"},status=status.HTTP_400_BAD_REQUEST)
+           
         user_profile = UserProfile.objects.filter(organization=organization)
         user_serializer = UserProfileSerializer(user_profile,many=True)
         return Response(user_serializer.data, status=status.HTTP_200_OK)

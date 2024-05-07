@@ -1,4 +1,4 @@
-import {Image, ScrollView, StyleSheet, Text, View , Dimensions} from 'react-native';
+import {Image, ScrollView, StyleSheet, Text, View , Dimensions , RefreshControl} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import GlobalStyles from '../../styles/GlobalStyle';
 import { baseUrl } from '../../env';
@@ -22,6 +22,15 @@ const SupervisorProjectScreen : React.FC = () => {
   const user = useSelector(state => state.user);
   const[projects , setProjects] = useState<ProjectType[]>([]);
   const[status , setStatus] = useState<any>();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      fetchProjects()
+      setRefreshing(false);
+    }, 2000);
+  };
 
   const fetchProjects = async() =>{
     try {
@@ -51,7 +60,13 @@ const SupervisorProjectScreen : React.FC = () => {
   },[])
   return (
     <View style={GlobalStyles.authContainer}>
-      <ScrollView contentContainerStyle={GlobalStyles.scrollAuthContainer} showsVerticalScrollIndicator={false}>
+      <ScrollView
+      refreshControl={<RefreshControl refreshing={refreshing}
+      onRefresh={onRefresh}
+      colors={[Colors.secondary]} 
+          tintColor={Colors.secondary} />
+    }
+      contentContainerStyle={GlobalStyles.scrollAuthContainer} showsVerticalScrollIndicator={false}>
 
         {projects.map((project,index) => (
           <View key={index} style={styles.ProjectCard}>

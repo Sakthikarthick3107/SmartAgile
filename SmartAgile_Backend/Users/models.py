@@ -56,9 +56,16 @@ class User(AbstractBaseUser,PermissionsMixin):
 from Organization.models import Organization
 
 class UserProfile(models.Model):
+    POSITION_CHOICES = (
+        ('IN' , 'Intern'),
+        ('AS' , 'Associate'),
+        ('MID' , 'Mid-Senior'),
+        ('LEAD' , 'Lead'),
+        ('DR' ,'Director')
+    )
     user = models.OneToOneField(User , on_delete=models.CASCADE , related_name='profile')
     organization = models.ForeignKey(Organization , on_delete=models.CASCADE)
-    position = models.CharField(max_length=100, null=True)
+    position = models.CharField(max_length=20, choices = POSITION_CHOICES , null=True , blank=True)
     role = models.CharField(max_length=100, null=True)
     date_joined = models.CharField(max_length=20,null=True)
     def __str__(self):
