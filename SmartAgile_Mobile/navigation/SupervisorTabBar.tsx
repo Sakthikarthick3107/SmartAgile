@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import SupervisorDashboard from "../screens/Supervisor/SupervisorDashboard";
-import { NavigationType } from "./NavigationTypes";
+import { NavigationType, RootStackParamList } from "./NavigationTypes";
 import SupervisorProjectScreen from "../screens/Supervisor/SupervisorProjectScreen";
 import Colors from "../styles/Colors";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -11,15 +11,30 @@ import EmployeeView from "../screens/Supervisor/EmployeeView";
 import { StyleSheet, Text, View } from "react-native";
 import SupervisorSettings from "../screens/Supervisor/SupervisorSettings";
 import { useSelector } from "react-redux";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { NavigationContainer } from "@react-navigation/native";
+import ProjectView from "../screens/Supervisor/ProjectView";
 
-const Tab = createBottomTabNavigator()
+const Tab = createBottomTabNavigator();
+const ProjectStackNavigator = createNativeStackNavigator<RootStackParamList>();
+
+export const SupervisorProjectStack =() =>{
+    return(
+        
+        <ProjectStackNavigator.Navigator screenOptions={{headerShown:false}}>
+            <ProjectStackNavigator.Screen name="SupervisorProjectScreen" component={SupervisorProjectScreen}/>
+            <ProjectStackNavigator.Screen name='ProjectView' component={ProjectView}/>
+        </ProjectStackNavigator.Navigator>
+        
+    )
+}
 
 type Props = {
     navigation : NavigationType<'SupervisorTabBar'>
   }
 
 const SupervisorTabBar : React.FC<Props> = ({navigation}) => {
-    const user = useSelector(state => state.user);
+    const user = useSelector(state => state.user.user);
 
     return(
         <Tab.Navigator   screenOptions={{ headerStyle:{
@@ -64,7 +79,8 @@ const SupervisorTabBar : React.FC<Props> = ({navigation}) => {
                         <MaterialCommunityIcons name='view-dashboard' size={24} color={color} />
                     )
                 }} />
-            <Tab.Screen name="SupervisorProjectScreen" component={SupervisorProjectScreen}
+
+            <Tab.Screen name="SupervisorProjectStack" component={SupervisorProjectStack}
                 options={{
                     tabBarLabel:'',
                     tabBarIcon:({color})=>(

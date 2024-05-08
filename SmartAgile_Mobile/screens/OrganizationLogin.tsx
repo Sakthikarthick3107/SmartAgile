@@ -11,7 +11,7 @@ import tlogo from '../assets/t-logo.png';   //Company Logo image
 const ToastModule = NativeModules.ToastModule;    // Android Native module for displaying toast messages
 //import Config from 'react-native-config';
 import { useDispatch } from 'react-redux';    // Hook to dispatch actions to Redux store
-import { setUser } from '../redux/actions';   // Action to set user data in the Redux store
+import { setUser } from '../redux/userRedux/actions';   // Action to set user data in the Redux store
 import { baseUrl } from '../env';   // Base URL for network requests
 import AsyncStorage from '@react-native-async-storage/async-storage';   // Storage library for async storage operations
 //import { State } from '../redux/reducers';

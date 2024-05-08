@@ -7,6 +7,7 @@ import Colors from '../../styles/Colors';
 import EmployeeListCard from '../../components/SupervisorComponents/EmployeeListCard';
 import RNPickerSelect from 'react-native-picker-select';
 
+
 type Employee = {
     id: number,
     email: string,
@@ -21,7 +22,7 @@ type Employee = {
 
 
 const EmployeeView = () => {
-  const user = useSelector(state => state.user);
+  const user = useSelector(state => state.user.user);
   const[employees,setEmployees] = useState<Employee[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const[pos , setPos] = useState<any>([]);
@@ -57,7 +58,7 @@ const EmployeeView = () => {
     
       setPos(response);
 
-      console.log(response)
+      //console.log(response)
     } catch (error) {
       
     }
@@ -67,7 +68,6 @@ const EmployeeView = () => {
   },[selectedPos])
 
   useEffect(() =>{
-    
     getPositions();
   },[])
 
