@@ -23,7 +23,7 @@ const SupervisorDashboard = () => {
 
         <View style={styles.welcome}>
           {/* <LottieView source={welcomeBot} loop autoPlay style={{height:250,width:250}} /> */}
-          <Text style={GlobalStyles.textStyle}>Hello {user.is_staff && 'admin'}</Text>
+          <Text style={GlobalStyles.textStyle}>Hello</Text>
         </View>
         <PieChart donut={true} radius={width*0.2}   data={data}/>
       

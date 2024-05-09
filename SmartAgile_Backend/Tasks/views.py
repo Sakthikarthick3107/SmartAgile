@@ -7,7 +7,7 @@ from .models import Task
 
 @extend_schema(request=TaskSerializer, responses=TaskSerializer)
 class TaskView(APIView):
-    def get(self,request, id=None):
+    def get(self,request , id=None):
         if id is not None:
             try:
                 task = Task.objects.get(id=id)

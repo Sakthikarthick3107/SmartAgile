@@ -21,7 +21,12 @@ const ProjectStackNavigator = createNativeStackNavigator<RootStackParamList>();
 export const SupervisorProjectStack =() =>{
     return(
         
-        <ProjectStackNavigator.Navigator screenOptions={{headerShown:false}}>
+        <ProjectStackNavigator.Navigator   screenOptions={{
+                                                    headerShown:false,
+                                                    gestureDirection:'horizontal' , 
+                                                    animation:'slide_from_bottom',
+                                                    animationDuration:50
+                                                        }}>
             <ProjectStackNavigator.Screen name="SupervisorProjectScreen" component={SupervisorProjectScreen}/>
             <ProjectStackNavigator.Screen name='ProjectView' component={ProjectView}/>
         </ProjectStackNavigator.Navigator>
