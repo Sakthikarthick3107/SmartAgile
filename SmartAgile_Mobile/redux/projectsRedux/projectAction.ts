@@ -3,7 +3,7 @@ import { baseUrl } from "../../env";
 export const SET_PROJECT = 'SET_PROJECT';
 
 
-export type Project = {
+export type ProjectType = {
     proj_id: string,
     icon: string,
     proj_name: string,
@@ -13,7 +13,7 @@ export type Project = {
     organization: number
   }
 
-export const setProjectData = (project : Project) =>({
+export const setProjectData = (project : ProjectType) =>({
     type : SET_PROJECT,
     payload : project
 })

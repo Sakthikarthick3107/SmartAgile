@@ -38,7 +38,7 @@ const GlobalStyles = StyleSheet.create({
   textStyle:{
     color:'black',
     fontFamily:'Poppins',
-    fontSize:20,
+    fontSize:18,
   },
   rowBetween:{
     display:'flex',
@@ -47,6 +47,20 @@ const GlobalStyles = StyleSheet.create({
     alignItems:'center',
     justifyContent:'space-between',
 
+  },
+  curvedButton:{
+    padding:5,
+    borderRadius:50,
+    backgroundColor:Colors.primary,
+    display:'flex',
+    alignItems:'center',
+    justifyContent:'center',
+    marginVertical:10
+  },
+  btnText:{
+    color:Colors.White,
+    fontFamily:'Poppins',
+    fontSize:14,
   },
 
   employeeIcon:{
@@ -61,6 +75,11 @@ const GlobalStyles = StyleSheet.create({
     paddingHorizontal:20,
     marginVertical:10,
     elevation:2
+  },
+  smallText:{
+    fontFamily:'Poppins',
+    fontSize:12,
+    color:Colors.text
   }
 });
 

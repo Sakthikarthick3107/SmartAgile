@@ -5,7 +5,7 @@ from .serializers import ProjectSerializer , ProjectMemberSerializer
 from rest_framework.views import APIView
 from .models import Project , ProjectMembers
 from rest_framework.decorators import api_view
-from rest_framework.generics import ListCreateAPIView , RetrieveAPIView,ListAPIView
+from rest_framework.generics import ListCreateAPIView ,RetrieveUpdateDestroyAPIView
 
 
 @api_view(['GET'])
@@ -14,10 +14,16 @@ def status_choices(request):
     return Response(statuses)
 
 
-class ProjectMemberView(ListAPIView):
-    queryset = ProjectMembers.objects.all()
-    serializer_class = ProjectMemberSerializer
-    lookup_field = 'project'
+@extend_schema(request=ProjectMemberSerializer , responses=ProjectMemberSerializer)
+class ProjectMemberView(APIView):
+    def get(self,request,project=None):
+        if project is not None:
+            members = ProjectMembers.objects.filter(project = project)
+            members_serializer = ProjectMemberSerializer(members , many=True)
+            return Response(members_serializer.data)
+        members = ProjectMembers.objects.all()
+        members_serializer = ProjectMemberSerializer(members , many=True)
+        return Response(members_serializer.data)
 
 @extend_schema(request=ProjectSerializer, responses=ProjectSerializer)
 class ProjectView(APIView):

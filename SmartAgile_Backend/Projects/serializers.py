@@ -7,6 +7,9 @@ class ProjectSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
 class ProjectMemberSerializer(serializers.ModelSerializer):
+    user = serializers.IntegerField(source='profile.user.id')
+    username = serializers.CharField(source = 'profile.user.username')
+    image = serializers.CharField(source='profile.user.image')
     class Meta:
         model = ProjectMembers
         fields = '__all__'
