@@ -6,13 +6,17 @@ import welcomeBot from '../../assets/hello-bot.json'
 import LottieView from 'lottie-react-native';
 import { useSelector } from 'react-redux';
 import { fetchProjectData } from '../../redux/projectsRedux/projectAction';
-import { PieChart } from 'react-native-gifted-charts';
+import { BarChart, LineChart, PieChart } from 'react-native-gifted-charts';
 
 const{width , height} = Dimensions.get('window')
 
 const SupervisorDashboard = () => {
   const user = useSelector(state => state.user.user);
   const data=[ 
+        {value : 50 , color : Colors.primary , text:'Hello'}, 
+        {value : 80 , color : Colors.text , text:'Hello'}, 
+        {value : 90 , color : Colors.secondary , text:'Hello'}, 
+        {value : 70 , color : Colors.error , text:'Hello'},
         {value : 50 , color : Colors.primary , text:'Hello'}, 
         {value : 80 , color : Colors.text , text:'Hello'}, 
         {value : 90 , color : Colors.secondary , text:'Hello'}, 
@@ -25,8 +29,9 @@ const SupervisorDashboard = () => {
           {/* <LottieView source={welcomeBot} loop autoPlay style={{height:250,width:250}} /> */}
           <Text style={GlobalStyles.textStyle}>Hello</Text>
         </View>
-        <PieChart donut={true} radius={width*0.2}   data={data}/>
-      
+        <PieChart animationDuration={20} donut={true} radius={width*0.2}   data={data}/>
+        <LineChart data={data}/>
+        <BarChart width={300} isThreeD={true} data = {data} />
         
       </ScrollView>
     </View>

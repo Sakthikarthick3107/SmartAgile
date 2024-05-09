@@ -49,6 +49,7 @@ const SupervisorTabBar : React.FC<Props> = ({navigation}) => {
                 shadowRadius:20,
                 
             },
+            tabBarHideOnKeyboard:true,
             headerShadowVisible:true,
             headerTintColor:Colors.background,
             headerTitle:'',
