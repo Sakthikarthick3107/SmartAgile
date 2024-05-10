@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+
+import React from "react";
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChartBar, faBriefcase, faTasks, faComments, faCog } from "@fortawesome/free-solid-svg-icons";
