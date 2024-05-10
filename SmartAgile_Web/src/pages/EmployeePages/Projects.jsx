@@ -127,3 +127,52 @@ const Project = () => {
 };
 
 export default Project;
+
+
+
+// import React, { useState, useEffect } from 'react';
+
+// const Project = () => {
+//   const [projects, setProjects] = useState([]);
+
+//   useEffect(() => {
+//     // Fetch project data from the backend API
+//     fetchProjects();
+//   }, []);
+
+//   const fetchProjects = async () => {
+//     try {
+//       const response = await fetch('http://127.0.0.1:8000/#/projects');
+//       if (!response.ok) {
+//         throw new Error('Failed to fetch projects');
+//       }
+//       const data = await response.json();
+//       setProjects(data);
+//     } catch (error) {
+//       console.error('Error fetching projects:', error);
+//     }
+//   };
+
+//   return (
+//     <div className="flex justify-center top-5 h-screen">
+//       {projects.map(project => (
+//         <div key={project.id} className="projects-grid flex-row gap-5 pl-9 pt-6">
+//           <div className="card mb-3 project-card top-2 relative rounded-[19px] shadow-lg bg-gray-200 max-w-[300px]">
+//             <div className="absolute top-4 right-4 rounded-full pl-2 pr-2 text-[10px] text-white bg-[#4D989D]">
+//               Deadline: {project.deadline}
+//             </div>
+//             <div className="flex items-center">
+//               <img src={project.image} alt={project.name} className="project-img mt-6" />
+//               <b className="text-20 font-serif pt-5 ml-[1px]">{project.name}</b>
+//             </div>
+//             <p className="desc text-[14px] font-serif p-3 text-justify">{project.shortDescription}</p>
+//             <p className="project-desc text-[14px] font-serif p-3 text-justify">{project.longDescription}</p>
+//             <img src={project.teamImage} alt="Team_member" className="team1 p-3" />
+//           </div>
+//         </div>
+//       ))}
+//     </div>
+//   );
+// };
+
+// export default Project;
