@@ -46,3 +46,14 @@ class TaskView(APIView):
             return Response({'message' : 'Task Deleted Successfully'},status=status.HTTP_200_OK)
         except Task.DoesNotExist:
             return Response({'message' : 'Task Not found'}, status=status.HTTP_400_BAD_REQUEST)
+        
+class Project_Task(APIView):
+    def get(self,request,proj_id):
+        if proj_id is not None:
+            try:
+                task = Task.objects.filter(project=proj_id)
+                serializer = TaskSerializer(task,many=True)     
+                return Response(serializer.data,status=status.HTTP_200_OK)  
+            except Task.DoesNotExist:
+                return Response({'message':'Task Not found'},status=status.HTTP_400_BAD_REQUEST)
+            
