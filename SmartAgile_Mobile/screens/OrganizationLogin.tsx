@@ -155,7 +155,7 @@ const OrganizationLogin: React.FC<Props> = ({navigation}) => {
             <Text style={styles.subOptions}>New Organization</Text>
           </TouchableOpacity>
           <TouchableOpacity>
-            <Text style={styles.subOptions}>Forgot Password?</Text>
+            <Text style={styles.subOptions} onPress={() => navigation.navigate('ForgetPassword')}>Forgot Password?</Text>
           </TouchableOpacity>
           
         </View>

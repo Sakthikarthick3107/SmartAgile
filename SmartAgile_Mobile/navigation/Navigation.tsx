@@ -11,6 +11,9 @@ import SupervisorProfile from '../screens/Supervisor/SupervisorProfile';
 import Colors from '../styles/Colors';
 import { StyleSheet, Text, View } from 'react-native';
 import ProjectView from '../screens/Supervisor/ProjectView';
+import { useEffect } from 'react';
+import { initializeUser } from '../redux/userRedux/actions';
+import ForgetPassword from '../screens/ForgetPassword';
 //import SupervisorMenu from './SupervisorMenu';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -18,7 +21,10 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 
 const Navigation = () => {
-  const user = useSelector(state  => state.user);
+  const user = useSelector(state  => state.user.user);
+
+
+
   return (
     <NavigationContainer>
       {user ?
@@ -46,7 +52,8 @@ const Navigation = () => {
           <Stack.Screen name="Welcome" component={Welcome}  />
           <Stack.Screen name="OrganizationLogin" component={OrganizationLogin}  />
           <Stack.Screen name='NewOrganization' component={NewOrganization}/>
-        <Stack.Screen name="PersonalLogin" component={PersonalLogin}  />
+          <Stack.Screen name="PersonalLogin" component={PersonalLogin}  />
+          <Stack.Screen name='ForgetPassword' component={ForgetPassword}/> 
         
       </Stack.Navigator>
     }

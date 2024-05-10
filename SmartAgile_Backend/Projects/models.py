@@ -30,4 +30,4 @@ class ProjectMembers(models.Model):
     role_within_project = models.CharField(max_length=100)
     
     def __str__(self):
-        return f"{self.project.proj_name} {self.profile.user.username}"
+        return f"{self.profile.user.username}"

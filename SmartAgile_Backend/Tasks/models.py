@@ -9,7 +9,7 @@ class Task(models.Model):
         ('HIGH', 'High'),
     ]
     project = models.ForeignKey(Project, related_name='project_tasks', on_delete=models.CASCADE)
-    project_members = models.ForeignKey(ProjectMembers,related_name='project_member', on_delete=models.CASCADE,blank=True,null=True)
+    assigned_to = models.ForeignKey(ProjectMembers,related_name='project_member', on_delete=models.CASCADE,blank=True,null=True)
     task_id = models.AutoField(primary_key=True)
     task_name = models.CharField(max_length=100, unique=True)
     task_deadline = models.DateField()
