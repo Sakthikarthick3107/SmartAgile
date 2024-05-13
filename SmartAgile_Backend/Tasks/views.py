@@ -7,13 +7,13 @@ from .models import Task
 
 @extend_schema(request=TaskSerializer, responses=TaskSerializer)
 class TaskView(APIView):
-    def get(self,request, id=None):
-        if id is not None:
+    def get(self, request , task_id=None):
+        if task_id is not None:
             try:
-                task = Task.objects.get(id=id)
+                task = Task.objects.get(task_id = task_id)
                 serializer = TaskSerializer(task)
                 return Response(serializer.data, status=status.HTTP_200_OK)
-            except task.DoesNotExist:
+            except Task.DoesNotExist:
                 return Response({'message' : 'Task Not found'}, status=status.HTTP_400_BAD_REQUEST)
         
         task = Task.objects.all()
@@ -27,10 +27,10 @@ class TaskView(APIView):
             return Response({'message' : 'Task Created Successfully'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
-    def put(self,request,id):
+    def put(self,request,task_id):
         try:
-            task = Task.objects.get(id=id)
-        except task.DoesNotExist:
+            task = Task.objects.get(task_id = task_id)
+        except Task.DoesNotExist:
             return Response({'message' : 'Task Not found'}, status=status.HTTP_400_BAD_REQUEST)
         
         serializer = TaskSerializer(task, data = request.data)
@@ -39,10 +39,10 @@ class TaskView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    def delete(self,request,id):
-        task = Task.objects.get(id=id)
+    def delete(self,request,task_id):
         try:
+            task = Task.objects.get(task_id = task_id)
             task.delete()
             return Response({'message' : 'Task Deleted Successfully'},status=status.HTTP_200_OK)
-        except task.DoesNotExist:
+        except Task.DoesNotExist:
             return Response({'message' : 'Task Not found'}, status=status.HTTP_400_BAD_REQUEST)

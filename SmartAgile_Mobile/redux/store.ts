@@ -1,7 +1,12 @@
-import { createStore , Store } from "redux";
-import reducers from "./reducers";
+import { AnyAction, applyMiddleware, legacy_createStore as createStore , Store } from "redux";
+import reducers from "./userRedux/reducers";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { State } from "./reducers";
+import { State } from "./userRedux/reducers";
+import rootReducer, { RootState } from "./rootReducer";
+import { thunk } from "redux-thunk";
+
+
+const store : Store<RootState> = createStore(rootReducer, applyMiddleware(thunk) );
 
 async function initializeUser(){
     try {
@@ -19,6 +24,7 @@ async function initializeUser(){
     }
 }
 
-const store : Store<State> = createStore(reducers,initializeUser());
+
+initializeUser()
 
 export default store;

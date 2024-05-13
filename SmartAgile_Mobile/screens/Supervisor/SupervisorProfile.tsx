@@ -14,7 +14,7 @@ type Props = {
 }
 
 const SupervisorProfile : React.FC<Props> = ({navigation}) => {
-  const user = useSelector(state => state.user);
+  const user = useSelector(state => state.user.user);
   const userName = user.username[0].toUpperCase() + user.username.substring(1);
   const[orgDetails , setOrgDetails] = useState({});
 

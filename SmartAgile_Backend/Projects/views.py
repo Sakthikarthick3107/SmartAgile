@@ -5,7 +5,7 @@ from .serializers import ProjectSerializer , ProjectMemberSerializer
 from rest_framework.views import APIView
 from .models import Project , ProjectMembers
 from rest_framework.decorators import api_view
-from rest_framework.generics import ListCreateAPIView , RetrieveAPIView,ListAPIView
+from rest_framework.generics import ListCreateAPIView ,RetrieveUpdateDestroyAPIView
 
 
 @api_view(['GET'])
@@ -14,10 +14,16 @@ def status_choices(request):
     return Response(statuses)
 
 
-class ProjectMemberView(ListAPIView):
-    queryset = ProjectMembers.objects.all()
-    serializer_class = ProjectMemberSerializer
-    lookup_field = 'project'
+@extend_schema(request=ProjectMemberSerializer , responses=ProjectMemberSerializer)
+class ProjectMemberView(APIView):
+    def get(self,request,project=None):
+        if project is not None:
+            members = ProjectMembers.objects.filter(project = project)
+            members_serializer = ProjectMemberSerializer(members , many=True)
+            return Response(members_serializer.data)
+        members = ProjectMembers.objects.all()
+        members_serializer = ProjectMemberSerializer(members , many=True)
+        return Response(members_serializer.data)
 
 @extend_schema(request=ProjectSerializer, responses=ProjectSerializer)
 class ProjectView(APIView):
@@ -48,10 +54,10 @@ class ProjectView(APIView):
             return Response({'message' : 'Project Created Successfully'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
-    def put(self,request,id):
+    def put(self,request,proj_id):
         try:
-            project = Project.objects.get(id=id)
-        except project.DoesNotExist:
+            project = Project.objects.get(pk=proj_id)
+        except Project.DoesNotExist:
             return Response({'message' : 'Project Not found'}, status=status.HTTP_400_BAD_REQUEST)
         
         serializer = ProjectSerializer(project, data = request.data)
@@ -60,11 +66,11 @@ class ProjectView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    def delete(self,request,id):
-        project = Project.objects.get(id=id)
+    def delete(self,request,proj_id):
         try:
+            project = Project.objects.get(pk=proj_id)
             project.delete()
             return Response({'message' : 'Project Deleted Successfully'},status=status.HTTP_200_OK)
-        except project.DoesNotExist:
+        except Project.DoesNotExist:
             return Response({'message' : 'Project Not found'}, status=status.HTTP_400_BAD_REQUEST)
 
