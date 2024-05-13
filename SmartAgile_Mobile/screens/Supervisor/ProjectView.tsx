@@ -1,5 +1,5 @@
 import { Image, RefreshControl,Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import GlobalStyles from '../../styles/GlobalStyle'
 import Colors from '../../styles/Colors';
 import { NavigationType } from '../../navigation/NavigationTypes';
@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { ProjectType, fetchProjectData, setProjectData } from '../../redux/projectsRedux/projectAction';
 import { baseUrl } from '../../env';
+import { useFocusEffect } from '@react-navigation/native';
 
 const {width , height} = Dimensions.get('window')
 
@@ -14,7 +15,8 @@ type Props = {
   navigation : NavigationType<'ProjectView' >,
   route:{
     params:{
-      projId : number
+      projId : number,
+      projectName : string
     }
   }
 }
@@ -60,6 +62,22 @@ const ProjectView : React.FC<Props> = ({navigation , route}) => {
       
     }
   }
+
+  // useFocusEffect(
+  //   useCallback(() =>{
+  //     const onBackPress = () =>{
+  //       console.log('Enter');
+  //       fetchProjectData(projId)
+  //     }
+  //     navigation.addListener('focus' , onBackPress);
+
+  //     return () =>{
+  //       //dispatch(setProjectData({}));
+  //       console.log('Leave');
+  //       navigation.removeListener('focus' , onBackPress);
+  //     }
+  //   },[])
+  // )
     
 
     useEffect(()=>{
@@ -89,7 +107,7 @@ const ProjectView : React.FC<Props> = ({navigation , route}) => {
       {/* <Image source={{uri:`${baseUrl}/${project.icon}`}} height={30} width={30} /> */}
       <Text style={GlobalStyles.textStyle}>{project.proj_desc}</Text>
 
-      <TouchableOpacity style={GlobalStyles.curvedButton}>
+      <TouchableOpacity onPress={()=> navigation.navigate('SupervisorTaskView' , {projId : projId , projectName : project.proj_name})} style={GlobalStyles.curvedButton}>
         <Text style={GlobalStyles.btnText}>Explore Tasks</Text>
       </TouchableOpacity>
 

@@ -62,6 +62,7 @@ const SupervisorProjectScreen : React.FC<Props> = ({navigation}) => {
   useEffect(() =>{
     fetchProjects();
     getStatus();
+    console.log(user.organization)
   },[])
   return (
     <View style={GlobalStyles.authContainer}>

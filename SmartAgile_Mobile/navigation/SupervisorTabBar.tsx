@@ -12,8 +12,8 @@ import { StyleSheet, Text, View } from "react-native";
 import SupervisorSettings from "../screens/Supervisor/SupervisorSettings";
 import { useSelector } from "react-redux";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { NavigationContainer } from "@react-navigation/native";
 import ProjectView from "../screens/Supervisor/ProjectView";
+import SupervisorTaskView from "../screens/Supervisor/SupervisorTaskView";
 
 const Tab = createBottomTabNavigator();
 const ProjectStackNavigator = createNativeStackNavigator<RootStackParamList>();
@@ -24,11 +24,12 @@ export const SupervisorProjectStack =() =>{
         <ProjectStackNavigator.Navigator   screenOptions={{
                                                     headerShown:false,
                                                     gestureDirection:'horizontal' , 
-                                                    animation:'slide_from_bottom',
+                                                    animation:'simple_push',
                                                     animationDuration:50
                                                         }}>
             <ProjectStackNavigator.Screen name="SupervisorProjectScreen" component={SupervisorProjectScreen}/>
             <ProjectStackNavigator.Screen name='ProjectView' component={ProjectView}/>
+            <ProjectStackNavigator.Screen name="SupervisorTaskView" component={SupervisorTaskView} />
         </ProjectStackNavigator.Navigator>
         
     )

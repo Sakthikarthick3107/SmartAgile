@@ -1,8 +1,8 @@
-import { Project, SET_PROJECT } from "./projectAction";
+import { ProjectType, SET_PROJECT } from "./projectAction";
 
 
 type State = {
-    project : {} | Project
+    project : {} | ProjectType
 }
 
 const initialState : State ={

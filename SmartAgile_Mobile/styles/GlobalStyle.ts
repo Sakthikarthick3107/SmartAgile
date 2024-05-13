@@ -48,6 +48,13 @@ const GlobalStyles = StyleSheet.create({
     justifyContent:'space-between',
 
   },
+  row:{
+    display:'flex',
+    flexDirection:'row',
+    width:'100%',
+    alignItems:'center',
+    marginVertical:5
+  },
   curvedButton:{
     padding:5,
     borderRadius:50,

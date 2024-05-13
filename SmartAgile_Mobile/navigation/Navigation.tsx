@@ -33,6 +33,7 @@ const Navigation = () => {
             <Stack.Screen name="SupervisorTabBar" options={{headerShown:false}} component={SupervisorTabBar}  />
             <Stack.Screen name="ProjectView"  options={{headerShown:false}} component={ProjectView}/>
 
+
             <Stack.Screen name="SupervisorProfile" options={{
               headerStyle:{
                 backgroundColor:Colors.primary,

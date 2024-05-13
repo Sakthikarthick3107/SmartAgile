@@ -10,6 +10,7 @@ export type RootStackParamList = {
     PersonalLogin : undefined;
     SupervisorTabBar : undefined;
     SupervisorProjectScreen : undefined;
+    SupervisorTaskView : {projId : number,projectName : string};
     //SupervisorMenu : undefined;
     ProjectView : {projId : number};
     SupervisorSettings:undefined;
