@@ -6,7 +6,7 @@ import BarChart from "../../components/SupervisorComponents/BarChart";
 const Dashboard = () => {
   return (
     <div >
-      Dashboard
+     <h2 className='text-3xl font-bold mt-4'>Dashboard</h2>
       
       <BarChart/>
       
