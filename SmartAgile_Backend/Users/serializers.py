@@ -76,7 +76,7 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
         try:
             user = User.objects.get(otp = otp)
         except User.DoesNotExist:
-            raise serializers.ValidationError('Invalid User')
+            return None
         return data
     
     def update(self, instance, validated_data):
