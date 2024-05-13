@@ -3,6 +3,7 @@ import React from 'react'
 import Colors from '../../styles/Colors'
 import GlobalStyles from '../../styles/GlobalStyle'
 import { baseUrl } from '../../env'
+import user from '../../assets/user.png';
 
 
 type Employee = {
@@ -20,7 +21,10 @@ type Employee = {
 const EmployeeListCard  = ({employee} : {employee: Employee})  => {
   return (
     <View  style={styles.employeeCard}>
-        <Image source={{uri : `${baseUrl}/media/${employee.image}`}} style={GlobalStyles.employeeIcon} />
+        {employee.image !== '' ?
+        <Image source={{uri : `${baseUrl}/media/${employee.image}`}} style={GlobalStyles.employeeIcon} />:
+        <Image source={user} style={GlobalStyles.employeeIcon} />
+      }
         <View>
             <View style={styles.nameAndPosition}>
                 <Text style={styles.nameText}>{employee.username}  </Text>

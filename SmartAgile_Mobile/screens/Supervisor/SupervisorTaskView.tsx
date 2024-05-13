@@ -27,7 +27,15 @@ export type Task = {
   task_desc: string,
   created_at: string,
   project: number,
-  assigned_to: number
+  assigned_to: {
+    id : number,
+    user : number,
+    username : string,
+    image : string,
+    role_within_project : string,
+    project : number,
+    profile : number
+  }
 }
 
 const SupervisorTaskView : React.FC<Props> = ({navigation , route}) => {
@@ -46,8 +54,12 @@ const SupervisorTaskView : React.FC<Props> = ({navigation , route}) => {
 
 
       const allTaskDetails = async() =>{
+        let url = `${baseUrl}/tasks/project/${projId}`;
+        if(activePriority !== ""){
+          url += `/prior=${activePriority}`
+        }
         try {
-          const request_tasks = await fetch(`${baseUrl}/tasks/project/${projId}`);
+          const request_tasks = await fetch(url);
           const task_response  = await request_tasks.json();
           setTasks(task_response);
           ToastModule.showToast(projectName)
@@ -57,20 +69,24 @@ const SupervisorTaskView : React.FC<Props> = ({navigation , route}) => {
         
       }
 
-  useFocusEffect(
-    useCallback(() =>{
-      const onBackPress = () =>{
-        //console.log('Enter');
-        allTaskDetails()
-      }
-      navigation.addListener('focus' , onBackPress);
+  // useFocusEffect(
+  //   useCallback(() =>{
+  //     const onBackPress = () =>{
+  //       //console.log('Enter');
+  //       allTaskDetails()
+  //     }
+  //     navigation.addListener('focus' , onBackPress);
 
-      return () =>{
-        //console.log('Leave');
-        navigation.removeListener('focus' , onBackPress);
-      }
-    },[])
-  )
+  //     return () =>{
+  //       //console.log('Leave');
+  //       navigation.removeListener('focus' , onBackPress);
+  //     }
+  //   },[activePriority])
+  // )
+
+  useEffect(()=>{
+    allTaskDetails()
+  },[activePriority])
       
   return (
     <View style={GlobalStyles.authContainer}>

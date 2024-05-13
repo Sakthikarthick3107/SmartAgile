@@ -7,7 +7,7 @@ from .models import Task
 
 @extend_schema(request=TaskSerializer, responses=TaskSerializer)
 class TaskView(APIView):
-    def get(self, request , task_id=None):
+    def get(self, request , task_id=None ):
         if task_id is not None:
             try:
                 task = Task.objects.get(task_id = task_id)
@@ -16,6 +16,8 @@ class TaskView(APIView):
             except Task.DoesNotExist:
                 return Response({'message' : 'Task Not found'}, status=status.HTTP_400_BAD_REQUEST)
         
+        
+                
         task = Task.objects.all()
         serializer = TaskSerializer(task,many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -48,12 +50,19 @@ class TaskView(APIView):
             return Response({'message' : 'Task Not found'}, status=status.HTTP_400_BAD_REQUEST)
         
 class Project_Task(APIView):
-    def get(self,request,proj_id):
-        if proj_id is not None:
+    def get(self,request,proj_id , task_priority = None):
+        if task_priority is not None and proj_id is not None:
+            task = Task.objects.filter(project=proj_id)
+            priority_task = task.filter(task_priority = task_priority)
+            priority_serializer = TaskSerializer(priority_task , many=True)
+            return Response(priority_serializer.data , status=status.HTTP_200_OK) 
+        
+        elif proj_id is not None:
             try:
                 task = Task.objects.filter(project=proj_id)
                 serializer = TaskSerializer(task,many=True)     
                 return Response(serializer.data,status=status.HTTP_200_OK)  
             except Task.DoesNotExist:
                 return Response({'message':'Task Not found'},status=status.HTTP_400_BAD_REQUEST)
-            
+          
+        

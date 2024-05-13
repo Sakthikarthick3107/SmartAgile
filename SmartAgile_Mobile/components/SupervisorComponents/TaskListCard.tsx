@@ -3,6 +3,7 @@ import React from 'react'
 import { Task } from '../../screens/Supervisor/SupervisorTaskView'
 import Colors from '../../styles/Colors'
 import GlobalStyles from '../../styles/GlobalStyle'
+import PriorityColor from '../../styles/PriorityColor'
 
 
 
@@ -10,12 +11,12 @@ const TaskListCard = ({task} :{task: Task}) => {
   return (
     <TouchableOpacity style={styles.taskContainer}>
       <View style={GlobalStyles.rowBetween}>
-        <Text style={styles.taskTitle}>{task.task_name}</Text>
-        <Text style={styles.priorityChip}>{task.task_priority} </Text>
+        <Text style={styles.taskTitle }>{task.task_name}</Text>
+        <Text style={[styles.priorityChip , {backgroundColor : PriorityColor[task.task_priority]}]}>{task.task_priority} </Text>
         {/* <Text style={GlobalStyles.smallText}>{task.task_deadline} </Text> */}
       </View>
       
-      <Text style={GlobalStyles.smallText}>{task.task_desc}</Text>
+      <Text style={[GlobalStyles.smallText,{padding:4}]}>{task.assigned_to.username}</Text>
     </TouchableOpacity>
   )
 }
@@ -30,19 +31,30 @@ const styles = StyleSheet.create({
         backgroundColor:Colors.White,
         marginVertical:6,
         elevation:2,
-        padding:8,
+        //paddingVertical:8,
         borderRadius:5
     },
     taskTitle:{
-        fontSize:16,
+        fontSize:14,
         fontFamily:'Poppins-Medium',
-        color:Colors.text
+        color:Colors.text,
+        padding:4
     },
     priorityChip:{
-        paddingHorizontal:6,
-        backgroundColor:Colors.background,
-        color:Colors.text,
-        borderRadius:50,
-        fontSize:12
+        //paddingHorizontal:6,
+        color:Colors.White,
+        fontSize:12,
+        paddingHorizontal: 12,
+        borderTopLeftRadius:5,
+        //borderBottomRightRadius: 50,
+        borderBottomLeftRadius:50,
+        borderTopRightRadius: 5,
+        shadowColor: '#000',
+        elevation: 10,
+        //position:'absolute',
+        shadowOffset: { width: 1, height: 1 },
+        shadowOpacity: 0.3,
+        shadowRadius: 3,
+        transform: [{ skewX: '-10deg' }]
     }
 })

@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { ProjectType, fetchProjectData, setProjectData } from '../../redux/projectsRedux/projectAction';
 import { baseUrl } from '../../env';
+import user from '../../assets/user.png'
 import { useFocusEffect } from '@react-navigation/native';
 
 const {width , height} = Dimensions.get('window')
@@ -116,7 +117,10 @@ const ProjectView : React.FC<Props> = ({navigation , route}) => {
       <View style={styles.memberContainer}>
       {projectMembers.map((member,index) =>(
         <View style={styles.memberView} key={index}>
-          <Image source={{uri : `${baseUrl}/media/${member.image}`}} style={styles.memberImages}/>
+          {member.image !== '' ?
+          <Image source={{uri : `${baseUrl}/media/${member.image}`}} style={styles.memberImages}/>:
+          <Image source={user} style={styles.memberImages}/>
+      }
           <Text style={GlobalStyles.smallText}>{member.username}</Text>
         </View>
         
