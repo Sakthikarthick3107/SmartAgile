@@ -13,21 +13,22 @@ function Login() {
   const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
   const [otpSent, setOtpSent] = useState(false);
-    const [otp, setOtp] = useState('');
-    const [newPassword, setNewPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [id, setId] = useState('');
-    const [code, setCode] = useState('');
+  const [otp, setOtp] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [id, setId] = useState('');
+  const [code, setCode] = useState('');
+  const [passwordChange, setPasswordChange] = useState(false);
 
-    useEffect(() => {
-        // Extract id and code from URL when component mounts
-        const searchParams = new URLSearchParams(location.search);
-        const idParam = searchParams.get('id');
-        const codeParam = searchParams.get('code');
-        // Now you have id and code, you can use them for OTP verification
-        setId(idParam);
-        setCode(codeParam);
-    }, [location.search]);
+  useEffect(() => {
+      // Extract id and code from URL when component mounts
+      const searchParams = new URLSearchParams(location.search);
+      const idParam = searchParams.get('id');
+      const codeParam = searchParams.get('code');
+      // Now you have id and code, you can use them for OTP verification
+      setId(idParam);
+      setCode(codeParam);
+  }, [location.search]);
 
   // Regular expression for validating email or employee ID format
   const usernameRegex =
@@ -100,6 +101,7 @@ function Login() {
   const handleForgotPasswordSubmit = async (e) => {
     e.preventDefault();
     try {
+      // const token = e.target.elements.token.value;
       const response = await fetch(
         "http://127.0.0.1:8000/users/auth/password_reset/",
         {
@@ -115,12 +117,18 @@ function Login() {
 
       const data = await response.json();
 
+      setId(data.id);
+
+      setCode(data.unique_token);
+
       if (response.ok) {
         console.log("OTP sent successfully");
+        alert('OTP sent successfully');
         // setShowForgotPasswordModal(true);
         setOtpSent(true);
       } else {
         console.error("Failed to send OTP:", data.error);
+        alert('Enter proper Email Address');
       }
     } catch (error) {
       console.error("Error sending OTP:", error);
@@ -130,26 +138,32 @@ function Login() {
   const handleOtpSubmit = async (e) => {
     e.preventDefault();
     try {
-        const response = await fetch(`http://127.0.0.1:8000/users/auth/password_reset/confirm/otp/${userId}/${otp}`, {
+        const response = await fetch(`http://127.0.0.1:8000/users/auth/password_reset/confirm/otp/${id}/${code}/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify({
+              otp: otp,
+            }),
         });
 
         const data = await response.json();
+        console.log(data);
 
         if (response.ok) {
             console.log('OTP verified successfully');
-            setShowForgotPasswordModal(false);
+            alert('OTP verified successfully');
+            setPasswordChange(true);
             // Show the form to enter new password
         } else {
             console.error('Failed to verify OTP:', data.error);
-            setOtpError('Invalid OTP');
+            alert('Failed to verify OTP');
+            setOtp('Invalid OTP');
         }
     } catch (error) {
         console.error('Error verifying OTP:', error);
-        setOtpError('Error verifying OTP');
+        setOtp('Error verifying OTP');
     }
 };
 
@@ -164,15 +178,16 @@ function Login() {
 
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/users/auth/password_reset/reset/",
+        `http://127.0.0.1:8000/users/auth/password_reset/confirm/password/${id}/${code}/`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            email: forgotPasswordEmail,
+            otp: otp,
             new_password: newPassword,
+            confirm_password: confirmPassword
           }),
         }
       );
@@ -181,6 +196,8 @@ function Login() {
 
       if (response.ok) {
         console.log("Password reset successfully");
+        alert('Password reset successfully');
+        setShowForgotPasswordModal(false);
         // Redirect user to login page or show a success message
       } else {
         console.error("Failed to reset password:", data.error);
@@ -291,6 +308,13 @@ function Login() {
                                 <button type="submit">Send OTP</button>
                             </form>
                         )}
+                        <div className={`${passwordChange ? 'inline' : 'hidden'}`}>
+                           <form onClick={handlePasswordChange}>
+                             <input type="password" placeholder="Enter new password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+                             <input type="password" placeholder="Confirm password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+                             <button type="submit">Submit</button>
+                           </form>
+                        </div>
                     </div>
                 </div>
             )}

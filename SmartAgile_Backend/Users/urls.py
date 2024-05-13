@@ -27,7 +27,7 @@ urlpatterns = [
     path('employee/profile/org=<int:organization>/<int:id>' , UserProfileCreate.as_view() , name="User-Profile Create id"),
 
     path('auth/password_reset/', PasswordResetRequestView.as_view(), name='password-reset-request'),
-    path('auth/password_reset/confirm/otp/<int:pk>/<str:code>/', PasswordResetConfirmOtpView.as_view(), name='password-reset-otp'),
+    path('auth/password_reset/confirm/otp/<int:pk>/<str:token>/', PasswordResetConfirmOtpView.as_view(), name='password-reset-otp'),
     path('auth/password_reset/confirm/password/<int:pk>/<str:code>/', PasswordResetConfirmView.as_view(), name='password-reset-confirm'),
     
     path('employee/position-choices/' ,position_choices , name="Employee Position" )
