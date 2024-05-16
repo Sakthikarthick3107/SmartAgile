@@ -60,6 +60,8 @@ import TaskHub from "./pages/EmployeePages/Taskhub";
 import Chat from "./pages/EmployeePages/Chat";
 import Settings from "./pages/EmployeePages/Settings";
 import Dashboard from "./pages/EmployeePages/Dashboard";
+import UserList from "./pages/EmployeePages/UserList";
+import TaskDetails from "./pages/EmployeePages/TaskDetails"
 
 // Layout component with Navbar and Sidebar
 function LayoutWithSidebar({ children }) {
@@ -82,6 +84,8 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/dashboard" element={<LayoutWithSidebar><Dashboard /></LayoutWithSidebar>} />
       <Route path="/projects" element={<LayoutWithSidebar><Projects /></LayoutWithSidebar>} />
+         <Route exact path="/user-list" element={<LayoutWithSidebar><UserList /></LayoutWithSidebar>} />
+         <Route exact path="/taskdetails" element={<LayoutWithSidebar><TaskDetails /></LayoutWithSidebar>} />
       <Route path="/tasks" element={<LayoutWithSidebar><TaskHub /></LayoutWithSidebar>} />
       <Route path="/chat" element={<LayoutWithSidebar><Chat /></LayoutWithSidebar>} />
       <Route path="/settings" element={<LayoutWithSidebar><Settings /></LayoutWithSidebar>} />
