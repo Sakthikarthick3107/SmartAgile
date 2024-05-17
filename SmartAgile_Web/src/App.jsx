@@ -12,6 +12,7 @@ import Chat from "./pages/EmployeePages/Chat";
 import Settings from "./pages/EmployeePages/Settings";
 import Dashboard from "./pages/EmployeePages/Dashboard";
 import TaskDetails from "./pages/EmployeePages/TaskDetails";
+import AddCandidate from "./pages/EmployeePages/AddCandidate";
 
 
 // Layout component with Navbar and Sidebar
@@ -37,6 +38,7 @@ function App() {
       <Route path="/projects" element={<LayoutWithSidebar><Projects /></LayoutWithSidebar>} />
       <Route path="/tasks" element={<LayoutWithSidebar><TaskHub /></LayoutWithSidebar>} />
       <Route path="/taskdetails" element={<LayoutWithSidebar><TaskDetails /></LayoutWithSidebar>} />
+      <Route path="/addcandidate" element={<LayoutWithSidebar><AddCandidate /></LayoutWithSidebar>} />
       <Route path="/chat" element={<LayoutWithSidebar><Chat /></LayoutWithSidebar>} />
       <Route path="/settings" element={<LayoutWithSidebar><Settings /></LayoutWithSidebar>} />
     </Routes>
