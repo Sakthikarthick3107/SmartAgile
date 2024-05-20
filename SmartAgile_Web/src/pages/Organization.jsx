@@ -1,23 +1,17 @@
-
-
-
-
-
-
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import slogo from '../assets/slogo.png';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import slogo from "../assets/slogo.png";
 
 const Organization = () => {
   const [formData, setFormData] = useState({
-    organizationName: '',
-    organizationEmail: '',
-    organizationWebsite: '',
-    ownerName: '',
-    ownerEmail: '',
-    password: '',
-    confirmPassword: '',
-    organizationAddress: '',
+    organizationName: "",
+    organizationEmail: "",
+    organizationWebsite: "",
+    ownerName: "",
+    ownerEmail: "",
+    password: "",
+    confirmPassword: "",
+    organizationAddress: "",
   });
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
@@ -37,7 +31,64 @@ const Organization = () => {
 
   const validateForm = () => {
     let formErrors = {};
-    // Add validation conditions here, e.g., check for empty fields, invalid email format, etc.
+
+    if (!formData.organizationName.trim()) {
+      formErrors.organizationName = "Organization name is required";
+    }
+
+    // Organization Email
+    if (!formData.organizationEmail.trim()) {
+      formErrors.organizationEmail = "Organization email is required";
+    } else if (!/^\S+@\S+\.\S+$/.test(formData.organizationEmail)) {
+      formErrors.organizationEmail = "Invalid email format";
+    }
+
+    // Organization Website
+    if (!formData.organizationWebsite.trim()) {
+      formErrors.organizationWebsite = "Organization website is required";
+    } else if (
+      !/^(http(s)?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w- ;,.\/?%&=]*)?$/.test(
+        formData.organizationWebsite
+      )
+    ) {
+      formErrors.organizationWebsite = "Invalid website URL format";
+    }
+
+    // Organization Address
+    if (!formData.organizationAddress.trim()) {
+      formErrors.organizationAddress = "Organization address is required";
+    } else if (!/^[a-zA-Z0-9,'/:\- ]+$/.test(formData.organizationAddress)) {
+      formErrors.organizationAddress = "Invalid address format";
+    }
+
+    // Owner Name
+    if (!formData.ownerName.trim()) {
+      formErrors.ownerName = "Owner name is required";
+    } else if (!/^[a-zA-Z\s]+$/.test(formData.ownerName)) {
+      formErrors.ownerName = "Owner name can only contain alphabets and spaces";
+    }
+
+    // Owner Email
+    if (!formData.ownerEmail.trim()) {
+      formErrors.ownerEmail = "Owner email is required";
+    } else if (!/^\S+@\S+\.\S+$/.test(formData.ownerEmail)) {
+      formErrors.ownerEmail = "Invalid email format";
+    }
+
+    // Password
+    if (!formData.password.trim()) {
+      formErrors.password = "Password is required";
+    } else if (formData.password.trim().length < 8) {
+      formErrors.password = "Password must be at least 8 characters long";
+    }
+
+    // Confirm Password
+    if (!formData.confirmPassword.trim()) {
+      formErrors.confirmPassword = "Confirm password is required";
+    } else if (formData.password !== formData.confirmPassword) {
+      formErrors.confirmPassword = "Passwords do not match";
+    }
+
     return formErrors;
   };
 
@@ -49,15 +100,18 @@ const Organization = () => {
     };
 
     try {
-      const createSuperuser = await fetch(`${baseUrl}/users/employees/superuser/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(superuser),
-      });
+      const createSuperuser = await fetch(
+        `${baseUrl}/users/employees/superuser/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(superuser),
+        }
+      );
       const superuserResponse = await createSuperuser.json();
-      console.log('Superuser response:', superuserResponse);
+      console.log("Superuser response:", superuserResponse);
 
       if (createSuperuser.status === 201) {
         const newOrganization = {
@@ -68,30 +122,36 @@ const Organization = () => {
         };
 
         const postNewOrganization = await fetch(`${baseUrl}/organization/`, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(newOrganization),
         });
         const orgResponse = await postNewOrganization.json();
-        console.log('Organization response:', orgResponse);
+        console.log("Organization response:", orgResponse);
 
-        if (postNewOrganization.status === 200 && orgResponse.message === 'successfully created') {
+        if (
+          postNewOrganization.status === 200 &&
+          orgResponse.message === "successfully created"
+        ) {
           const profileStatus = {
             user: superuserResponse.id,
             organization: orgResponse.data.org_id,
           };
 
-          const userProfileCreate = await fetch(`${baseUrl}/users/employee/profile`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(profileStatus),
-          });
+          const userProfileCreate = await fetch(
+            `${baseUrl}/users/employee/profile`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(profileStatus),
+            }
+          );
           const profileResponse = await userProfileCreate.json();
-          console.log('Profile response:', profileResponse);
+          console.log("Profile response:", profileResponse);
 
           if (userProfileCreate.status === 201) {
             // Store data in local storage
@@ -105,23 +165,29 @@ const Organization = () => {
               orgId: orgResponse.data.org_id,
               ownerId: superuserResponse.id,
             };
-            localStorage.setItem('organizationData', JSON.stringify(organizationData));
+            localStorage.setItem(
+              "organizationData",
+              JSON.stringify(organizationData)
+            );
 
-            console.log('Organization data saved to local storage:', organizationData);
+            console.log(
+              "Organization data saved to local storage:",
+              organizationData
+            );
 
-            alert('New Organization created successfully');
-            navigate('/login');
+            alert("New Organization created successfully");
+            navigate("/login");
           } else {
-            throw new Error('Failed to create user profile');
+            throw new Error("Failed to create user profile");
           }
         } else {
-          throw new Error('Failed to create organization');
+          throw new Error("Failed to create organization");
         }
       } else {
-        throw new Error('Failed to create superuser');
+        throw new Error("Failed to create superuser");
       }
     } catch (error) {
-      console.error('Failed to create organization:', error);
+      console.error("Failed to create organization:", error);
       alert(`Error: ${error.message}`);
     }
   };
@@ -146,11 +212,17 @@ const Organization = () => {
           New Organization
         </h2>
         <hr className="border-black mb-8" />
-        <form onSubmit={handleSubmit} className="flex flex-wrap justify-between">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-wrap justify-between"
+        >
           <div className="w-full lg:w-6/12 pl-2 pr-2">
             {/* Organization Name */}
             <div className="mb-6">
-              <label htmlFor="organizationName" className="block text-sm font-semibold text-black text-lg mb-1">
+              <label
+                htmlFor="organizationName"
+                className="block text-sm font-semibold text-black text-lg mb-1"
+              >
                 Organization Name
               </label>
               <input
@@ -169,7 +241,10 @@ const Organization = () => {
             </div>
             {/* Organization Email */}
             <div className="mb-6">
-              <label htmlFor="organizationEmail" className="block text-sm font-semibold text-black text-lg mb-1">
+              <label
+                htmlFor="organizationEmail"
+                className="block text-sm font-semibold text-black text-lg mb-1"
+              >
                 Organization Email
               </label>
               <input
@@ -188,7 +263,10 @@ const Organization = () => {
             </div>
             {/* Organization Website */}
             <div className="mb-6">
-              <label htmlFor="organizationWebsite" className="block text-sm font-semibold text-black text-lg mb-1">
+              <label
+                htmlFor="organizationWebsite"
+                className="block text-sm font-semibold text-black text-lg mb-1"
+              >
                 Organization Website
               </label>
               <input
@@ -202,12 +280,17 @@ const Organization = () => {
                 placeholder="Enter website URL"
               />
               {errors.organizationWebsite && (
-                <span className="text-red-500">{errors.organizationWebsite}</span>
+                <span className="text-red-500">
+                  {errors.organizationWebsite}
+                </span>
               )}
             </div>
             {/* Organization Address */}
             <div className="mb-6">
-              <label htmlFor="organizationAddress" className="block text-sm font-semibold text-black text-lg mb-1">
+              <label
+                htmlFor="organizationAddress"
+                className="block text-sm font-semibold text-black text-lg mb-1"
+              >
                 Organization Address
               </label>
               <textarea
@@ -220,14 +303,19 @@ const Organization = () => {
                 placeholder="Enter the address"
               />
               {errors.organizationAddress && (
-                <span className="text-red-500">{errors.organizationAddress}</span>
+                <span className="text-red-500">
+                  {errors.organizationAddress}
+                </span>
               )}
             </div>
           </div>
           <div className="w-full lg:w-6/12 pl-2 pr-2">
             {/* Owner Name */}
             <div className="mb-6">
-              <label htmlFor="ownerName" className="block text-sm font-semibold text-black text-lg mb-1">
+              <label
+                htmlFor="ownerName"
+                className="block text-sm font-semibold text-black text-lg mb-1"
+              >
                 Owner Name
               </label>
               <input
@@ -246,7 +334,10 @@ const Organization = () => {
             </div>
             {/* Owner Email */}
             <div className="mb-6">
-              <label htmlFor="ownerEmail" className="block text-sm font-semibold text-black text-lg mb-1">
+              <label
+                htmlFor="ownerEmail"
+                className="block text-sm font-semibold text-black text-lg mb-1"
+              >
                 Owner Email
               </label>
               <input
@@ -265,7 +356,10 @@ const Organization = () => {
             </div>
             {/* Password */}
             <div className="mb-6">
-              <label htmlFor="password" className="block text-sm font-semibold text-black text-lg mb-1">
+              <label
+                htmlFor="password"
+                className="block text-sm font-semibold text-black text-lg mb-1"
+              >
                 Password
               </label>
               <input
@@ -284,7 +378,10 @@ const Organization = () => {
             </div>
             {/* Confirm Password */}
             <div className="mb-6">
-              <label htmlFor="confirmPassword" className="block text-sm font-semibold text-black text-lg mb-1">
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-semibold text-black text-lg mb-1"
+              >
                 Confirm Password
               </label>
               <input
