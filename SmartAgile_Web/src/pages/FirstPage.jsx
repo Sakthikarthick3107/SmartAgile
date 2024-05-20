@@ -22,7 +22,7 @@ const FirstPage = () => {
                         <img src={logo} alt="Logo" className="w-80" />
             </div>
             <div>
-                <h1 className='text-6xl mt-10 text-center'>Smart Agile</h1>
+                <h1 className='text-6xl mt-10 text-center text-gray-900'>Smart Agile</h1>
             </div>
             <div className='flex flex-col w-[50%] gap-5  mt-32 ml-[25%] text-white text-xl'>
                 <button onClick={handleOrganizationClick} className=' bg-bgfirst py-4'>Organization</button>
