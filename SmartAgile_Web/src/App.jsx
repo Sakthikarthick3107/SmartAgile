@@ -49,6 +49,7 @@
 
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Organization from "./pages/Organization";
 import FirstPage from "./pages/FirstPage";
@@ -69,9 +70,21 @@ function LayoutWithSidebar({ children }) {
     <div className="flex flex-col h-screen">
       <Navbar />
       <div className="flex flex-grow">
+// Layout component with Navbar and Sidebar
+function LayoutWithSidebar({ children }) {
+  return (
+    <div className="flex flex-col h-screen">
+      <Navbar />
+      <div className="flex flex-grow">
         <Sidebar />
         <main className="flex-grow p-4">{children}</main>
+        <main className="flex-grow p-4">{children}</main>
       </div>
+    </div>
+  );
+}
+
+function App() {
     </div>
   );
 }
