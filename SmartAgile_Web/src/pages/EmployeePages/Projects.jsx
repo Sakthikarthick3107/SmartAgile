@@ -31,4 +31,5 @@ function Projects() {
     </div>
   );
 }
-export default Projects
+
+export default Projects;

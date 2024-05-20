@@ -41,7 +41,6 @@ function Login() {
   };
 
   // Function to handle form submission
-  // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -165,7 +164,7 @@ function Login() {
         console.error('Error verifying OTP:', error);
         setOtp('Error verifying OTP');
     }
-};
+  };
 
 
   const handlePasswordChange = async (e) => {
