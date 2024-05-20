@@ -18,28 +18,6 @@ function Projects() {
 
     fetchProjects();
   }, []);
-}
-
-import React, { useState, useEffect } from 'react';
-import ProjectCard from '../../components/EmployeeComponents/ProjectComponents/ProjectCard';
-
-function Projects() {
-  const [projects, setProjects] = useState([]);
-
-  useEffect(() => {
-    async function fetchProjects() {
-      try {
-        const response = await fetch('http://127.0.0.1:8000/projects/');
-        const data = await response.json();
-        setProjects(data);
-        // console.log(data)
-      } catch (error) {
-        console.error('Error fetching projects:', error);
-      }
-    }
-
-    fetchProjects();
-  }, []);
 
   return (
     <div className="projects-container">
@@ -50,8 +28,8 @@ function Projects() {
           
         ))}
       </div>
-       
     </div>
   );
 }
+
 export default Projects;

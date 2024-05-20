@@ -3,7 +3,6 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChartBar, faBriefcase, faTasks, faComments, faCog } from "@fortawesome/free-solid-svg-icons";
-import { faChartBar, faBriefcase, faTasks, faComments, faCog } from "@fortawesome/free-solid-svg-icons";
 
 const Sidebar = () => {
   const navItems = [
@@ -12,15 +11,9 @@ const Sidebar = () => {
     { name: "Task Hub", icon: faTasks, path: "/tasks" },
     { name: "Chat", icon: faComments, path: "/chat" },
     { name: "Settings", icon: faCog, path: "/settings" },
-    { name: "Dashboard", icon: faChartBar, path: "/dashboard" },
-    { name: "Projects", icon: faBriefcase, path: "/projects" },
-    { name: "Task Hub", icon: faTasks, path: "/tasks" },
-    { name: "Chat", icon: faComments, path: "/chat" },
-    { name: "Settings", icon: faCog, path: "/settings" },
   ];
 
   return (
-    <nav className="w-64 h-screen bg-[#4D989D] bg-opacity-20 font-regular text-white flex flex-col pt-10 pr-5">
     <nav className="w-64 h-screen bg-[#4D989D] bg-opacity-20 font-regular text-white flex flex-col pt-10 pr-5">
       {navItems.map((item, index) => (
         <NavLink
@@ -33,12 +26,8 @@ const Sidebar = () => {
           }>
           <FontAwesomeIcon icon={item.icon} className="ml-1 mr-3 text-lg" />
           <span>{item.name}</span>
-          }>
-          <FontAwesomeIcon icon={item.icon} className="ml-1 mr-3 text-lg" />
-          <span>{item.name}</span>
         </NavLink>
       ))}
-    </nav>
     </nav>
   );
 };

@@ -152,37 +152,8 @@ const Taskhub = () => {
           </div>
         </div>
       </div>
-
-{/* Priority section */}
-      <div className="flex flex-row">
-        <button
-          onClick={() => handlePriorityClick('')}
-          className={`px-3 py-1 rounded-md text-sm mr-2 ${activePriority === '' && 'bg-blue-500 text-white'}`}
-        >
-          All
-        </button>
-        <button
-          onClick={() => handlePriorityClick('LOW')}
-          className={`px-3 py-1 rounded-md text-sm mr-2 ${activePriority === 'LOW' && 'bg-blue-500 text-white'}`}
-        >
-          Low
-        </button>
-        <button
-          onClick={() => handlePriorityClick('MED')}
-          className={`px-3 py-1 rounded-md text-sm mr-2 ${activePriority === 'MED' && 'bg-blue-500 text-white'}`}
-        >
-          Medium
-        </button>
-        <button
-          onClick={() => handlePriorityClick('HIGH')}
-          className={`px-3 py-1 rounded-md text-sm mr-2 ${activePriority === 'HIGH' && 'bg-blue-500 text-white'}`}
-        >
-          High
-        </button>
-      </div>
     </div>
   );
 };
 
-export default Taskhub;
 export default Taskhub;
