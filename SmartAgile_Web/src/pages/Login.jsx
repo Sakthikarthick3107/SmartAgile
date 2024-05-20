@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import slogo from "../assets/slogo.png";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import slogo from "../assets/slogo.png";
 // import personal from '../assets/Personal.png';
 // import org from '../assets/Org.png';
 
@@ -29,11 +32,43 @@ function Login() {
       setId(idParam);
       setCode(codeParam);
   }, [location.search]);
+  const navigate = useNavigate(); // Initialize navigate function
+  const [username, setusername] = useState("");
+  const [password, setPassword] = useState("");
+  const [usernameError, setUsernameError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [id, setId] = useState('');
+  const [code, setCode] = useState('');
+  const [passwordChange, setPasswordChange] = useState(false);
+
+  useEffect(() => {
+      // Extract id and code from URL when component mounts
+      const searchParams = new URLSearchParams(location.search);
+      const idParam = searchParams.get('id');
+      const codeParam = searchParams.get('code');
+      // Now you have id and code, you can use them for OTP verification
+      setId(idParam);
+      setCode(codeParam);
+  }, [location.search]);
 
   // Regular expression for validating email or employee ID format
   const usernameRegex =
     /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$|^([a-zA-Z]{3})_([0-9]{3})$/;
+  // Regular expression for validating email or employee ID format
+  const usernameRegex =
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$|^([a-zA-Z]{3})_([0-9]{3})$/;
 
+  // Function to handle organizational option click
+  const handleOrganizationalClick = () => {
+    // Redirect to the dashboard
+    navigate("dashboard");
+  };
   // Function to handle organizational option click
   const handleOrganizationalClick = () => {
     // Redirect to the dashboard
@@ -318,7 +353,9 @@ function Login() {
                     </div>
                 </div>
             )}
+            )}
         </div>
+  );
   );
 }
 
