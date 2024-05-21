@@ -15,7 +15,6 @@ const TaskListCard = ({task} :{task: Task}) => {
         <Text style={[styles.priorityChip , {backgroundColor : PriorityColor[task.task_priority]}]}>{task.task_priority} </Text>
         {/* <Text style={GlobalStyles.smallText}>{task.task_deadline} </Text> */}
       </View>
-      
       <Text style={[GlobalStyles.smallText,{padding:4}]}>{task.assigned_to.username}</Text>
     </TouchableOpacity>
   )
