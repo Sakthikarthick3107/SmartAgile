@@ -102,6 +102,7 @@ function Login() {
     e.preventDefault();
     try {
       // const token = e.target.elements.token.value;
+      // const token = e.target.elements.token.value;
       const response = await fetch(
         "http://127.0.0.1:8000/users/auth/password_reset/",
         {
@@ -116,6 +117,10 @@ function Login() {
       );
 
       const data = await response.json();
+
+      setId(data.id);
+
+      setCode(data.unique_token);
 
       setId(data.id);
 
