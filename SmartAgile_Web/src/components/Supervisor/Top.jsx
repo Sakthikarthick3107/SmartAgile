@@ -34,7 +34,7 @@ const Top = () => {
       <div className="flex items-center">
         <div className="w-40 h-auto">
           {/* Your logo component or image */}
-          <img src={logo} alt="Logo" />
+          <img src={logo} alt="Logo" />admin
         </div>
       </div>
       <div className="flex items-center">

@@ -197,6 +197,8 @@ function Chat() {
         });
 
         setUserProjects(projectsWithFullIconPaths);
+
+        
       } catch (error) {
         console.error('Error fetching user projects:', error);
       }
@@ -215,7 +217,7 @@ function Chat() {
       <div className="flex flex-1 flex-col pt-6 pr-5 pl-2 rounded-xl bg-slate-50 shadow-[0px_0px_4px_rgba(0,0,0,0.35)]">
         <div className="flex gap-5 w-full">
           <div className="flex-auto pl-4 text-3xl font-semibold text-black">
-            Teams
+            Projects
           </div>
         </div>
         <div className="mt-3.5 h-px bg-black" />
