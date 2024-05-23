@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
-import logo from "../../assets/logo.png"
+import logo from "../../assets/logo.png";
+import Avatar from '@mui/material/Avatar';
 
 const Navbar = () => {
   const [userData, setUserData] = useState({});
@@ -12,10 +13,12 @@ const Navbar = () => {
     fetchUserData();
   }, []);
 
+  const id = localStorage.getItem('user_id');
+
   const fetchUserData = async () => {
     try {
       // Replace with the actual backend endpoint that provides user data
-      const response = await fetch("/api/user");
+      const response = await fetch(`http://127.0.0.1:8000/users/employees/${id}`);
       const data = await response.json();
       setUserData(data);
 
@@ -38,16 +41,17 @@ const Navbar = () => {
         <div className="flex items-center ">
           {/* Your user profile area */}
           <span className="mr-2.5">{userData.username}</span>
-          <img
+          {/* <img
             className="max-w-[30px] h-auto cursor-pointer ml-2.5 w-10 h-10 rounded-full object-cover mx-3.5"
             src={userData.profilePicture}
             alt="Profile"
-          />
+          /> */}
+          <Avatar src={userData.image} alt="Profile"/>
         </div>
         <div className="ml-3">
           {/* FontAwesome Bell Icon with notification count */}
           <span className="relative top-[-7.5px] right-[-23.5px] bg-red-500 text-white text-xs p-[0px] px-[4px] rounded-full">
-            {notificationCount}
+            1
           </span>
           <FontAwesomeIcon icon={faBell} />
         </div>
