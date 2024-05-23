@@ -46,6 +46,7 @@ class LoginView(APIView):
         password = request.data.get('password')
 
         user = authenticate(email=email,password=password)
+        print(user)
 
         if not user:
             return Response({'error' : 'Invalid Credentials'},status=status.HTTP_400_BAD_REQUEST)

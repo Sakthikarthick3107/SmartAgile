@@ -20,6 +20,7 @@ class Project(models.Model):
     proj_deadline = models.CharField(max_length=10)
     proj_desc = models.CharField(max_length=255)
     status = models.CharField(max_length=2 , choices= STATUS_CHOICES , default='PL')
+    created_at = models.DateField(auto_now_add=True)
     
     def __str__(self):
         return self.proj_name
