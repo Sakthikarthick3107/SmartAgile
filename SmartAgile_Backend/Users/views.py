@@ -65,6 +65,7 @@ class LoginView(APIView):
             # 'refresh_token' : str(refresh_token),
             'username' : user.username,
             'email' : email,
+            'user_id' : user.pk,
             'organization':organization.org_id,
             'is_owner' : is_owner,
             'message' : 'Logged in successfully',
