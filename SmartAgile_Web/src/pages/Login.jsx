@@ -176,6 +176,20 @@ function Login() {
         alert("Failed to verify OTP");
         setOtp("Invalid OTP");
       }
+      if (response.ok) {
+        console.log("OTP verified successfully");
+        alert("OTP verified successfully");
+        setOtpSent(false);
+        setShowForgotPasswordModal(false);
+        setPasswordChange(true);
+        
+
+        // Show the form to enter new password
+      } else {
+        console.error("Failed to verify OTP:", data.error);
+        alert("Failed to verify OTP");
+        setOtp("Invalid OTP");
+      }
     } catch (error) {
       console.error("Error verifying OTP:", error);
       setOtp("Error verifying OTP");
@@ -201,6 +215,7 @@ function Login() {
             otp: otp,
             new_password: newPassword,
             confirm_password: confirmPassword,
+            confirm_password: confirmPassword,
           }),
         }
       );
@@ -210,10 +225,10 @@ function Login() {
         console.log("Password reset successfully");
         alert("Password reset successfully");
         setShowForgotPasswordModal(false);
-        setPasswordChange(false);
         setOtp('')
         setNewPassword('')
         setConfirmPassword('')
+        setPasswordChange(false);
         // Redirect user to login page or show a success message
       } else {
         console.error("Failed to reset password:", data.error);
@@ -227,8 +242,8 @@ function Login() {
     // Navigate to the Register page
     navigate("/Organization");
   };
-  return (
-    <div className="flex justify-center items-center w-[100vw] h-screen bg-bgfirst bg-opacity-80">
+return (
+   <div className="flex justify-center items-center w-[100vw] h-screen bg-bgfirst bg-opacity-80">
       <div className="bg-white rounded-lg shadow-md p-8 w-96">
         <div className="flex justify-center mb-6">
           <img src={slogo} alt="Logo" className="w-20" />
