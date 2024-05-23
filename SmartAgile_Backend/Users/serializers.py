@@ -7,7 +7,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id','username','password','email']
+        fields = ['id','username','password','email', 'image']
 
     def create(self, validated_data):
         user = User.objects.create(
@@ -15,6 +15,14 @@ class UserSerializer(serializers.ModelSerializer):
             email = validated_data['email']
         )
         user.set_password(validated_data['password'])
+
+        image_field = validated_data.get('image', None)
+        if image_field:
+            if not image_field.content:
+                user.image = None
+            else:
+                user.image.save(image_field.name, ContentFile(image_field.read()))
+                
         user.save()
         return user
     
