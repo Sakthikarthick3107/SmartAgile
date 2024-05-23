@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from .models import Project , ProjectMembers
 from Users.models import User
 from rest_framework.decorators import api_view
-from rest_framework.generics import ListCreateAPIView ,RetrieveUpdateDestroyAPIView
+# from rest_framework.generics import ListCreateAPIView ,RetrieveUpdateDestroyAPIView
 
 
 @api_view(['GET'])
@@ -34,12 +34,12 @@ class ProjectView(APIView):
                 project = Project.objects.get(proj_id= proj_id)
                 serializer = ProjectSerializer(project)
                 return Response(serializer.data, status=status.HTTP_200_OK)
-            except project.DoesNotExist:
+            except Project.DoesNotExist:
                 return Response({'message' : 'Project Not found'}, status=status.HTTP_400_BAD_REQUEST)
         elif organization is not None:
             try:
-                org_prjs = Project.objects.filter(organization = organization)
-                serializer = ProjectSerializer(org_prjs , many=True)
+                org_proj = Project.objects.filter(organization = organization)
+                serializer = ProjectSerializer(org_proj , many=True)
                 return Response(serializer.data)
             except Project.DoesNotExist:
                 return Response({'error' : 'Error'} , status=status.HTTP_400_BAD_REQUEST)
