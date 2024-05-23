@@ -4,7 +4,10 @@ from .models import UserProfile
 
 # Register your models here.
 class UserAdmin(admin.ModelAdmin):
-    list_display = ['username', 'email','is_staff', 'is_superuser']
+    list_display = ['id', 'username', 'email','is_staff', 'is_superuser']
 
-admin.site.register(User,UserAdmin)
-admin.site.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ['user', 'organization', 'position', 'role']
+
+admin.site.register(User, UserAdmin)
+admin.site.register(UserProfile, UserProfileAdmin)

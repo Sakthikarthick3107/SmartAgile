@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import slogo from "../assets/slogo.png";
+// import personal from '../assets/Personal.png';
+// import org from '../assets/Org.png';
 
 function Login() {
   const navigate = useNavigate(); // Initialize navigate function
@@ -11,22 +13,23 @@ function Login() {
   const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
   const [otpSent, setOtpSent] = useState(false);
-  const [otp, setOtp] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [id, setId] = useState('');
-  const [code, setCode] = useState('');
+  const [otp, setOtp] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [id, setId] = useState("");
+  const [code, setCode] = useState("");
   const [passwordChange, setPasswordChange] = useState(false);
 
-  useEffect(() => {
-      // Extract id and code from URL when component mounts
-      const searchParams = new URLSearchParams(location.search);
-      const idParam = searchParams.get('id');
-      const codeParam = searchParams.get('code');
-      // Now you have id and code, you can use them for OTP verification
-      setId(idParam);
-      setCode(codeParam);
-  }, [location.search]);
+  // useEffect(() => {
+  //   // Extract id and code from URL when component mounts
+  //   const searchParams = new URLSearchParams(location.search);
+    
+  //   const idParam = searchParams.get("id");
+  //   const codeParam = searchParams.get("code");
+  //   // Now you have id and code, you can use them for OTP verification
+  //   setId(idParam);
+  //   setCode(codeParam);
+  // }, [location.search]);
 
   // Regular expression for validating email or employee ID format
   const usernameRegex =
@@ -72,22 +75,21 @@ function Login() {
 
       const res = await response.json();
       console.log(res);
+      localStorage.setItem('user_id',JSON.stringify(res.user_id));
 
       if (response.ok) {
         // Authentication successful
         console.log("Login successful");
         const userData = {
           username: res.email,
-          isStaff: res.is_staff
+          isStaff : res.is_staff
         };
         localStorage.setItem("user", JSON.stringify(userData));
-
-        if (res.is_staff) {
-        navigate("/sdashboard"); 
-      } else {
-        navigate("/dashboard"); // Navigate to dashboard if user is not staff
-      }
-
+        if(res.is_staff){
+          navigate('/sdashboard');
+        }else{
+          navigate('/dashboard');
+        }
       } else {
         // Authentication failed
         console.error("Login failed:", data.error);
@@ -101,6 +103,7 @@ function Login() {
   const handleForgotPassword = () => {
     setShowForgotPasswordModal(true);
   };
+
 
   const handleForgotPasswordSubmit = async (e) => {
     e.preventDefault();
@@ -127,12 +130,13 @@ function Login() {
 
       if (response.ok) {
         console.log("OTP sent successfully");
-        alert('OTP sent successfully');
+        alert("OTP sent successfully");
         // setShowForgotPasswordModal(true);
+        setForgotPasswordEmail('')
         setOtpSent(true);
       } else {
         console.error("Failed to send OTP:", data.error);
-        alert('Enter proper Email Address');
+        alert("Enter proper Email Address");
       }
     } catch (error) {
       console.error("Error sending OTP:", error);
@@ -142,35 +146,55 @@ function Login() {
   const handleOtpSubmit = async (e) => {
     e.preventDefault();
     try {
-        const response = await fetch(`http://127.0.0.1:8000/users/auth/password_reset/confirm/otp/${id}/${code}/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              otp: otp,
-            }),
-        });
-
-        const data = await response.json();
-        console.log(data);
-
-        if (response.ok) {
-            console.log('OTP verified successfully');
-            alert('OTP verified successfully');
-            setPasswordChange(true);
-            // Show the form to enter new password
-        } else {
-            console.error('Failed to verify OTP:', data.error);
-            alert('Failed to verify OTP');
-            setOtp('Invalid OTP');
+      const response = await fetch(
+        `http://127.0.0.1:8000/users/auth/password_reset/confirm/otp/${id}/${code}/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            otp: otp,
+          }),
         }
+      );
+
+      const data = await response.json();
+      console.log(data);
+
+      if (response.ok) {
+        console.log("OTP verified successfully");
+        alert("OTP verified successfully");
+        setOtpSent(false);
+        setShowForgotPasswordModal(false);
+        setPasswordChange(true);
+        
+
+        // Show the form to enter new password
+      } else {
+        console.error("Failed to verify OTP:", data.error);
+        alert("Failed to verify OTP");
+        setOtp("Invalid OTP");
+      }
+      if (response.ok) {
+        console.log("OTP verified successfully");
+        alert("OTP verified successfully");
+        setOtpSent(false);
+        setShowForgotPasswordModal(false);
+        setPasswordChange(true);
+        
+
+        // Show the form to enter new password
+      } else {
+        console.error("Failed to verify OTP:", data.error);
+        alert("Failed to verify OTP");
+        setOtp("Invalid OTP");
+      }
     } catch (error) {
-        console.error('Error verifying OTP:', error);
-        setOtp('Error verifying OTP');
+      console.error("Error verifying OTP:", error);
+      setOtp("Error verifying OTP");
     }
   };
-
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
@@ -179,7 +203,6 @@ function Login() {
       // Handle password mismatch error
       return;
     }
-
     try {
       const response = await fetch(
         `http://127.0.0.1:8000/users/auth/password_reset/confirm/password/${id}/${code}/`,
@@ -191,17 +214,21 @@ function Login() {
           body: JSON.stringify({
             otp: otp,
             new_password: newPassword,
-            confirm_password: confirmPassword
+            confirm_password: confirmPassword,
+            confirm_password: confirmPassword,
           }),
         }
       );
-
       const data = await response.json();
 
       if (response.ok) {
         console.log("Password reset successfully");
-        alert('Password reset successfully');
+        alert("Password reset successfully");
         setShowForgotPasswordModal(false);
+        setOtp('')
+        setNewPassword('')
+        setConfirmPassword('')
+        setPasswordChange(false);
         // Redirect user to login page or show a success message
       } else {
         console.error("Failed to reset password:", data.error);
@@ -215,8 +242,8 @@ function Login() {
     // Navigate to the Register page
     navigate("/Organization");
   };
-  return (
-    <div className="flex justify-center items-center w-[100vw] h-screen bg-bgfirst bg-opacity-80">
+return (
+   <div className="flex justify-center items-center w-[100vw] h-screen bg-bgfirst bg-opacity-80">
       <div className="bg-white rounded-lg shadow-md p-8 w-96">
         <div className="flex justify-center mb-6">
           <img src={slogo} alt="Logo" className="w-20" />
@@ -296,33 +323,85 @@ function Login() {
         </div>
       </div>
       {showForgotPasswordModal && (
-                <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-900 bg-opacity-50">
-                    <div className="bg-white p-8 rounded-md">
-                        {otpSent ? (
-                            <>
-                                <form onSubmit={handleOtpSubmit}>
-                                    <input type="text" placeholder="Enter OTP" value={otp} onChange={(e) => setOtp(e.target.value)} />
-                                    <button type="submit">Verify OTP</button>
-                                </form>
-                                <button onClick={() => setShowForgotPasswordModal(false)}>Cancel</button>
-                            </>
-                        ) : (
-                            <form onSubmit={handleForgotPasswordSubmit}>
-                                <input type="email" placeholder="Enter your email" value={forgotPasswordEmail} onChange={(e) => setForgotPasswordEmail(e.target.value)} />
-                                <button type="submit">Send OTP</button>
-                            </form>
-                        )}
-                        <div className={`${passwordChange ? 'inline' : 'hidden'}`}>
-                           <form onClick={handlePasswordChange}>
-                             <input type="password" placeholder="Enter new password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
-                             <input type="password" placeholder="Confirm password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
-                             <button type="submit">Submit</button>
-                           </form>
-                        </div>
-                    </div>
-                </div>
+        <div className="fixed top-0 w-full h-full flex justify-center items-center bg-gray-900 bg-opacity-50">
+          <div className="bg-white p-8  rounded-md  w-[350px]">
+            {otpSent ? (
+              <>
+                <form className="text-right  bg-white rounded-md  w-full">
+                  <input
+                    className="w-full m-auto border border-gray-500 rounded-md bg-gray-100 p-2 mb-[20px]"
+                    type="text"
+                    placeholder="Enter OTP"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                  />
+                  <div className="flex justify-between gap-[75px]">
+                    <button
+                      className="bg-[#4D989D] text-white "
+                      onClick={() => setShowForgotPasswordModal(false)}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="bg-[#4D989D] text-white "
+                      onClick={handleOtpSubmit}
+                    >
+                      Verify OTP
+                    </button>
+                  </div>
+                </form>
+              </>
+            ) : (
+              <form
+                className="text-center"
+                onSubmit={handleForgotPasswordSubmit}
+              >
+                <input
+                  className="w-full border border-gray-500 rounded-md bg-gray-100 p-2 mb-[20px]"
+                  type="email"
+                  placeholder="Enter your email"
+                  value={forgotPasswordEmail}
+                  onChange={(e) => setForgotPasswordEmail(e.target.value)}
+                />
+                <button className="bg-[#4D989D] text-white" type="submit">
+                  Send OTP
+                </button>
+              </form>
             )}
+          </div>
         </div>
+      )}
+      {passwordChange && (
+        <div className="fixed top-0 w-full h-full flex justify-center items-center bg-gray-900 bg-opacity-50">
+          <div className="bg-white p-8  rounded-md  w-[350px]">
+            <div className={`${passwordChange ? "inline" : "hidden"}`}>
+              <form
+                className=" bg-white rounded-md  w-full"
+                onSubmit={handlePasswordChange}
+              >
+                <input
+                  className="w-full border border-gray-500 rounded-md bg-gray-100 p-2 mb-[20px]"
+                  type="password"
+                  placeholder="Enter new password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+                <input
+                  className="w-full border border-gray-500 rounded-md bg-gray-100 p-2 mb-[20px]"
+                  type="password"
+                  placeholder="Confirm password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+                <button className="bg-[#4D989D] text-white" type="submit">
+                  Submit
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 

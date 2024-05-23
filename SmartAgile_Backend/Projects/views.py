@@ -4,6 +4,7 @@ from drf_spectacular.utils import extend_schema
 from .serializers import ProjectSerializer , ProjectMemberSerializer
 from rest_framework.views import APIView
 from .models import Project , ProjectMembers
+from Users.models import User
 from rest_framework.decorators import api_view
 from rest_framework.generics import ListCreateAPIView ,RetrieveUpdateDestroyAPIView
 
@@ -74,3 +75,14 @@ class ProjectView(APIView):
         except Project.DoesNotExist:
             return Response({'message' : 'Project Not found'}, status=status.HTTP_400_BAD_REQUEST)
 
+class UserProjectView(APIView):
+    def get(self, request, user_id):
+        try:
+            user = User.objects.get(pk = user_id)
+        except User.DoesNotExist:
+            return Response('User not fount', status=status.HTTP_404_NOT_FOUND)
+        
+        projects = Project.objects.filter(proj_members__profile__user=user).select_related('organization')
+
+        serializer = ProjectSerializer(projects, many = True)
+        return Response(serializer.data)
