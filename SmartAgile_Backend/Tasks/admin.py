@@ -10,8 +10,9 @@ class TaskAdminForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(TaskAdminForm, self).__init__(*args, **kwargs)
-        if self.instance and self.instance.project:
-            self.fields['assigned_to'].queryset = ProjectMembers.objects.filter(project=self.instance.project)
+        if self.instance and hasattr(self.instance, 'project'):
+            if self.instance.project:
+                self.fields['assigned_to'].queryset = ProjectMembers.objects.filter(project=self.instance.project)
 
 class TaskAdmin(admin.ModelAdmin):
     form = TaskAdminForm
