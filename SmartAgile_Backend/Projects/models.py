@@ -27,7 +27,7 @@ class Project(models.Model):
     
 class ProjectMembers(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE , related_name='proj_members')
-    profile = models.OneToOneField(UserProfile , on_delete=models.CASCADE , related_name='project_membership')
+    profile = models.ForeignKey(UserProfile , on_delete=models.CASCADE , related_name='project_membership')
     role_within_project = models.CharField(max_length=100)
     
     def __str__(self):
