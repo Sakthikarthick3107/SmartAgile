@@ -1,11 +1,12 @@
 import {Image, ScrollView, RefreshControl, StyleSheet, Text, View, TextInput} from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import GlobalStyles from '../../styles/GlobalStyle';
 import { baseUrl } from '../../env';
 import { useSelector } from 'react-redux';
 import Colors from '../../styles/Colors';
 import EmployeeListCard from '../../components/SupervisorComponents/EmployeeListCard';
 import RNPickerSelect from 'react-native-picker-select';
+import debounce from 'lodash.debounce';
 
 
 type Employee = {
@@ -27,6 +28,8 @@ const EmployeeView = () => {
   const [refreshing, setRefreshing] = useState(false);
   const[pos , setPos] = useState<any>([]);
   const[selectedPos , setSelectedPos] = useState<string>('');
+
+  const[searchName , setSearchName] = useState<string>('');
 
   const positionItems = Object.entries(pos).map(([value,label]) =>({
     label , value
@@ -51,6 +54,21 @@ const EmployeeView = () => {
     }
   }
 
+  const fetchByName = async(name : string) =>{
+    const getEmployeesByName = await fetch(`${baseUrl}/users/employee/profile/username/?organization=${user.organization}&username=${name}`);
+    const response = await getEmployeesByName.json();
+    setEmployees(response)
+  }
+
+  const debounceFetchByName = useCallback(debounce((name : string) => {
+    fetchByName(name);
+  },300) , []);
+
+  const handleName = (e:any) =>{
+    setSearchName(e);
+    debounceFetchByName(e)
+  }
+
   const getPositions = async() =>{
     try {
       const positions = await fetch(`${baseUrl}/users/employee/position-choices/`);
@@ -71,6 +89,7 @@ const EmployeeView = () => {
     getPositions();
   },[])
 
+
   
 
 
@@ -86,8 +105,9 @@ const EmployeeView = () => {
         />}  
         contentContainerStyle={GlobalStyles.scrollAuthContainer} showsVerticalScrollIndicator={false}>
         
-        <TextInput placeholder='Seach...' placeholderTextColor={'#000'} style={GlobalStyles.searchBar} />
+        <TextInput value={searchName} onChangeText={handleName} placeholder='Seach...' placeholderTextColor={'#000'} style={GlobalStyles.searchBar} />
 
+        
         <RNPickerSelect   onValueChange={(value)=>{setSelectedPos(value) ; console.log(value)}}
             items={positionItems}
             value={selectedPos}
@@ -114,7 +134,7 @@ const EmployeeView = () => {
 
           
           />
-
+         
         {employees.map((employee , index) =>  (
           <EmployeeListCard  employee={employee} key={index}/>
         ))}

@@ -14,9 +14,11 @@ import { useSelector } from "react-redux";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ProjectView from "../screens/Supervisor/ProjectView";
 import SupervisorTaskView from "../screens/Supervisor/SupervisorTaskView";
+import SupervisorProfile from "../screens/Supervisor/SupervisorProfile";
 
 const Tab = createBottomTabNavigator();
 const ProjectStackNavigator = createNativeStackNavigator<RootStackParamList>();
+const SettingsStackNavigator = createNativeStackNavigator<RootStackParamList>();
 
 export const SupervisorProjectStack =() =>{
     return(
@@ -32,6 +34,20 @@ export const SupervisorProjectStack =() =>{
             <ProjectStackNavigator.Screen name="SupervisorTaskView" component={SupervisorTaskView} />
         </ProjectStackNavigator.Navigator>
         
+    )
+}
+
+export const SupervisorSettingsStack = () => {
+    return(
+        <SettingsStackNavigator.Navigator screenOptions={{
+            headerShown:false,
+            gestureDirection:'horizontal' , 
+            animation:'simple_push',
+            animationDuration:50
+                }}>
+                <SettingsStackNavigator.Screen name="SupervisorSettings" component={SupervisorSettings}/>
+                <SettingsStackNavigator.Screen name="SupervisorProfile" component={SupervisorProfile}/>
+        </SettingsStackNavigator.Navigator>
     )
 }
 
@@ -58,7 +74,6 @@ const SupervisorTabBar : React.FC<Props> = ({navigation}) => {
                 fontWeight :'normal',
                 fontSize:24
             },
-            tabBarHideOnKeyboard:true,
             headerRight:()=>(
                 <View style={styles.headerLeft}>
                     <Text style={styles.headerLeftTitle}>{user && user.username}</Text>
@@ -102,7 +117,7 @@ const SupervisorTabBar : React.FC<Props> = ({navigation}) => {
                         <FontAwersome name='users' size={24} color={color} />
                     )
                 }}  />
-            <Tab.Screen name="SupervisorSettings" component={SupervisorSettings}
+            <Tab.Screen name="SupervisorSettingsSTack" component={SupervisorSettingsStack}
                 options={{
                     tabBarLabel:'',
                     headerTitle: 'Settings',

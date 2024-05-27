@@ -7,8 +7,10 @@ from .serializers import UserSerializer , SuperuserSerializer , LoginSerializer,
 from rest_framework import status
 from django.contrib.auth import authenticate
 from drf_spectacular.utils import extend_schema
-from rest_framework.generics import ListCreateAPIView , RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView , RetrieveUpdateDestroyAPIView , ListAPIView
 from rest_framework.decorators import api_view
+from django_filters.rest_framework import DjangoFilterBackend
+from .filter import UserProfileFilter
 
 # from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 # from rest_framework_simplejwt.views import TokenObtainPairView
@@ -85,6 +87,12 @@ class SuperuserViewEditDelete(RetrieveUpdateDestroyAPIView):
 # class UserProfileCreate(ListCreateAPIView):
 #     queryset = UserProfile.objects.all()
 #     serializer_class = UserProfileSerializers
+
+class UserProfileListFilter(ListAPIView):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = UserProfileFilter
 
 @extend_schema(request=UserProfileSerializer,responses=UserProfileSerializer)
 class UserProfileCreate(APIView):

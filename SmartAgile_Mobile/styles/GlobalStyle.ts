@@ -81,7 +81,8 @@ const GlobalStyles = StyleSheet.create({
     paddingVertical:7,
     paddingHorizontal:20,
     marginVertical:10,
-    elevation:2
+    elevation:2,
+    color:Colors.text
   },
   smallText:{
     fontFamily:'Poppins',

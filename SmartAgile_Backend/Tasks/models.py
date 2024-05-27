@@ -9,9 +9,9 @@ class Task(models.Model):
         ('HIGH', 'High'),
     ]
     STATUS_CHOICES = [
-        ('TD', 'To-do'),
-        ('IP', 'Inprogress'),
-        ('CP', 'Completed')
+        ('Todo', 'To-do'),
+        ('Progress', 'Inprogress'),
+        ('Completed', 'Completed')
     ]
     project = models.ForeignKey(Project, related_name='project_tasks', on_delete=models.CASCADE)
     assigned_to = models.ForeignKey(ProjectMembers,related_name='project_member', on_delete=models.CASCADE,blank=True,null=True)
@@ -20,7 +20,7 @@ class Task(models.Model):
     task_deadline = models.DateField()
     task_priority = models.CharField(max_length=15, choices=PRIORITY_CHOICES, default='LOW')
     task_desc = models.CharField(max_length=255)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='TD')
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Todo')
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
