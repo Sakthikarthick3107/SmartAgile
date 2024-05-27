@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Employee from '../../components/SupervisorComponents/Employee';
+import Employee from '../../components/SupervisorComponents/ProjectComponents/Employee';
 import ArrowCircleRightOutlined from '@mui/icons-material/ArrowCircleRightOutlined';
 import SearchIcon from '@mui/icons-material/Search';
 
