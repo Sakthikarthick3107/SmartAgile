@@ -6,10 +6,15 @@ import GlobalStyles from '../../styles/GlobalStyle'
 import PriorityColor from '../../styles/PriorityColor'
 
 
+type TaskCard = {
+  task : Task,
+  onPress? : () => void
+}
 
-const TaskListCard = ({task} :{task: Task}) => {
+
+const TaskListCard = ({task , onPress} : TaskCard) => {
   return (
-    <TouchableOpacity style={styles.taskContainer}>
+    <TouchableOpacity onPress={onPress} style={styles.taskContainer}>
       <View style={GlobalStyles.rowBetween}>
         <Text style={styles.taskTitle }>{task.task_name}</Text>
         <Text style={[styles.priorityChip , {backgroundColor : PriorityColor[task.task_priority]}]}>{task.task_priority} </Text>
