@@ -23,10 +23,13 @@ urlpatterns = [
     path('employees/superuser/<int:id>', SuperuserViewEditDelete.as_view() , name="SuperUserViewEditDelete"),
     
 
-    path('employee/profile/org=<int:organization>/' , UserProfileCreate.as_view() , name="User-Profile"),
-    path('employee/profile/org=<int:organization>/<str:position>', UserProfileCreate.as_view() , name="User-Profile with Positions"),
+    path('employee/profile/<int:org_id>/' , UserProfileCreate.as_view() , name="User-Profile"),
+    path('employee/profile/position/<int:org_id>/<str:position>/', UserProfileCreate.as_view() , name="User-Profile with Positions"),
+    path('employees/profile/',UserProfileCreate.as_view(), name='new-user-profile'),
+    path('employees/profile/<int:id>/',UserProfileCreate.as_view(), name='new-user-profile'),
     path('employee/profile/username/' , UserProfileListFilter.as_view() , name="User Filter"),
-    path('employee/profile/org=<int:organization>/<int:id>' , UserProfileCreate.as_view() , name="User-Profile Create id"),
+    path('employee/profile/<int:org_id>/<int:id>/' , UserProfileCreate.as_view() , name="User-Profile Create id"),
+
 
     path('auth/password_reset/', PasswordResetRequestView.as_view(), name='password-reset-request'),
     path('auth/password_reset/confirm/otp/<int:pk>/<str:token>/', PasswordResetConfirmOtpView.as_view(), name='password-reset-otp'),
