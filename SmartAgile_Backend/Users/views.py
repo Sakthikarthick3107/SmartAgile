@@ -94,59 +94,62 @@ class UserProfileListFilter(ListAPIView):
     filter_backends = [DjangoFilterBackend]
     filterset_class = UserProfileFilter
 
-@extend_schema(request=UserProfileSerializer,responses=UserProfileSerializer)
+@extend_schema(request=UserProfileSerializer, responses=UserProfileSerializer)
 class UserProfileCreate(APIView):
-    def get(self,request,organization,id=None,position=None):
+    def get(self,request, org_id, id=None, position=None):
         if id is not None:
             try:
-                user_profile_id = UserProfile.objects.get(id=id , organization=organization)
-                user_serialize_id = UserProfileSerializer(user_profile_id)
-                return Response(user_serialize_id.data,status=status.HTTP_200_OK)
+                user_id = UserProfile.objects.get(pk=id, organization = org_id)
+                if user_id:
+                    user_serialize_id = UserProfileSerializer(user_id)
+                    return Response(user_serialize_id.data, status=status.HTTP_200_OK)
+                return Response('Incorrect user id or org id', status=status.HTTP_404_NOT_FOUND)
             except UserProfile.DoesNotExist:
-                return Response({"error":"Invalid Credentials"},status=status.HTTP_400_BAD_REQUEST)
-            
+                return Response('Invalid credentials or the user does not exist', status=status.HTTP_400_BAD_REQUEST)
+        
         elif position is not None:
             try:
-               user_position = UserProfile.objects.filter(position = position,organization=organization)
-               profile_serializer = UserProfileSerializer(user_position , many=True)
-               return Response(profile_serializer.data ,status=status.HTTP_200_OK)
-           
+                user_profiles = UserProfile.objects.filter(position=position, organization=org_id)
+                if user_profiles:
+                    profile_serializer = UserProfileSerializer(user_profiles, many=True)
+                    return Response(profile_serializer.data, status=status.HTTP_200_OK)
+                return Response('No user for the given position', status=status.HTTP_404_NOT_FOUND)
             except UserProfile.DoesNotExist:
-                return Response({"error":"Failed to get request"},status=status.HTTP_400_BAD_REQUEST)
-           
-        user_profile = UserProfile.objects.filter(organization=organization)
-        user_serializer = UserProfileSerializer(user_profile,many=True)
-        return Response(user_serializer.data, status=status.HTTP_200_OK)
-    
-    def post(self,request):
+                return Response('Incorrect organization id', status=status.HTTP_404_NOT_FOUND)
+            
+        else:
+            try:
+                user_profile = UserProfile.objects.filter(organization=org_id)
+                if user_profile:
+                    user_serializer = UserProfileSerializer(user_profile, many=True)
+                    return Response(user_serializer.data, status=status.HTTP_200_OK)
+                return Response('No Users in the Organization', status=status.HTTP_400_BAD_REQUEST)
+            except UserProfile.DoesNotExist:
+                return Response('Invalid organization id', status=status.HTTP_400_BAD_REQUEST)
+            
+    def post(self, request):
         user_profile_post = UserProfileSerializer(data=request.data)
         if user_profile_post.is_valid():
             user_profile_post.save()
-            return Response({"message":"Successfully created"},status=status.HTTP_201_CREATED)
-        return Response(user_profile_post.errors,status=status.HTTP_400_BAD_REQUEST)
-    
-    def put(self,request,id):
+            return Response({'message' : 'Successfully created'}, status=status.HTTP_201_CREATED)
+        return Response(user_profile_post.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, id):
         try:
-            user_profile_put = UserProfile.objects.get(id=id)
-        except user_profile_put.DoesNotExist:
-            return Response({"error":"Invalid Credentials"},status=status.HTTP_400_BAD_REQUEST)
-            
-        user_serializer_put = UserProfileSerializer(user_profile_put,data=request.data)
-        if user_serializer_put.is_valid():
-            user_serializer_put.save()
-            return Response({
-                "message":"Updated Successfully",
-                "data":user_profile_put.data},status=status.HTTP_200_OK)
-        return Response(user_serializer_put.errors,status=status.HTTP_400_BAD_REQUEST)
+            user_profile_put = UserProfile.objects.get(pk=id)
+        except UserProfile.DoesNotExist:
+            return Response('Invalid Credentials', status=status.HTTP_400_BAD_REQUEST)
+        
+        user_serializer = UserProfileSerializer(user_profile_put, data=request.data)
+        if user_serializer.is_valid():
+            user_serializer.save()
+            return Response(user_serializer.data, status=status.HTTP_200_OK)
+        return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    def delete(self,request,id):
-        user_profile_delete = UserProfile.objects.get(id=id)
+    def delete(self,request, id):
         try:
-            user_profile_delete.delete()
-            return Response({
-                "message":"Successfully deleted"
-            },status=status.HTTP_200_OK)
-        except user_profile_delete.DoesNotExist:
-            return Response({
-                "error":"Invalid Credentials"
-            },status=status.HTTP_400_BAD_REQUEST)
+            user_profile = UserProfile.objects.get(pk=id)
+            user_profile.delete()
+            return Response({'message' : 'Successfully deleted'}, status=status.HTTP_204_NO_CONTENT)
+        except UserProfile.DoesNotExist:
+            return Response('Invalid Credentials', status=status.HTTP_400_BAD_REQUEST)
