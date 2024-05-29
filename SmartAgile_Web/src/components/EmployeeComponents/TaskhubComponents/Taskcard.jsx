@@ -42,24 +42,42 @@
 // export default Createtask;
 
 
-import React from 'react'
+// import React from 'react'
 
-const Taskcard = (title, count, onClick ) => {
+// const Taskcard = (title, count, onClick ) => {
   
-  return (
-    <div>
-       <div className="task-card card p-4 shadow-lg bg-white rounded-lg">
-    <div className="flex items-center justify-between">
-      <b className="text-lg cursor-pointer" onClick={onClick}>{title}</b>
-      <div className="flex items-center">
-        <span className="bg-gray-400 text-black text-xs px-2 rounded-full">
-          {count}
-        </span>
-      </div>
-    </div>
-  </div>
-    </div>
-  )
-}
+//   return (
+//     <div>
+//        <div className="task-card card p-4 shadow-lg bg-white rounded-lg">
+//     <div className="flex items-center justify-between">
+//       <b className="text-lg cursor-pointer" onClick={onClick}>{title}</b>
+//       <div className="flex items-center">
+//         <span className="bg-gray-400 text-black text-xs px-2 rounded-full">
+//           {count}
+//         </span>
+//       </div>
+//     </div>
+//   </div>
+//     </div>
+//   )
+// }
 
-export default Taskcard
+// export default Taskcard
+import React from 'react';
+
+const TaskCard = ({ employee }) => {
+  return (
+    <div className="p-4 mb-4 border border-gray-300 rounded shadow">
+      <img src={employee.image} alt={employee.username} className="w-16 h-16 rounded-full mb-4" />
+      <h2 className="text-xl font-bold">{employee.username}</h2>
+      <p>{employee.email}</p>
+      <p>{employee.position}</p>
+      <p>{employee.role}</p>
+      <p>{employee.date_joined}</p>
+    </div>
+  );
+};
+
+export default TaskCard;
+
+

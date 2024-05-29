@@ -1,12 +1,12 @@
 import React from "react";
-import Left_arrow from '../../assets/arrow-left-circle.png';
+import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
 
 const SmartAgileDocumentation = () => {
   return (
     <div className="p-4 bg-gray-100 relative">
        <div className="flex justify-between items-center  p-2 mb-4">
         <button className="rounded-full text-white  bg-[#4D989D] flex items-center">
-          <img src={Left_arrow} alt='Left arrow' className="w-6 h-6 mr-2" />
+        <ArrowCircleLeftOutlinedIcon className="w-6 h-6 mr-2" />
           <span>Back</span>
         </button>
       </div>

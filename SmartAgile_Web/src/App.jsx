@@ -76,6 +76,7 @@ import SmartAgileDocumentation from "./pages/EmployeePages/SmartAgileDocumentati
 import ViewEmployee from "./pages/EmployeePages/ViewEmployee";
 import AddProject from "./components/SupervisorComponents/ProjectComponents/AddProject";
 import AddCandidate from "./components/SupervisorComponents/ProjectComponents/AddCandidate";
+import ViewEmployeeList from "./pages/SupervisorPages/ViewEmployeeList";
 
 // Layout component with Navbar and Sidebar
 function LayoutWithSidebar({ children }) {
@@ -178,6 +179,14 @@ function LayoutWithTop({ children }) {
             element={
               <LayoutWithTop>
                 <SEmployees />
+              </LayoutWithTop>
+            } 
+          />
+          <Route
+           path="/ViewEmployeeList"
+            element={
+              <LayoutWithTop>
+                <ViewEmployeeList />
               </LayoutWithTop>
             } 
           />
