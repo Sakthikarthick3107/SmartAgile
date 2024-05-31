@@ -33,17 +33,20 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
     'Users',
     'rest_framework',
     'Organization',
     'Projects',
     'Tasks',
+    'Chats',
     'corsheaders',
     'drf_spectacular',
     'rest_framework_simplejwt',
@@ -140,6 +143,7 @@ TEMPLATES = [
     },
 ]
 
+ASGI_APPLICATION = 'SmartAgile_Backend.asgi.application'
 WSGI_APPLICATION = 'SmartAgile_Backend.wsgi.application'
 
 AUTH_USER_MODEL = 'Users.User'
@@ -206,3 +210,10 @@ EMAIL_PORT = 587  # Use 465 for SSL/TLS
 EMAIL_USE_TLS = True  # Use True for STARTTLS
 EMAIL_HOST_USER = 'kumarnandha8983@gmail.com'
 EMAIL_HOST_PASSWORD = 'wnil inhl wogx bjyk'
+
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}

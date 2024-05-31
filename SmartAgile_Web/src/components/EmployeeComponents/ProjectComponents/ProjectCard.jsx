@@ -13,7 +13,7 @@ const ProjectCard = ({ project, onClick }) => {
         </div>
         <div className="flex items-center">
           <img
-            src={`${baseUrl}/${project.icon}`}
+            src={`${baseUrl}${project.icon}`}
             alt={`${project.proj_name} icon`}
             className="project-img mt-6 w-[50px] mr-4"
           />
