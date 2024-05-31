@@ -1,6 +1,13 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const AddCandidate = () => {
+
+  const navigate = useNavigate();
+
+  const handleEmployeePageClick = ()=>{
+    navigate("/ViewEmployeeList");
+  }
   return (
     <div className="main-container w-[1038px] h-[854px] ">
       <div className="w-[151px] h-[45px] bg-[#4c989d] rounded-[15px] relative z-[2] mr-0 mt-[729px] ml-[750px]">
@@ -11,7 +18,9 @@ const AddCandidate = () => {
       <div className="w-[432px] h-[643px] absolute top-0 left-0 z-[45]">
         <div className="w-[96px] h-[32px] bg-transparent rounded-[50px] border-solid border-2 border-[#4c989d] relative z-[45] mt-[120px] mr-0 mb-0 ml-[374px]">
           <div className="w-[31.25%] h-[93.75%]  absolute top-[-3.13%] left-[-2.08%] z-[43]" />
-          <span className="flex h-[27px] justify-start items-start font-['Poppins'] text-[18px] font-normal leading-[27px] text-black absolute top-[1px] left-[34px]  text-left whitespace-nowrap z-[44]">
+          <span className="flex h-[27px] justify-start cursor-pointer items-start font-['Poppins'] text-[18px] font-normal leading-[27px] text-black absolute top-[1px] left-[34px]  text-left whitespace-nowrap z-[44]"
+           onClick={handleEmployeePageClick}
+          >
             Back
           </span>
         </div>

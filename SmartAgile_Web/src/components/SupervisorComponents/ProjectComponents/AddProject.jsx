@@ -1,16 +1,33 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 
 const AddProject = () => {
+ 
+  const navigate = useNavigate();
+
+  const handleClick = ()=>{
+    navigate('/sprojects')
+  }
+
+
   return (
     <div>
       <div className="main-container w-[888px] h-[827px] text-[0px] relative mx-auto my-0">
-      <div className="w-[96px] h-[32px] bg-transparent rounded-[50px] border-solid border-2 border-[#4c989d] relative z-[45] mt-[0px] mr-0 mb-0 ml-[-350px]">
+      <div className="w-[96px] h-[32px] bg-transparent rounded-[50px] border-solid border-2 border-[#4c989d] relative z-[45] mt-[0px] mr-0 mb-0 ml-[-250px]">
           <div className="w-[31.25%] h-[93.75%]  absolute top-[-3.13%] left-[-2.08%] z-[43]" />
-          <span className="flex h-[27px] justify-start items-start font-['Poppins'] text-[18px] font-normal leading-[27px] text-black absolute top-[1px] left-[34px]  text-left whitespace-nowrap z-[44]">
+          <span 
+          onClick={handleClick}
+          className="flex h-[27px] cursor-pointer justify-start items-start font-['Poppins'] text-[18px] font-normal leading-[27px] text-black absolute top-[1px] left-[4px]  text-left whitespace-nowrap z-[44]">
+          <span 
+          onClick={handleClick}
+          className="m-[1px] cursor-pointer text-black mr-1">
+              <ArrowCircleLeftOutlinedIcon />
+            </span>
             Back
           </span>
         </div>
-        <span className="flex w-[387px] h-[90px] justify-start items-start font-['Poppins'] text-[32px] font-medium leading-[48px] text-[#000] relative text-left z-[1] mt-[29px] mr-0 mb-0 ml-[-299px]">
+        <span className="flex w-[387px] h-[90px] justify-start items-start font-['Poppins'] text-[32px] font-medium leading-[48px] text-[#000] relative text-left z-[1] mt-[29px] mr-0 mb-0 ml-[-249px]">
           Create New Project
         </span>
         <div className="ml-[-220px]">
