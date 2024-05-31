@@ -94,7 +94,7 @@ function Chat() {
 
         // Fetch user's projects data
         const response = await fetch(
-          `http://127.0.0.1:8000/projects/user-projects/${userId}`
+          `http://127.0.0.1:8000/chat/chatroom/users/${userId}`
         );
         const data = await response.json();
 
@@ -118,9 +118,13 @@ function Chat() {
     // };
   }, []);
 
-  const handleProjectClick = (projectId) => {
+  const handleProjectClick = async (projectId) => {
     // Update local storage with the clicked project ID
     localStorage.setItem("project_id", projectId);
+
+    const response = await fetch(`http://127.0.0.1:8000/chat/chatroom/get/${projectId}/`);
+    const data = await response.json();
+    localStorage.setItem('chatroom_id', JSON.stringify(data.id));
     // Navigate to the project details page
     navigate(`/chat/${projectId}`);
   };
@@ -137,7 +141,7 @@ function Chat() {
         {userProjects.map((project) => (
           <div
             key={project.proj_id}
-            className="flex gap-5 items-start px-6 pt-4 pb-3 mt-2 ml-3 text-2xl font-semibold text-black text-xl rounded-md bg-slate-50 shadow-[0px_4px_4px_rgba(0,0,0,0.35)]"
+            className="flex gap-5 items-start px-6 pt-4 pb-3 mt-2 ml-3 font-semibold text-black text-xl rounded-md bg-slate-50 shadow-[0px_4px_4px_rgba(0,0,0,0.35)]"
             onClick={() => handleProjectClick(project.proj_id)}
             style={{ cursor: "pointer" }}
           >
