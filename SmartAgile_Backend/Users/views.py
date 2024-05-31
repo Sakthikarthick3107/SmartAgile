@@ -153,3 +153,14 @@ class UserProfileCreate(APIView):
             return Response({'message' : 'Successfully deleted'}, status=status.HTTP_204_NO_CONTENT)
         except UserProfile.DoesNotExist:
             return Response('Invalid Credentials', status=status.HTTP_400_BAD_REQUEST)
+        
+
+class UserProfileView(APIView):
+    def get(self, request, id):
+        try:
+            user_profile = UserProfile.objects.get(user = id)
+            if user_profile:
+                serializer = UserProfileSerializer(user_profile)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+        except UserProfile.DoesNotExist:
+            return Response('User does not exist', status=status.HTTP_400_BAD_REQUEST)

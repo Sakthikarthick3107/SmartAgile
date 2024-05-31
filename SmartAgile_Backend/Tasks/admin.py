@@ -16,7 +16,7 @@ class TaskAdminForm(forms.ModelForm):
 
 class TaskAdmin(admin.ModelAdmin):
     form = TaskAdminForm
-    list_display = ['task_id', 'task_name' , 'assigned_to', 'project' ]
+    list_display = ['task_id', 'task_name' , 'assigned_to', 'project', 'assigned_by' ]
     list_filter = ['project']
 
 admin.site.register(Task, TaskAdmin)

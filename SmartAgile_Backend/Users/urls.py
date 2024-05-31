@@ -7,7 +7,8 @@ from .views import (
     UserProfileCreate, 
     SuperuserViewEditDelete,
     UserProfileListFilter,
-    position_choices
+    position_choices,
+    UserProfileView
     )
 from .forgot_password_views import PasswordResetRequestView, PasswordResetConfirmOtpView, PasswordResetConfirmView
 
@@ -30,6 +31,7 @@ urlpatterns = [
     path('employee/profile/username/' , UserProfileListFilter.as_view() , name="User Filter"),
     path('employee/profile/<int:org_id>/<int:id>/' , UserProfileCreate.as_view() , name="User-Profile Create id"),
 
+    path('employee/profile/user-details/<int:id>/', UserProfileView.as_view(), name='user_profile_details'),
 
     path('auth/password_reset/', PasswordResetRequestView.as_view(), name='password-reset-request'),
     path('auth/password_reset/confirm/otp/<int:pk>/<str:token>/', PasswordResetConfirmOtpView.as_view(), name='password-reset-otp'),
