@@ -1,6 +1,7 @@
 from django.db import models
 # Create your models here.
 from Projects.models import Project, ProjectMembers
+from Users.models import UserProfile
 
 class Task(models.Model):
     PRIORITY_CHOICES = [
@@ -22,6 +23,8 @@ class Task(models.Model):
     task_desc = models.CharField(max_length=255)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Todo')
     created_at = models.DateTimeField(auto_now_add=True)
+    attachments = models.FileField(upload_to='task-attachments/', blank=True, null=True)
+    assigned_by = models.ForeignKey(UserProfile, related_name='task_assignee', on_delete=models.CASCADE, blank=True, null=True)
     
     def __str__(self):
         return self.task_name
