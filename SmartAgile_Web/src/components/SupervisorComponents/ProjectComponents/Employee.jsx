@@ -76,7 +76,7 @@ const Employees = () => {
         {/* Filter Dropdown */}
         <div className="flex">
           <select
-            className="bg-[#4d989d] p-2 rounded-md text-white"
+            className="bg-[#4d989d] p-2 rounded-md text-white outline-none focus:outline-none focus:border-none"
             value={filterValue}
             onChange={handleFilterChange}
           >
@@ -140,4 +140,3 @@ const Employees = () => {
 };
 
 export default Employees;
-

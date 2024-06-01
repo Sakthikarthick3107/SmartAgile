@@ -14,11 +14,15 @@ def send_password_reset_email(user, uid, token):
     otp = generate_password_reset_otp()
     user.otp = otp
 
-    reset_link = f"{base_url}/auth/password_reset/confirm/otp/{uid}/{token}/"
+    # reset_link = f"{base_url}/auth/password_reset/confirm/otp/{uid}/{token}/"
+
+    # email_body = f"""   A password reset request has been made for your account\n
+    # One Time Password for password reset : {otp} \n
+    # Password reset link : \n    {reset_link}\n 
+    # If you did not request a password reset, you can safely ignore this mail."""
 
     email_body = f"""   A password reset request has been made for your account\n
     One Time Password for password reset : {otp} \n
-    Password reset link : \n    {reset_link}\n 
     If you did not request a password reset, you can safely ignore this mail."""
 
     send_mail(
