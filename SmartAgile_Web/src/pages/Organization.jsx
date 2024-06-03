@@ -1,9 +1,3 @@
-
-
-
-
-
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import slogo from '../assets/slogo.png';

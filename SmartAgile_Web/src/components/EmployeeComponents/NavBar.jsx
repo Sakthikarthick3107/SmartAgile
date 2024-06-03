@@ -80,7 +80,7 @@ const Navbar = () => {
   const fetchUserData = async () => {
     try {
       // Replace with the actual backend endpoint that provides user data
-      const response = await fetch(`http://127.0.0.1:8000/users/employees/${id}`);
+      const response = await fetch(`http://127.0.0.1:8000/users/employees/${id}/`);
       const data = await response.json();
       setUserData(data);
 

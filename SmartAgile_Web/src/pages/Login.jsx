@@ -20,17 +20,6 @@ function Login() {
   const [code, setCode] = useState("");
   const [passwordChange, setPasswordChange] = useState(false);
 
-  // useEffect(() => {
-  //   // Extract id and code from URL when component mounts
-  //   const searchParams = new URLSearchParams(location.search);
-    
-  //   const idParam = searchParams.get("id");
-  //   const codeParam = searchParams.get("code");
-  //   // Now you have id and code, you can use them for OTP verification
-  //   setId(idParam);
-  //   setCode(codeParam);
-  // }, [location.search]);
-
   // Regular expression for validating email or employee ID format
   const usernameRegex =
     /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$|^([a-zA-Z]{3})_([0-9]{3})$/;

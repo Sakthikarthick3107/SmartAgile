@@ -70,9 +70,9 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend'
     ],
-    # 'DEFAULT_AUTHENTICATION_CLASSES' : (
-    #     'rest_framework_simplejwt.authentication.JWTAuthentication'
-    # )
+    'DEFAULT_AUTHENTICATION_CLASSES' : (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
 }
 
 SIMPLE_JWT = {
@@ -83,7 +83,6 @@ SIMPLE_JWT = {
     "UPDATE_LAST_LOGIN": False,
 
     "ALGORITHM": "HS256",
-    
     "VERIFYING_KEY": "",
     "AUDIENCE": None,
     "ISSUER": None,

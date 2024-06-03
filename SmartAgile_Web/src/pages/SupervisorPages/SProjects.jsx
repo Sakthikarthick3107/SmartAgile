@@ -11,7 +11,7 @@ export default function SProjects() {
   useEffect(() => {
     async function  fetchProjects() {
       try{
-        const response = await fetch('http://127.0.0.1:8000/projects');
+        const response = await fetch('http://127.0.0.1:8000/projects/');
         const data = await response.json();
         setProjects(data);
       }catch(e){
