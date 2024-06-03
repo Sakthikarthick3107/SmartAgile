@@ -170,7 +170,7 @@ const SProjectDetails = () => {
   useEffect(() => {
     async function fetchProjectDetails() {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/projects/${proj_id}`);
+        const response = await fetch(`http://127.0.0.1:8000/projects/${proj_id}/`);
         const data = await response.json();
         setProject(data);
       } catch (error) {
@@ -180,7 +180,7 @@ const SProjectDetails = () => {
 
     async function fetchTeamMembers() {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/projects/project-members/${proj_id}`);
+        const response = await fetch(`http://127.0.0.1:8000/projects/project-members/${proj_id}/`);
         const data = await response.json();
         setTeamMembers(data);
       } catch (error) {

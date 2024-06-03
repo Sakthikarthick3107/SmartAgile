@@ -7,7 +7,7 @@ const ProjectDetails = ({ project, onClose }) => {
   useEffect(() => {
     async function fetchTeamMembers() {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/projects/project-members/${project.proj_id}`);
+        const response = await fetch(`http://127.0.0.1:8000/projects/project-members/${project.proj_id}/`);
         const data = await response.json();
         setTeamMembers(data);
         console.log(data)

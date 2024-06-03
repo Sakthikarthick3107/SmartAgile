@@ -1,4 +1,4 @@
-from django.conf import settings
+# from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import Token
@@ -12,21 +12,22 @@ from rest_framework.decorators import api_view
 from django_filters.rest_framework import DjangoFilterBackend
 from .filter import UserProfileFilter
 
-# from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-# from rest_framework_simplejwt.views import TokenObtainPairView
-# from rest_framework.authtoken.models import Token
-# from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.authtoken.models import Token
+from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 
-# class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-#     @classmethod
-#     def get_token(cls, user):
-#         token =  super().get_token(user)
-#         token['username'] = user.username
-#         token['email'] = user.email
-#         return token
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token =  super().get_token(user)
+        token['username'] = user.username
+        token['email'] = user.email
+        return token
     
-# class MyTokenObtainPairView(TokenObtainPairView):
-#     serializer_class = MyTokenObtainPairSerializer
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+
 @api_view(['GET'])
 def position_choices(request):
     positions = dict(UserProfile.POSITION_CHOICES)
@@ -61,11 +62,11 @@ class LoginView(APIView):
         except UserProfile.DoesNotExist:
             return Response({'error': 'User has no profile associated'}, status=status.HTTP_404_NOT_FOUND)
         
-        # access_token = AccessToken.for_user(user)
-        # refresh_token = RefreshToken.for_user(user)
+        access_token = AccessToken.for_user(user)
+        refresh_token = RefreshToken.for_user(user)
         return Response({
-            # 'access_token' : str(access_token),
-            # 'refresh_token' : str(refresh_token),
+            'access_token' : str(access_token),
+            'refresh_token' : str(refresh_token),
             'username' : user.username,
             'email' : email,
             'user_id' : user.pk,
