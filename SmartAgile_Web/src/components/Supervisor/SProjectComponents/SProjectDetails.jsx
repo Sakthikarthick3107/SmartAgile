@@ -154,7 +154,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleInfo, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { faCircleInfo, faCircleXmark, faXmark } from '@fortawesome/free-solid-svg-icons';
 import SAbstractPopup from '../../Supervisor/SProjectComponents/SAbstractPopup';
 import AddTaskEmployee from '../AddTask/AddTaskEmployee';
 
@@ -280,7 +280,7 @@ const SProjectDetails = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 shadow-lg w-[50%] border border-3 rounded-xl overflow-y-auto max-h-[90%]">
             <div className="text-right">
-              <FontAwesomeIcon className="pr-2 text-xl" icon={faCircleXmark} onClick={() => setShowAbstractPopup(false)} />
+              <FontAwesomeIcon className="px-1.5 cursor-pointer py-1 text-red-600 text-xl border-red-600 border rounded-full" icon={faXmark} onClick={() => setShowAbstractPopup(false)} />
             </div>
             <SAbstractPopup />
           </div>
@@ -291,7 +291,7 @@ const SProjectDetails = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 shadow-lg w-[40%] border border-3 rounded-xl overflow-y-auto max-h-[90%]">
             <div className="text-right">
-              <FontAwesomeIcon className="pr-2 text-xl" icon={faCircleXmark} onClick={() => setShowAddTaskPopup(false)} />
+              <FontAwesomeIcon className="px-1.5 cursor-pointer py-1 text-xl text-red-600 border-red-600 border rounded-full" icon={faXmark} onClick={() => setShowAddTaskPopup(false)} />
             </div>
             <AddTaskEmployee projectId={proj_id} assignedTo={selectedMember ? selectedMember.username : ''} assignedId ={selectedMember.id}  />
           </div>

@@ -6,9 +6,9 @@ import slogo from "../assets/slogo.png";
 
 function Login() {
   const navigate = useNavigate(); // Initialize navigate function
-  const [username, setusername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [usernameError, setUsernameError] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
@@ -21,8 +21,10 @@ function Login() {
   const [passwordChange, setPasswordChange] = useState(false);
 
   // Regular expression for validating email or employee ID format
-  const usernameRegex =
-    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$|^([a-zA-Z]{3})_([0-9]{3})$/;
+  // const usernameRegex =
+  //   /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$|^([a-zA-Z]{3})_([0-9]{3})$/;
+
+  const backendUrl = 'http://127.0.0.1:8000';
 
   // Function to handle organizational option click
   const handleOrganizationalClick = () => {
@@ -35,12 +37,12 @@ function Login() {
     e.preventDefault();
 
     // Reset errors
-    setUsernameError("");
+    setEmailError("");
     setPasswordError("");
 
     // Validate username
-    if (!username) {
-      setUsernameError("Username is required");
+    if (!email) {
+      setEmailError("Username is required");
       return;
     }
 
@@ -51,55 +53,55 @@ function Login() {
     }
 
     try {
-      const response = await fetch("http://localhost:8000/users/login/", {
+      const response = await fetch(`${backendUrl}/users/login/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: username,
+          email: email,
           password: password,
         }),
       });
 
       const res = await response.json();
       console.log(res);
-      localStorage.setItem('user_id',JSON.stringify(res.user_id));
 
       if (response.ok) {
         // Authentication successful
         console.log("Login successful");
+        localStorage.setItem('user_id',JSON.stringify(res.user_id));
         const userData = {
           username: res.email,
           isStaff : res.is_staff
         };
         localStorage.setItem("user", JSON.stringify(userData));
-        if(res.is_staff){
-          navigate('/sdashboard');
-        }else{
-          navigate('/dashboard');
-        }
+        setTimeout(() => {
+          if(res.is_staff){
+            navigate('/sdashboard');
+          }else{
+            navigate('/dashboard');
+          }
+          window.location.reload();
+        }, 2000);
       } else {
         // Authentication failed
         console.error("Login failed:", data.error);
-        // Update state to display error message to the user
       }
     } catch (error) {
       console.error("Error during login:", error);
-      // Handle network errors or other exceptions
     }
   };
+
   const handleForgotPassword = () => {
     setShowForgotPasswordModal(true);
   };
 
-
   const handleForgotPasswordSubmit = async (e) => {
     e.preventDefault();
     try {
-      // const token = e.target.elements.token.value;
       const response = await fetch(
-        "http://127.0.0.1:8000/users/auth/password_reset/",
+        `${backendUrl}/users/auth/password_reset/`,
         {
           method: "POST",
           headers: {
@@ -113,14 +115,10 @@ function Login() {
 
       const data = await response.json();
 
-      setId(data.id);
-
-      setCode(data.unique_token);
-
       if (response.ok) {
-        console.log("OTP sent successfully");
         alert("OTP sent successfully");
-        // setShowForgotPasswordModal(true);
+        setId(data.id);
+        setCode(data.unique_token);
         setForgotPasswordEmail('')
         setOtpSent(true);
       } else {
@@ -136,7 +134,7 @@ function Login() {
     e.preventDefault();
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/users/auth/password_reset/confirm/otp/${id}/${code}/`,
+        `${backendUrl}/users/auth/password_reset/confirm/otp/${id}/${code}/`,
         {
           method: "POST",
           headers: {
@@ -157,23 +155,6 @@ function Login() {
         setOtpSent(false);
         setShowForgotPasswordModal(false);
         setPasswordChange(true);
-        
-
-        // Show the form to enter new password
-      } else {
-        console.error("Failed to verify OTP:", data.error);
-        alert("Failed to verify OTP");
-        setOtp("Invalid OTP");
-      }
-      if (response.ok) {
-        console.log("OTP verified successfully");
-        alert("OTP verified successfully");
-        setOtpSent(false);
-        setShowForgotPasswordModal(false);
-        setPasswordChange(true);
-        
-
-        // Show the form to enter new password
       } else {
         console.error("Failed to verify OTP:", data.error);
         alert("Failed to verify OTP");
@@ -189,12 +170,12 @@ function Login() {
     e.preventDefault();
     // Check if newPassword matches confirmPassword
     if (newPassword !== confirmPassword) {
-      // Handle password mismatch error
+      console.log('Passwords should match');
       return;
     }
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/users/auth/password_reset/confirm/password/${id}/${code}/`,
+        `${backendUrl}/users/auth/password_reset/confirm/password/${id}/${code}/`,
         {
           method: "POST",
           headers: {
@@ -203,7 +184,6 @@ function Login() {
           body: JSON.stringify({
             otp: otp,
             new_password: newPassword,
-            confirm_password: confirmPassword,
             confirm_password: confirmPassword,
           }),
         }
@@ -231,39 +211,40 @@ function Login() {
     // Navigate to the Register page
     navigate("/Organization");
   };
+
 return (
    <div className="flex justify-center items-center w-[100vw] h-screen bg-bgfirst bg-opacity-80">
       <div className="bg-white rounded-lg shadow-md p-8 w-96">
         <div className="flex justify-center mb-6">
           <img src={slogo} alt="Logo" className="w-20" />
         </div>
-        <div className="text-center text-lg mb-6">
+        <div className="text-center text-lg mb-6 text-black">
           Welcome! Please sign in to continue.
         </div>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
               htmlFor="username"
-              className="block text-sm font-semibold ml-2 mb-2"
+              className="block text-md font-semibold ml-2 mb-2 text-black"
             >
-              User Name
+              Email
             </label>
             <input
               type="text"
               id="username"
-              placeholder="Enter your user Name"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-              value={username}
-              onChange={(e) => setusername(e.target.value)}
+              placeholder="Enter your Email"
+              className="w-full px-4 py-2 border border-gray-300 bg-gray-950 bg-opacity-25 rounded-md focus:outline-none focus:border-blue-500"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
-            {usernameError && (
-              <p className="text-red-500 text-sm">{usernameError}</p>
+            {emailError && (
+              <p className="text-red-500 text-sm">{emailError}</p>
             )}
           </div>
           <div className="mb-4">
             <label
               htmlFor="password"
-              className="block text-sm font-semibold ml-2 mb-2"
+              className="block text-md font-semibold ml-2 mb-2 text-black"
             >
               Password
             </label>
@@ -271,7 +252,7 @@ return (
               type="password"
               id="password"
               placeholder="Enter your password"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 bg-gray-950 bg-opacity-25 rounded-md focus:outline-none focus:border-blue-500"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -282,7 +263,7 @@ return (
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center">
               <input type="checkbox" id="rememberMe" className="mr-2" />
-              <label htmlFor="rememberMe" className="text-sm">
+              <label htmlFor="rememberMe" className="text-sm text-black">
                 Remember Me
               </label>
             </div>
@@ -305,7 +286,7 @@ return (
           New Organization?
           <button
             onClick={handleRegisterClick}
-            className="text-blue-700 ml-2 font-semibold hover:underline"
+            className="text-blue-700 border-gray-300 bg-gray-100 ml-2 font-semibold hover:underline"
           >
             Register
           </button>
@@ -318,7 +299,7 @@ return (
               <>
                 <form className="text-right  bg-white rounded-md  w-full">
                   <input
-                    className="w-full m-auto border border-gray-500 rounded-md bg-gray-100 p-2 mb-[20px]"
+                    className="w-full m-auto border border-gray-500 rounded-md bg-gray-950 bg-opacity-25 p-2 mb-[20px]"
                     type="text"
                     placeholder="Enter OTP"
                     value={otp}
@@ -346,7 +327,7 @@ return (
                 onSubmit={handleForgotPasswordSubmit}
               >
                 <input
-                  className="w-full border border-gray-500 rounded-md bg-gray-100 p-2 mb-[20px]"
+                  className="w-full border border-gray-500 rounded-md bg-gray-950 bg-opacity-25 p-2 mb-[20px]"
                   type="email"
                   placeholder="Enter your email"
                   value={forgotPasswordEmail}
@@ -369,14 +350,14 @@ return (
                 onSubmit={handlePasswordChange}
               >
                 <input
-                  className="w-full border border-gray-500 rounded-md bg-gray-100 p-2 mb-[20px]"
+                  className="w-full border border-gray-500 rounded-md bg-gray-950 bg-opacity-25 p-2 mb-[20px]"
                   type="password"
                   placeholder="Enter new password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                 />
                 <input
-                  className="w-full border border-gray-500 rounded-md bg-gray-100 p-2 mb-[20px]"
+                  className="w-full border border-gray-500 rounded-md bg-gray-950 bg-opacity-25 p-2 mb-[20px]"
                   type="password"
                   placeholder="Confirm password"
                   value={confirmPassword}

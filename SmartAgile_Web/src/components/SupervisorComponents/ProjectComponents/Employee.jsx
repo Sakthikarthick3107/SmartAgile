@@ -112,7 +112,7 @@ const Employees = () => {
                   key={`${member.user}-${index}`}
                   className="border-b border-gray-300"
                 >
-                  <td className="py-1 px-3">{member.user}</td>
+                  <td className="py-1 px-3 text-black">{member.user}</td>
                   <td className="py-1 px-3">
                     <img
                       src={`${baseUrl}/media/${member.image}`}
@@ -120,9 +120,9 @@ const Employees = () => {
                       className="w-16 h-16 rounded-full"
                     />
                   </td>
-                  <td className="py-1 px-3">{member.username}</td>
-                  <td className="py-1 px-3">{member.role_within_project}</td>
-                  <td className="py-1 px-3">{member.project}</td>
+                  <td className="py-1 px-3 text-black">{member.username}</td>
+                  <td className="py-1 px-3 text-black">{member.role_within_project}</td>
+                  <td className="py-1 px-3 text-black">{member.project}</td>
                 </tr>
               ))
             ) : (

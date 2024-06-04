@@ -6,7 +6,7 @@ const SAbstractPopup = () => {
     <div className="bg-white p-6 shadow-lg w-full border border-3 rounded-xl overflow-y-auto max-h-[90%]">
       <h2 className="text-xl text-black font-bold	mb-3">Project: Smart Agile</h2>
 
-      <p className="text-justify">
+      <p className="text-justify text-black">
         SmartAgile, a comprehensive suite of software applications, transforms
         workplace productivity and Agile project management through innovative
         Al technology. Its central component, the SmartAgile Al Monitoring App,
