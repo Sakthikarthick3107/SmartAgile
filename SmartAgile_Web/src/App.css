@@ -49,3 +49,16 @@
 .other-message {
   border-radius: 0.5rem; /* All corners rounded */
 }
+
+.row-content{
+  margin: 10px 0 10px 0;
+}
+
+.colon{
+  margin-right: 6px;
+}
+
+[type='date']::-webkit-calendar-picker-indicator {
+  /* background-color: black; */
+  color: #333;
+}

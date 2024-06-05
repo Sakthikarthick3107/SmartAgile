@@ -293,7 +293,7 @@ const SProjectDetails = () => {
             <div className="text-right">
               <FontAwesomeIcon className="px-1.5 cursor-pointer py-1 text-xl text-red-600 border-red-600 border rounded-full" icon={faXmark} onClick={() => setShowAddTaskPopup(false)} />
             </div>
-            <AddTaskEmployee projectId={proj_id} assignedTo={selectedMember ? selectedMember.username : ''} assignedId ={selectedMember.id}  />
+            <AddTaskEmployee projectId={proj_id} projectName={project.proj_name} assignedTo={selectedMember ? selectedMember.username : ''} assignedId ={selectedMember.id}  />
           </div>
         </div>
       )}
