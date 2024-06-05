@@ -395,8 +395,11 @@
 
 // export default AddTaskEmployee;
 import React, { useState } from 'react';
+import {TextField, Select, MenuItem} from '@mui/material';
+import { styled } from '@mui/system';
+import '../../../App.css';
 
-const AddTaskEmployee = ({ projectId, assignedTo,assignedId }) => {
+const AddTaskEmployee = ({ projectId, projectName, assignedTo, assignedId }) => {
 
   const [formData, setFormData] = useState({
     task_name: '',
@@ -442,14 +445,86 @@ const AddTaskEmployee = ({ projectId, assignedTo,assignedId }) => {
     }
   };
 
+  const CustomTextField = styled(TextField)({
+    '& .MuiOutlinedInput-root':{
+      '& input':{
+        padding: '10px',
+        backgroundColor: 'rgba(0,0,0,0.2)'
+      },
+    },
+  });
+
+  const CustomSelect = styled(Select)({
+    '& .MuiSelect-selectMenu': {
+      padding: '10px', 
+      backgroundColor: 'rgba(0,0,0,0.2)',
+    },
+  });
+  
+
   return (
-    <div className="w-[100%] border mt-5 p-5">
+    <div className="w-[100%] border mt-1 p-5">
       <div>
-        <h1 className="text-2xl text-black font-bold mb-4">Add New Task - Smart Agile</h1>
+        <h1 className="text-2xl text-black font-bold mb-4">Add New Task - {projectName}</h1>
       </div>
       <form onSubmit={handleSubmit}>
+
+        <table className='table-auto'>
+          <tr>
+            <td className='text-black'>Task Name</td>
+            <td className='text-black'>:</td>
+            <td><CustomTextField variant='outlined' placeholder='Enter your Task Name' fullWidth InputProps={{style:{borderRadius: '5px', border: '1px solid rgba(192,192,192,0.2'}}}/></td>
+          </tr>
+
+          <tr>
+            <td className='text-black'><div className='row-content'>Deadline</div></td>
+            <td className='text-black'><div className='row-content colon'>:</div></td>
+            <td className='w-[87%]'><div className='row-content'><CustomTextField type='date' variant='outlined' fullWidth InputProps={{style:{borderRadius: '5px', border: '1px solid rgba(192,192,192,0.2'}}}/></div></td>
+          </tr>
+
+          <tr>
+            <td className='text-black'>Assign To</td>
+            <td className='text-black'>:</td>
+            <td><CustomTextField variant='outlined' fullWidth value={assignedTo} disabled InputProps={{style:{borderRadius: '5px', border: '1px solid rgba(192,192,192,0.2'}}}/></td>
+          </tr>
+
+          <tr>
+            <td className='text-black'><div className='row-content'>Priority</div></td>
+            <td className='text-black'><div className='row-content'>:</div></td>
+            <td>
+              <div className='row-content'>
+                <Select fullWidth defaultValue={'Low'} sx={{backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: '5px', border: '1px solid rgba(192,192,192,0.2'}}>
+                  <MenuItem value='Low'>Low</MenuItem>
+                  <MenuItem value='Medium'>Medium</MenuItem>
+                  <MenuItem value='High'>High</MenuItem>
+                </Select>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td className='text-black'><div className='mb-[10px]'>Status</div></td>
+            <td className='text-black'><div className='mb-[10px]'>:</div></td>
+            <td>
+              <div className='row-content'>
+                <Select fullWidth defaultValue={'To-do'}  sx={{backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: '5px', border: '1px solid rgba(192,192,192,0.2'}}>
+                  <MenuItem value='To-do'>To-do</MenuItem>
+                  <MenuItem value='Inprogress'>Inprogress</MenuItem>
+                  <MenuItem value='Completed'>Completed</MenuItem>
+                </Select>
+              </div>
+            </td>
+            {/* <td><div className='mb-[10px]'><CustomTextField variant='outlined' fullWidth InputProps={{style:{borderRadius: '5px', border: '1px solid rgba(192,192,192,0.2'}}}/></div></td> */}
+          </tr>
+
+          <tr>
+            <td className='text-black'>Description</td>
+            <td className='text-black'>:</td>
+            <td><TextField variant='outlined' fullWidth multiline rows={3} placeholder='Write detailed information about the task' InputProps={{style:{borderRadius: '5px', border: '1px solid rgba(192,192,192,0.2', backgroundColor: 'rgba(0,0,0,0.2)'}}}/></td>
+          </tr>
+        </table>
      
-        <label
+        {/* <label
            htmlFor="taskName"
            className="text-xl text-black font-semibold"
          >
@@ -538,7 +613,7 @@ const AddTaskEmployee = ({ projectId, assignedTo,assignedId }) => {
              value={formData.task_desc}
              onChange={handleInputChange}
              placeholder="Write detailed information about the task"
-           ></textarea>
+           ></textarea> */}
           
         
         <div className="text-center mt-7">
