@@ -394,12 +394,38 @@
 // };
 
 // export default AddTaskEmployee;
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {TextField, Select, MenuItem} from '@mui/material';
 import { styled } from '@mui/system';
 import '../../../App.css';
 
 const AddTaskEmployee = ({ projectId, projectName, assignedTo, assignedId }) => {
+  const [taskAssignee, setTaskAssignee] = useState('');
+
+  const userId = JSON.parse(localStorage.getItem('user_id'));
+
+  useEffect(() => {
+    const fetchTaskAssignee = async () => {
+      try{
+        const response = await fetch(`http://127.0.0.1:8000/projects/user-details/${userId}/${projectId}/`);
+        const data = await response.json();
+        if(Array.isArray(data) && data.length > 0){
+          const TaskAssigneeData = data[0];
+          const TaskAssigneeId = TaskAssigneeData.profile;
+          setTaskAssignee(TaskAssigneeId);
+          setFormData(prevFormData => ({
+            ...prevFormData,
+            assigned_by: TaskAssigneeId,
+          }));
+        }else{
+          console.log('Error getting Task Assignee Id');
+        }
+      }catch (error) {
+        console.error('Error fetching Task Assignee');
+      }
+    }
+    fetchTaskAssignee();
+  }, [userId,projectId]);
 
   const [formData, setFormData] = useState({
     task_name: '',
@@ -409,19 +435,20 @@ const AddTaskEmployee = ({ projectId, projectName, assignedTo, assignedId }) => 
     status: '',
     assigned_to:assignedId,
     project: parseInt(projectId),
+    assigned_by: taskAssignee
   });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData(prevFormData => ({
+      ...prevFormData,
       [name]: value,
-    });
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData)
+    console.log(formData);
     try {
       const response = await fetch('http://127.0.0.1:8000/tasks/', {
         method: 'POST',
@@ -434,9 +461,7 @@ const AddTaskEmployee = ({ projectId, projectName, assignedTo, assignedId }) => 
       console.log((response.json()))
 
       if (response.ok) {
-        console.log('Task created successfully!');
-        
-        
+        console.log('Task created successfully!');    
       } else {
         console.error('Failed to create task:', response.statusText);
       }
@@ -453,15 +478,7 @@ const AddTaskEmployee = ({ projectId, projectName, assignedTo, assignedId }) => 
       },
     },
   });
-
-  const CustomSelect = styled(Select)({
-    '& .MuiSelect-selectMenu': {
-      padding: '10px', 
-      backgroundColor: 'rgba(0,0,0,0.2)',
-    },
-  });
   
-
   return (
     <div className="w-[100%] border mt-1 p-5">
       <div>
@@ -470,58 +487,61 @@ const AddTaskEmployee = ({ projectId, projectName, assignedTo, assignedId }) => 
       <form onSubmit={handleSubmit}>
 
         <table className='table-auto'>
-          <tr>
-            <td className='text-black'>Task Name</td>
-            <td className='text-black'>:</td>
-            <td><CustomTextField variant='outlined' placeholder='Enter your Task Name' fullWidth InputProps={{style:{borderRadius: '5px', border: '1px solid rgba(192,192,192,0.2'}}}/></td>
-          </tr>
+          <tbody>
+            <tr>
+              <td className='text-black'>Task Name</td>
+              <td className='text-black'>:</td>
+              <td><TextField variant='outlined' id='taskName' value={formData.task_name} onChange={handleInputChange} name='task_name' multiline rows={2} placeholder='Enter your Task Name' fullWidth InputProps={{style:{borderRadius: '5px', border: '1px solid rgba(192,192,192,0.2)', backgroundColor: 'rgba(0,0,0,0.2)'}}}/></td>
+              {/* <td><CustomTextField variant='outlined' id='taskName' value={formData.task_name} onChange={handleInputChange} name='task_name' placeholder='Enter your Task Name' fullWidth InputProps={{style:{borderRadius: '5px', border: '1px solid rgba(192,192,192,0.2'}}}/></td> */}
+            </tr>
 
-          <tr>
-            <td className='text-black'><div className='row-content'>Deadline</div></td>
-            <td className='text-black'><div className='row-content colon'>:</div></td>
-            <td className='w-[87%]'><div className='row-content'><CustomTextField type='date' variant='outlined' fullWidth InputProps={{style:{borderRadius: '5px', border: '1px solid rgba(192,192,192,0.2'}}}/></div></td>
-          </tr>
+            <tr>
+              <td className='text-black'><div className='row-content'>Deadline</div></td>
+              <td className='text-black'><div className='row-content colon'>:</div></td>
+              <td className='w-[87%]'><div className='row-content'><CustomTextField type='date' variant='outlined' id='taskDeadline' value={formData.task_deadline} onChange={handleInputChange} name='task_deadline' fullWidth InputProps={{style:{borderRadius: '5px', border: '1px solid rgba(192,192,192,0.2'}}}/></div></td>
+            </tr>
 
-          <tr>
-            <td className='text-black'>Assign To</td>
-            <td className='text-black'>:</td>
-            <td><CustomTextField variant='outlined' fullWidth value={assignedTo} disabled InputProps={{style:{borderRadius: '5px', border: '1px solid rgba(192,192,192,0.2'}}}/></td>
-          </tr>
+            <tr>
+              <td className='text-black'>Assign To</td>
+              <td className='text-black'>:</td>
+              <td><CustomTextField variant='outlined' id='assignedTo' fullWidth value={assignedTo} disabled InputProps={{style:{borderRadius: '5px', border: '1px solid rgba(192,192,192,0.2'}}}/></td>
+            </tr>
 
-          <tr>
-            <td className='text-black'><div className='row-content'>Priority</div></td>
-            <td className='text-black'><div className='row-content'>:</div></td>
-            <td>
-              <div className='row-content'>
-                <Select fullWidth defaultValue={'Low'} sx={{backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: '5px', border: '1px solid rgba(192,192,192,0.2'}}>
-                  <MenuItem value='Low'>Low</MenuItem>
-                  <MenuItem value='Medium'>Medium</MenuItem>
-                  <MenuItem value='High'>High</MenuItem>
-                </Select>
-              </div>
-            </td>
-          </tr>
+            <tr>
+              <td className='text-black'><div className='row-content'>Priority</div></td>
+              <td className='text-black'><div className='row-content'>:</div></td>
+              <td>
+                <div className='row-content'>
+                  <Select fullWidth defaultValue={'LOW'} id='taskPriority' value={formData.task_priority} onChange={handleInputChange} name='task_priority' sx={{backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: '5px', border: '1px solid rgba(192,192,192,0.2'}}>
+                    <MenuItem value='LOW'>Low</MenuItem>
+                    <MenuItem value='MED'>Medium</MenuItem>
+                    <MenuItem value='HIGH'>High</MenuItem>
+                  </Select>
+                </div>
+              </td>
+            </tr>
 
-          <tr>
-            <td className='text-black'><div className='mb-[10px]'>Status</div></td>
-            <td className='text-black'><div className='mb-[10px]'>:</div></td>
-            <td>
-              <div className='row-content'>
-                <Select fullWidth defaultValue={'To-do'}  sx={{backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: '5px', border: '1px solid rgba(192,192,192,0.2'}}>
-                  <MenuItem value='To-do'>To-do</MenuItem>
-                  <MenuItem value='Inprogress'>Inprogress</MenuItem>
-                  <MenuItem value='Completed'>Completed</MenuItem>
-                </Select>
-              </div>
-            </td>
-            {/* <td><div className='mb-[10px]'><CustomTextField variant='outlined' fullWidth InputProps={{style:{borderRadius: '5px', border: '1px solid rgba(192,192,192,0.2'}}}/></div></td> */}
-          </tr>
+            <tr>
+              <td className='text-black'><div className='mb-[10px]'>Status</div></td>
+              <td className='text-black'><div className='mb-[10px]'>:</div></td>
+              <td>
+                <div className='row-content'>
+                  <Select fullWidth defaultValue={'Todo'} id='status' value={formData.status} onChange={handleInputChange} name='status'  sx={{backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: '5px', border: '1px solid rgba(192,192,192,0.2'}}>
+                    <MenuItem value='Todo'>To-do</MenuItem>
+                    <MenuItem value='Progress'>Inprogress</MenuItem>
+                    <MenuItem value='Completed'>Completed</MenuItem>
+                  </Select>
+                </div>
+              </td>
+              {/* <td><div className='mb-[10px]'><CustomTextField variant='outlined' fullWidth InputProps={{style:{borderRadius: '5px', border: '1px solid rgba(192,192,192,0.2'}}}/></div></td> */}
+            </tr>
 
-          <tr>
-            <td className='text-black'>Description</td>
-            <td className='text-black'>:</td>
-            <td><TextField variant='outlined' fullWidth multiline rows={3} placeholder='Write detailed information about the task' InputProps={{style:{borderRadius: '5px', border: '1px solid rgba(192,192,192,0.2', backgroundColor: 'rgba(0,0,0,0.2)'}}}/></td>
-          </tr>
+            <tr>
+              <td className='text-black'>Description</td>
+              <td className='text-black'>:</td>
+              <td><TextField variant='outlined' value={formData.task_desc} onChange={handleInputChange} name='task_desc' fullWidth multiline rows={3} placeholder='Write detailed information about the task' InputProps={{style:{borderRadius: '5px', border: '1px solid rgba(192,192,192,0.2)', backgroundColor: 'rgba(0,0,0,0.2)'}}}/></td>
+            </tr>
+          </tbody>
         </table>
      
         {/* <label

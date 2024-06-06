@@ -65,7 +65,7 @@ function TeamDetails() {
         const memberId = await fetch(`${baseUrl}/projects/user-details/${userId}/${projectId}/`);
         const memberIdData = await memberId.json();
         if(Array.isArray(memberIdData) && memberIdData.length > 0){
-          const firstMemberData = memberIdData[0]
+          const firstMemberData = memberIdData[0];
           const memberIdDetails = firstMemberData.id;
           setProjectMemberId(memberIdDetails);
         }else{
