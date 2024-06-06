@@ -75,6 +75,7 @@ function Login() {
           username: res.email,
           isStaff : res.is_staff
         };
+        localStorage.setItem('org_id', JSON.stringify(res.organization));
         localStorage.setItem("user", JSON.stringify(userData));
         setTimeout(() => {
           if(res.is_staff){
@@ -86,7 +87,9 @@ function Login() {
         }, 2000);
       } else {
         // Authentication failed
-        console.error("Login failed:", data.error);
+        setEmailError('Invalid Email or Password');
+        setPasswordError('Invalid Email or Password');
+        console.error("Login failed:", res.error);
       }
     } catch (error) {
       console.error("Error during login:", error);

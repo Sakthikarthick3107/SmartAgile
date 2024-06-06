@@ -13,3 +13,8 @@ class ProjectMemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectMembers
         fields = '__all__'
+
+class ProjectMemberCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProjectMembers
+        fields = '__all__'

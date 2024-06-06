@@ -194,7 +194,7 @@ const SProjectDetails = () => {
 
   const handleAddTaskClick = (member) => {
     setSelectedMember(member); // Set the selected member
-    console.log(member)
+    // console.log(member)
     setShowAddTaskPopup(true);
   };
 
