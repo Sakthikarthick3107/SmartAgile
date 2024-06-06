@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework import status
 from drf_spectacular.utils import extend_schema
-from .serializers import ProjectSerializer , ProjectMemberSerializer
+from .serializers import ProjectSerializer , ProjectMemberSerializer, ProjectMemberCreateSerializer
 from rest_framework.views import APIView
 from .models import Project , ProjectMembers
 from Users.models import User, UserProfile
@@ -25,6 +25,15 @@ class ProjectMemberView(APIView):
         members = ProjectMembers.objects.all()
         members_serializer = ProjectMemberSerializer(members , many=True)
         return Response(members_serializer.data)
+    
+@extend_schema(request=ProjectMemberCreateSerializer , responses=ProjectMemberCreateSerializer)
+class ProjectMemberCreateView(APIView):
+    def post(self,request):
+        serializer = ProjectMemberCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message' : 'Project Members added successfully'} , status=status.HTTP_201_CREATED)
+        return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
 
 @extend_schema(request=ProjectSerializer, responses=ProjectSerializer)
 class ProjectView(APIView):
@@ -52,7 +61,7 @@ class ProjectView(APIView):
         serializer = ProjectSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({'message' : 'Project Created Successfully'}, status=status.HTTP_201_CREATED)
+            return Response({'message' : 'Project Created Successfully', 'serializer' : serializer.data}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
     def put(self,request,proj_id):
