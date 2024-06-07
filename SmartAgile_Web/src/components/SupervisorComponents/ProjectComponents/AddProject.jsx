@@ -26,6 +26,8 @@ const AddProject = () => {
     },
   });
 
+  const OrganizationId = JSON.parse(localStorage.getItem('org_id'));
+
   const [formData, setFormData] = useState({
     projectName: '',
     deadline: '',
@@ -37,6 +39,14 @@ const AddProject = () => {
   const [prdFile, setPrdFile] = useState(null);
   const [iconFile, setIconFile] = useState(null);
   const [organizationMembers, setOrganizationMembers] = useState([]);
+
+  const [projectNameError, setProjectNameError] = useState('');
+  const [projectDeadlineError, setProjectDeadlineError] = useState('');
+  const [projectStatusError, setProjectStatusError] = useState('');
+  const [projectTeamMembersError, setProjectTeamMembersError] = useState('');
+  const [projectDescriptionError, setProjectDescriptionError] = useState('');
+  const [projectPrdError, setProjectPrdError] = useState('');
+  const [projectIconError, setProjectIconError] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -74,46 +84,106 @@ const AddProject = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formDataToSend = new FormData();
-    formDataToSend.append('projectName', formData.projectName);
-    formDataToSend.append('deadline', formData.deadline);
-    formDataToSend.append('status', formData.status);
-    formDataToSend.append('description', formData.description);
-    formDataToSend.append('teamMembers', JSON.stringify(teamMembers));
-    if(prdFile){
-      formDataToSend.append('prdFile', prdFile);
-    }
-    if(iconFile){
-      formDataToSend.append('iconFile', iconFile);
+
+    setProjectNameError('');
+    setProjectDeadlineError('');
+    setProjectStatusError('');
+    setProjectDescriptionError('');
+    setProjectTeamMembersError('');
+    setProjectPrdError('');
+    setProjectIconError('');
+
+    if(!formData.projectName){
+      setProjectNameError('Project Name is required');
+      return;
     }
 
-    console.log(formDataToSend);
+    if(!formData.deadline){
+      setProjectDeadlineError('Project Deadline is required');
+      return;
+    }
 
-    const form = {
-      proj_name : formData.projectName,
-      proj_deadline: formData.deadline,
-      proj_status: formData.status,
-      proj_desc: formData.description,
-      icon: iconFile,
-      prd: prdFile
+    if(!formData.status){
+      setProjectStatusError('Project status is required');
+      return;
+    }
+
+    if(!formData.description){
+      setProjectDescriptionError('Project Description should be included');
+      return;
+    }
+
+    if(!teamMembers){
+      setProjectTeamMembersError('Project Team Members is required');
+      return;
     }
     
-    console.log(JSON.stringify(teamMembers));
+    if(!prdFile){
+      setProjectPrdError('Prd should be included');
+      return;
+    }
 
-    console.log(form)
+    if(!iconFile){
+      setProjectIconError('Project icon should be included');
+      return;
+    }
 
-    // try{
-    //   const response = await fetch(`${baseURL}/projects/`, {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(formData),
-    //   })
-    // } catch (error) {}
+    try{
+      const formDataToSend = new FormData();
+      formDataToSend.append('proj_name', formData.projectName);
+      formDataToSend.append('proj_deadline', formData.deadline);
+      formDataToSend.append('status', formData.status);
+      formDataToSend.append('proj_desc', formData.description);
+      formDataToSend.append('prd', prdFile);
+      formDataToSend.append('icon', iconFile);
+      formDataToSend.append('organization', OrganizationId);
+   
+
+      const response = await fetch(`${baseURL}/projects/`, {
+        method: 'POST',
+        body: formDataToSend,
+      });
+
+      const data = await response.json();
+      console.log(data);
+      const serializerData = data.serializer;
+
+      if(response.ok){
+        const newProjectId = serializerData.proj_id;
+
+        for(const member of teamMembers){
+          const memberData = {
+            project : newProjectId,
+            profile : member.profile,
+            role_within_project : member.role_within_project
+          };
+
+          const memberResponse = await fetch(`${baseURL}/projects/project-members/create/`, {
+            method: 'POST',
+            headers : {
+              'Content-Type': 'application/json'
+            },
+            body : JSON.stringify(memberData),
+          });
+
+          const memberDataResponse = await memberResponse.json();
+
+          if(memberResponse.ok){
+            console.log(memberDataResponse);
+            console.log(`Project member added successfully`);
+            window.location.reload();
+          }else{
+            console.log(memberDataResponse);
+            console.log(`Failed to add project member`);
+          }
+        }
+      }else{
+        console.log('Failed to create project');
+      }
+    } catch (error) {
+      console.log('Error creating project', error);
+    }
   };
-
-  const OrganizationId = JSON.parse(localStorage.getItem('org_id'));
 
   useEffect(() => {
     const fetchOrganizationMembers = async () => {
@@ -146,19 +216,29 @@ const AddProject = () => {
             <tbody>
 
               <tr>
-                <td className="text-black text-xl">Project Name</td>
+                <td className="text-black text-xl">Project Name <span className="text-red-500">*</span></td>
                 <td className="text-black text-xl">:</td>
                 <td><TextField variant="outlined" fullWidth name="projectName" value={formData.projectName} onChange={handleInputChange} placeholder="Enter your Project Name" InputProps={{style:{borderRadius: '5px', border: '1px solid rgba(192,192,192,0.2)', backgroundColor: 'rgba(0,0,0,0.2)'}}}/></td>
               </tr>
+              {/* <div>
+                {projectNameError && (
+                    <p className="text-red-500 text-center text-sm">{projectNameError}</p>
+                )}
+              </div> */}
 
               <tr>
-                <td className="text-black text-xl w-[20%]"><div className='row-content'>Deadline</div></td>
+                <td className="text-black text-xl w-[20%]"><div className='row-content'>Deadline<span className="text-red-500">*</span></div></td>
                 <td className="text-black text-xl"><div className='row-content colon'>:</div></td>
                 <td className="w-[88%]"><div className="row-content"><CustomTextField type="date" variant="outlined" name="deadline" value={formData.deadline} onChange={handleInputChange} fullWidth InputProps={{style:{borderRadius: '5px', border: '1px solid rgba(192,192,192,0.2)'}}}/></div></td>
               </tr>
+              {/* <div>
+                {projectDeadlineError && (
+                    <p className="text-red-500 text-center text-sm">{projectDeadlineError}</p>
+                )}
+              </div> */}
 
               <tr>
-                <td className="text-black text-xl">Status</td>
+                <td className="text-black text-xl">Status<span className="text-red-500">*</span></td>
                 <td className="text-black text-xl">:</td>
                 <td>
                   <Select fullWidth name="status" value={formData.status} onChange={handleInputChange} sx={{backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: '5px', border: '1px solid rgba(192,192,192,0.2'}}>
@@ -168,9 +248,15 @@ const AddProject = () => {
                   </Select>
                 </td>
               </tr>
+              {/* <div>
+                {projectStatusError && (
+                    <p className="text-red-500 text-center text-sm">{projectStatusError}</p>
+                )}
+              </div> */}
+
 
               <tr>
-                <td className="text-black text-xl"><div className="row-content">Team Members & Role</div></td>
+                <td className="text-black text-xl"><div className="row-content">Team Members & Role<span className="text-red-500">*</span></div></td>
                 <td className="text-black text-xl"><div className="row-content">:</div></td>
                 <td>
                   <div className="row-content">
@@ -231,15 +317,26 @@ const AddProject = () => {
                   </div>
                 </td>
               </tr>
+              {/* <div>
+                {projectTeamMembersError && (
+                    <p className="text-red-500 text-center text-sm">{projectTeamMembersError}</p>
+                )}
+              </div> */}
 
               <tr>
-                <td className="text-black text-xl"><div className="row-content">Description</div></td>
+                <td className="text-black text-xl"><div className="row-content">Description<span className="text-red-500">*</span></div></td>
                 <td className="text-black text-xl"><div className="row-content">:</div></td>
                 <td><div className="row-content"><TextField variant="outlined" name="description" value={formData.description} onChange={handleInputChange} fullWidth multiline rows={4} placeholder="Write a detailed description about your project" InputProps={{style:{borderRadius: '5px', border: '1px solid rgba(192,192,192,0.2)', backgroundColor: 'rgba(0,0,0,0.2)'}}}/></div></td>
               </tr>
+              {/* <div>
+                {projectDescriptionError && (
+                    <p className="text-red-500 text-center text-sm">{projectDescriptionError}</p>
+                )}
+              </div> */}
+              
 
               <tr>
-                <td className="text-black text-xl"><div className='row-content'>Add PRD</div></td>
+                <td className="text-black text-xl"><div className='row-content'>Add PRD<span className="text-red-500">*</span></div></td>
                 <td className="text-black text-xl"><div className='row-content colon'>:</div></td>
                 <td>
                   {prdFile ? (
@@ -253,15 +350,22 @@ const AddProject = () => {
                     <label htmlFor="prdFile">
                       <div className="row-content bg-white rounded-md drop-shadow-2xl flex justify-center items-center h-[17vh] cursor-pointer">                 
                         <FontAwesomeIcon className="text-7xl text-black bg-red" icon={faCloudUploadAlt}/>
+                        <p className="text-black text-3xl font-semibold ml-4">Upload Files</p>
                         <input type="file" id="prdFile" onChange={handleFileChange} style={{display:'none'}} accept=".pdf, .doc, .docx" />
                       </div>
                     </label>
                   )}
                 </td>
               </tr>
+              {/* <div>
+                {projectPrdError && (
+                    <p className="text-red-500 text-center text-sm">{projectPrdError}</p>
+                )}
+              </div> */}
+              
 
               <tr>
-                <td className="text-black text-xl"><div className='row-content'>Icon</div></td>
+                <td className="text-black text-xl"><div className='row-content'>Icon<span className="text-red-500">*</span></div></td>
                 <td className="text-black text-xl"><div className='row-content colon'>:</div></td>
                 <td>
                   {iconFile ? (
@@ -281,6 +385,11 @@ const AddProject = () => {
                   )}             
                 </td>
               </tr>
+              {/* <div>
+                {projectIconError && (
+                    <p className="text-red-500 text-center text-sm">{projectIconError}</p>
+                )}
+              </div> */}
 
             </tbody>
 
