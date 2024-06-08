@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faPaperPlane,faPaperclip, faReply, faTrash } from '@fortawesome/free-solid-svg-icons';
 import '../../App.css';
-import Avatar from '@mui/material/Avatar';
+import {Avatar, Modal, Box} from '@mui/material';
 
 function TeamDetails() {
   const [messages, setMessages] = useState([]);
@@ -16,10 +16,11 @@ function TeamDetails() {
   const messagesEndRef = useRef(null);
   const [projectMemberId, setProjectMemberId] = useState(null);
   const [maxWidth, setMaxWidth] = useState(0); // State to hold max width
-  const [userProfile, setUserProfile] = useState({}); // State to hold user profile information
-  const [selectedImage, setSelectedImage] = useState(null);
+  // const [userProfile, setUserProfile] = useState({}); // State to hold user profile information
   const [selectedMessage, setSelectedMessage] = useState(null); // State to hold the selected message
   const [showOptions, setShowOptions] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
 
   // Create a ref to detect clicks outside the dropdown
@@ -35,8 +36,14 @@ function TeamDetails() {
   const chatroomId = JSON.parse(localStorage.getItem('chatroom_id'));
 
   const scrollToBottom = () => {
-    if(messages.current){
-      messagesEndRef.current.scrollIntoView({bottom:0, behavior: 'smooth'});
+    messagesEndRef.current.scrollIntoView({bottom:0, behavior: 'smooth'});
+  };
+
+  const handleFileChange = (e) => {
+    const {files} = e.target;
+    if(files.length > 0){
+      setFile(files[0]);
+      sendMessage(null, files[0]);
     }
   };
 
@@ -79,6 +86,10 @@ function TeamDetails() {
     fetchMessages();
   }, [chatroomId]);
 
+  useEffect(() => {
+    scrollToBottom();
+  });
+
   
   useEffect(() => {
     const socket = new WebSocket(`ws://127.0.0.1:8000/ws/chatroom/${chatroomId}/`);
@@ -109,46 +120,36 @@ function TeamDetails() {
     };
   }, [messages]);
 
-  const sendMessage = (e) => {
-    e.preventDefault();
-    if(input.trim() !== ''){
+  const sendMessage = (e, selectedFile = null) => {
+    if(e) e.preventDefault();
+    
+    const messageText = input.trim();
+    const messageFile = selectedFile || file;
+
+    if(messageText !== '' || messageFile){
       const messageData = {
-        chatroom: chatroomId,
-        sender: projectMemberId,
-        message: input,
+        chatroom : chatroomId,
+        sender : projectMemberId,
       };
 
-      if(file){
+      if(messageText){
+        messageData.message = messageText;
+        sendToWebSocket(messageData);
+        setInput('');
+      };
+
+      if(messageFile){
         const reader = new FileReader();
-        reader.onload = function(event){
-          const base64File = event.target.result.split('.')[1];
+        reader.onload = (event) => {
+          const base64File = event.target.result.split(',')[1];
           messageData.file = base64File;
-          messageData.file_name = file.name;
+          messageData.file_name = messageFile.name;
           sendToWebSocket(messageData);
         };
-        reader.readAsDataURL(file);
-      }else{
-        sendToWebSocket(messageData);
-      }
-
-      setInput('');
-      setFile(null);
+        reader.readAsDataURL(messageFile);
+        setFile(null);
+      };
     }
-
-
-    // if (input.trim()|| file) {
-    //   const newMessage = {
-    //     text: input,
-    //     user: "self",
-    //     timestamp: new Date().toISOString(), // Add timestamp when the message is sent
-    //     file: file ? URL.createObjectURL(file) : null, // Create a URL for the file if it exists
-    //     fileName: file ? file.name : null, // Store the file name
-    //     fileType: file ? file.type : null // Store the file type
-    //   };
-    //   setMessages([...messages, newMessage]);
-    //   setInput("");
-    //   setFile(null);
-    // }
   };
 
   const sendToWebSocket = (messageData) => {
@@ -156,23 +157,9 @@ function TeamDetails() {
       websocket.current.send(JSON.stringify(messageData));
       console.log('Message sent', messageData);
       setInput('');
+      setFile(null);
     }else{
       console.error('Websocket is not open');
-    }
-  };
-
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    setFile(selectedFile);
-
-    if(selectedFile && (selectedFile.type.endsWith('.png') || selectedFile.type.endsWith('.jpg'))){
-      const reader = new FileReader();
-      reader.onload = function(event){
-        setSelectedImage(event.target.result);
-      };
-      reader.readAsDataURL(selectedFile);
-    }else{
-      setSelectedImage(null);
     }
   };
 
@@ -258,6 +245,39 @@ function TeamDetails() {
     return () => clearTimeout(timer);
   }, [messages]);
 
+  const messageTime = (sentAt) => {
+    const time = new Date(sentAt);
+    const formattedTime = time.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit', hour12: true});
+    return formattedTime;
+  };
+
+  const openModal = (imageUrl) => {
+    setSelectedImage(imageUrl);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedImage(null);
+  };
+
+  const modalStyle = {
+    position : 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 'auto',
+    height: '95%',
+    backgroundColor: 'rgba(0,0,0,0.2)',
+    boxShadow: 24,
+    p: 4,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    outline: 'none',
+    border: '8px solid rgba(0,0,0,0.4)',
+  };
+
 
   return (
     <div className="flex border flex-col pr-2 pl-2 rounded-md h-screen">
@@ -273,17 +293,6 @@ function TeamDetails() {
         </div>
       </div>
       <div className="flex-1 overflow-y-auto p-4 border-gray-300 bg-white">
-        {/* {messages.map((message, index) => (
-          <div key={index}>
-            <div className={`rounded p-2 my-2 max-w-xs ${
-              message.user_id === userId ? "bg-yellow-200 ml-auto rounded-lg rounded-tr-none mr-8 self-message" : "bg-[#4D989D] mr-auto rounded-lg rounded-tl-none ml-8 other-message"}`}>
-              <Avatar src={`http://127.0.0.1:8000/media/${message.user_image}`} alt={message.username} />
-              <strong className="text-black">{message.username}</strong>
-              <p className="text-black">{message.message}</p>
-              {message.sent_at}
-            </div>
-          </div>
-        ))} */}
         {messages.map((message, index) => (
           <div key={index} className="mb-4">
             {message.user_id === userId
@@ -311,8 +320,36 @@ function TeamDetails() {
                 width: 'max-content', // Set a fixed width for all messages, adjust as needed
                 maxWidth: `${maxWidth}px`,
                 position: 'relative',
-              }}><div className="mt-1">{message.message}</div></div>
-              {message.file && (
+              }}><div className="mt-1">{message.message}</div>
+              <div className={`text-xs ${message.message ? '' : 'hidden'} ${message.user_id === userId ? 'text-start' : 'text-end'}`}>{messageTime(message.sent_at)}</div>
+            </div>
+            <div className={`rounded ${
+              message.user_id === userId
+               ? 'ml-auto rounded-lg rounded-tr-none mr-8 self-message'
+               : 'mr-auto rounded-lg rounded-tl-none ml-8 other-message'
+              }`}
+              style={{
+                justifySelf: message.user_id === userId ? 'flex-end' : 'flex-start',
+                minWidth: '50px',
+                width: 'max-content',
+                maxWidth: `${maxWidth}px`,
+                position: 'relative',
+              }}
+            >
+              <div className="mt-1">
+                { message.file && (
+                  message.file.endsWith('.png') ||
+                  message.file.endsWith('.jpg') ||
+                  message.file.endsWith('.jpeg') ? (
+                    <img src={`${baseUrl}${message.file}`} alt={`${message.file.split('/').pop()}`} className="text-black rounded-lg border-8 border-gray-950 border-opacity-50 w-auto h-44" onClick={() => openModal(`${baseUrl}${message.file}`)} />
+                  ) : (
+                    <a target="blank" href={`${baseUrl}${message.file}`} download={`${message.file.split('/').pop()}`} className="text-black bg-red-400 py-1 px-2 rounded-lg">{message.file.split('/').pop()}</a>
+                  ))
+                }
+              </div>
+              <div className={`text-xs ${message.file ? '' : 'hidden'} ${message.user_id === userId ? 'text-start' : 'text-end'}`}>{messageTime(message.sent_at)}</div>
+            </div>
+            {/* {message.file && (
               <div>
                 {message.file.startsWith('data:image/') ? (
                   <p>{`${message.file.split('/').pop()}`}</p>
@@ -321,15 +358,14 @@ function TeamDetails() {
                   message.file.endsWith('.jpg') ||
                   message.file.endsWith('.jpeg') ||
                   message.file.endsWith('.gif') ? (
-                    <img src={`${baseUrl}${message.file}`} alt={`${message.file.split('/').pop()}`} className="text-black w-64 h-44"/>
+                    <img src={`${baseUrl}${message.file}`} alt={`${message.file.split('/').pop()}`} className="text-black rounded-lg border-8 border-gray-950 border-opacity-45 w-64 h-44"/>
                   ) : (
-                    <a target="blank" href={`${baseUrl}${message.file}`} download={`${message.file.split('/').pop()}`} className="text-black">{`${message.file.split('/').pop()}`}</a>
+                    <a target="blank" href={`${baseUrl}${message.file}`} download={`${message.file.split('/').pop()}`} className="text-black rounded-md m-2 bg-red-400">{`${message.file.split('/').pop()}`}</a>
                   )
-                )
-                }
+                )}
               </div>
-              )}
-          </div>
+              )} */}
+            </div>
         ))}
         <div ref={messagesEndRef} />
       </div>
@@ -387,6 +423,18 @@ function TeamDetails() {
           <FontAwesomeIcon icon={faPaperPlane} size="lg" />
         </button>
       </form> 
+
+      <Modal
+        open = {showModal}
+        onClose={closeModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={modalStyle}>
+          <img src={selectedImage} alt="Full Screen" className="w-full h-full object-contain" />
+        </Box>
+      </Modal>
+
     </div>
   );
 

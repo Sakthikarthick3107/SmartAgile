@@ -5,7 +5,6 @@ from .models import ChatRoom, Message
 from Projects.models import ProjectMembers
 from .serializers import MessageSerializer
 from channels.db import database_sync_to_async
-import logging
 from Projects.serializers import ProjectMemberSerializer
 from django.core.files.base import ContentFile
 
@@ -61,23 +60,23 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
         try:
             sender = ProjectMembers.objects.get(pk=sender)
             chatroom = ChatRoom.objects.get(pk=self.chatroom_id)
-            message_instance = Message.objects.create(chatroom=chatroom, sender=sender, message=message)
+            
+            if file_data:
+                file_content = base64.b64decode(file_data)
+                file = ContentFile(file_content, name=file_name)
 
-            if file_data and file_name:
-                try:
-                    decoded_file_data = base64.b64decode(file_data)
-                    content_file = ContentFile(decoded_file_data, name=file_name)
-                    message_instance.file = content_file
-                except (base64.binascii.Error, ValueError) as e:
-                    print('Error decoding base64 file data')
-                    return None
-
-            message_instance.save()
+                message_instance = Message.objects.create(
+                    chatroom = chatroom,
+                    sender = sender,
+                    file = file
+                )
+            else:
+                message_instance = Message.objects.create(
+                    chatroom = chatroom,
+                    sender = sender,
+                    message = message
+                )
             return message_instance
-        except ProjectMembers.DoesNotExist:
-            return None
-        except ChatRoom.DoesNotExist:
-            return None
         except Exception as e:
             return None
     
