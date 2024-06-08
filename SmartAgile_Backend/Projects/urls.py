@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ProjectView , status_choices , ProjectMemberView, UserProjectView, ProjectMemberCreateView
+from .views import ProjectView , status_choices , ProjectMemberView, UserProjectView, ProjectMemberCreateView, ProjectMemberDetailView
 
 urlpatterns = [
     path('', ProjectView.as_view(), name='Project Created'),
@@ -13,5 +13,5 @@ urlpatterns = [
     path('project-members/<int:project>/' , ProjectMemberView.as_view() , name="ProjectMembers"),
 
     path('user-projects/<int:user_id>/', UserProjectView.as_view(), name='user_projects'),
-    # path('user-details/<int:id>/<int:proj_id>/', ProjectMemberDetailView.as_view(), name='user-details'),
+    path('user-details/<int:id>/<int:proj_id>/', ProjectMemberDetailView.as_view(), name='user-details'),
 ]

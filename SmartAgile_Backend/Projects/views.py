@@ -96,19 +96,19 @@ class UserProjectView(APIView):
         serializer = ProjectSerializer(projects, many = True)
         return Response(serializer.data)
     
-# class ProjectMemberDetailView(APIView):
-#     def get(self, request, proj_id, id):
-#         try:
-#             user_profile = UserProfile.objects.get(user=id)
+class ProjectMemberDetailView(APIView):
+    def get(self, request, proj_id, id):
+        try:
+            user_profile = UserProfile.objects.get(user=id)
 
-#             project_member = ProjectMembers.objects.filter(profile=user_profile, project=proj_id)
+            project_member = ProjectMembers.objects.filter(profile=user_profile, project=proj_id)
 
-#             if not project_member.exists():
-#                 return Response({'message': 'Project members not found for the specified project'}, status=status.HTTP_404_NOT_FOUND)
+            if not project_member.exists():
+                return Response({'message': 'Project members not found for the specified project'}, status=status.HTTP_404_NOT_FOUND)
             
-#             serializer = ProjectMemberSerializer(project_member, many=True)
-#             return Response(serializer.data)
-#         except UserProfile.DoesNotExist:
-#             return Response({'message': 'User profile not found'}, status=status.HTTP_404_NOT_FOUND)
-#         except ProjectMembers.DoesNotExist:
-#             return Response({'message': 'Project members not found'}, status=status.HTTP_404_NOT_FOUND)
+            serializer = ProjectMemberSerializer(project_member, many=True)
+            return Response(serializer.data)
+        except UserProfile.DoesNotExist:
+            return Response({'message': 'User profile not found'}, status=status.HTTP_404_NOT_FOUND)
+        except ProjectMembers.DoesNotExist:
+            return Response({'message': 'Project members not found'}, status=status.HTTP_404_NOT_FOUND)
