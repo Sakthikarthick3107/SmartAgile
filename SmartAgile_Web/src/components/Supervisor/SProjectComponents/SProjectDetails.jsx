@@ -167,6 +167,24 @@ const SProjectDetails = () => {
   const [selectedMember, setSelectedMember] = useState(null); // State to store selected team member
   const navigate = useNavigate();
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  const calculateDuration = (startDate, endDate) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const differenceInTime = end - start;
+    console.log(startDate, start);
+    console.log(endDate, end);
+    const differenceInDays = differenceInTime/(1000*3600*24);
+    return Math.round(differenceInDays);
+  }
+
   useEffect(() => {
     async function fetchProjectDetails() {
       try {
@@ -225,13 +243,13 @@ const SProjectDetails = () => {
         </div>
         <div className="flex flex-col gap-2">
           <h2 className="text-xl text-black font-semibold">
-            Start Date: <span className="text-md font-normal">{project.created_at}</span>
+            Start Date: <span className="text-md font-normal">{formatDate(project.created_at)}</span>
           </h2>
           <h2 className="text-xl text-black font-semibold">
-            End Date: <span className="text-md font-normal">{project.proj_deadline}</span>
+            End Date: <span className="text-md font-normal">{formatDate(project.proj_deadline)}</span>
           </h2>
           <h2 className="text-xl text-black font-semibold">
-            Duration: <span className="text-md font-normal">{project.duration}</span>
+            Duration: <span className="text-md font-normal">{calculateDuration(project.created_at, project.proj_deadline)} days</span>
           </h2>
         </div>
       </div>

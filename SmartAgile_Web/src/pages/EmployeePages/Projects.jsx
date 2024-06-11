@@ -78,7 +78,7 @@ function Projects() {
     <>
       <div>
         <h1>Projects</h1>
-        <div className="flex gap-32">
+        <div className="grid grid-cols-4 gap-8">
           {projects.map((project) => (
             <ProjectCard key={project.proj_id} project={project} onClick={handleCardClick} />
           ))}

@@ -45,7 +45,17 @@
 
 import React from 'react';
 function SProjectCard({ project}) {
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
   const baseUrl = 'http://127.0.0.1:8000';
+
   return (
     <div className="cursor-pointer">
       <div className="pt-8">
@@ -76,7 +86,7 @@ function SProjectCard({ project}) {
             <div>
               <span className="text-black">Deadline</span>
               <br />
-              {project.proj_deadline}
+              {formatDate(project.proj_deadline)}
             </div>
           </div>
         </div>
