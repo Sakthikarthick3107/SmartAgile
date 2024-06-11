@@ -1,0 +1,10 @@
+# Django Installations
+
+# pip install django daphne
+# py -m pip install -U channels
+# pip install djangorestframework
+# pip install django-cors-headers
+# pip install django
+# pip install drf-spectacular
+# pip install djangorestframework-simplejwt
+# pip install django-filter

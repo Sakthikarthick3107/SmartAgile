@@ -151,6 +151,17 @@ const AddProject = () => {
       if(response.ok){
         const newProjectId = serializerData.proj_id;
 
+        const createChatroom = await fetch(`${baseURL}/chat/chatroom/projects/${newProjectId}/`, {
+          method: 'POST',
+          headers : {
+            'Content-Type': 'application/json'
+          },
+          body : JSON.stringify(newProjectId),
+        });
+
+        const chatroomData = await createChatroom.json();
+        console.log(chatroomData);
+
         for(const member of teamMembers){
           const memberData = {
             project : newProjectId,

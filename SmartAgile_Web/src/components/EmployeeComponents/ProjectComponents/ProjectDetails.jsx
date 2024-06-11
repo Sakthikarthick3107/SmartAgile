@@ -19,6 +19,16 @@ const ProjectDetails = ({ project, onClose }) => {
     fetchTeamMembers();
   }, [project.proj_id]);
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+
+  console.log(project);
+
   return (
     <div className="bg-white p-6  shadow-lg w-[50%] border border-3 rounded-xl ">
       <button
@@ -43,11 +53,11 @@ const ProjectDetails = ({ project, onClose }) => {
         <div className="flex gap-[40px] align-center mt-4">
           <div>
             <p className="text-[#4D989D]">Start date</p>
-            <p className="font-semibold">10/02/2024</p>
+            <p className="font-semibold text-black">{formatDate(project.created_at)}</p>
           </div>
           <div>
             <p className="text-[#4D989D]">End date</p>
-            <p className="font-semibold">{project.proj_deadline}</p>
+            <p className="font-semibold text-black">{formatDate(project.proj_deadline)}</p>
           </div>
         </div>
       </div>
@@ -78,7 +88,7 @@ const ProjectDetails = ({ project, onClose }) => {
         <h2 className="text-xl text-black font-semibold	mb-4 mt-4">
           Product Abstract
         </h2>
-        <p className="text-justify leading-6">{project.proj_desc}</p>
+        <p className="text-justify text-black leading-6">{project.proj_desc}</p>
       </div>
     </div>
   );
