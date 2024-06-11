@@ -347,7 +347,7 @@ function TeamDetails() {
                   ))
                 }
               </div>
-              <div className={`text-xs ${message.file ? '' : 'hidden'} ${message.user_id === userId ? 'text-start' : 'text-end'}`}>{messageTime(message.sent_at)}</div>
+              <div className={`text-xs text-black ${message.file ? '' : 'hidden'} ${message.user_id === userId ? 'text-start' : 'text-end'}`}>{messageTime(message.sent_at)}</div>
             </div>
             {/* {message.file && (
               <div>
