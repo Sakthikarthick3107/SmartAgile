@@ -145,6 +145,7 @@ import { useNavigate } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from '@mui/icons-material/Add';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
+import Avatar from '@mui/material/Avatar';
 
 const EmployeeList = () => {
   const [projectMembers, setProjectMembers] = useState([]);
@@ -153,10 +154,12 @@ const EmployeeList = () => {
   const navigate = useNavigate();
   const baseUrl = "http://127.0.0.1:8000";
 
+  const orgId = JSON.parse(localStorage.getItem('org_id'));
+
   useEffect(() => {
     const fetchProjectMembers = async () => {
       try {
-        const response = await fetch(`${baseUrl}/users/employee/profile/1/`);
+        const response = await fetch(`${baseUrl}/users/employee/profile/${orgId}/`);
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -240,16 +243,17 @@ const EmployeeList = () => {
           filteredProjectMembers.map((member, index) => (
             <div
               key={`${member.user}-${index}`}
-              className="bg-white rounded-lg shadow-md p-4"
+              className="bg-white rounded-lg shadow-md p-4 flex justify-center items-center flex-col"
             >
-              <div className="flex items-center justify-center">
+              {/* <div className="flex items-center justify-center">
                 <img
                   src={`${baseUrl}/media/${member.image}`}
                   alt={member.username}
                   className="w-16 h-16 rounded-full mr-20"
                 />
-              </div>
-              <div className="text-center mt-4">
+              </div> */}
+              <Avatar src={`${baseUrl}/media/${member.image}`} alt={member.username} style={{width: 75, height: 75}}/>
+              <div className="text-center mt-1">
                 <p className="font-bold">{member.username}</p>
                 <p className="text-gray-500 text-sm">{member.email}</p>
                 <p className="text-sm text-black">{member.position}</p>
