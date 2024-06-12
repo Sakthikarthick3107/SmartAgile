@@ -164,14 +164,22 @@ function App() {
                   </LayoutWithTop>
                 }
               />
-              <Route
-                path="/ViewEmployee"
-                element={
-                  <LayoutWithTop>
-                    <ViewEmployee />
-                  </LayoutWithTop>
-                }
-              />
+          <Route
+           path="/employees"
+            element={
+              <LayoutWithTop>
+                <SEmployees />
+              </LayoutWithTop>
+            } 
+          />
+          <Route
+           path="/employees/ViewEmployeeList"
+            element={
+              <LayoutWithTop>
+                <ViewEmployeeList />
+              </LayoutWithTop>
+            } 
+          />
               <Route
                 path="/addproject"
                 element={

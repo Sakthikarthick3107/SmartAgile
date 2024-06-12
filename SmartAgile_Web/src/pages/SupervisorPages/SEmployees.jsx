@@ -10,7 +10,7 @@ const SEmployee = () => {
   const navigate = useNavigate();
 
   const handleEmployeeClick= ()=>{
-    navigate("/ViewEmployeeList");
+    navigate("/employees/ViewEmployeeList");
   }
 
   // Filtering users based on search term and filter value

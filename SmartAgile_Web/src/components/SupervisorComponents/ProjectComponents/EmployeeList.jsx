@@ -143,9 +143,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
-import AddIcon from '@mui/icons-material/Add';
-import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
-import Avatar from '@mui/material/Avatar';
+import AddIcon from "@mui/icons-material/Add";
+import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+
 
 const EmployeeList = () => {
   const [projectMembers, setProjectMembers] = useState([]);
@@ -165,6 +167,7 @@ const EmployeeList = () => {
         }
         const data = await response.json();
         setProjectMembers(data);
+        console.log(data)
       } catch (error) {
         console.error("Error fetching project members:", error);
       }
@@ -211,9 +214,9 @@ const EmployeeList = () => {
     navigate("/employees");
   };
 
-  const handleAddCandidateClick = ()=>{
+  const handleAddCandidateClick = () => {
     navigate("/addcandidate");
-  }
+  };
 
   return (
     <div className="container mx-auto justify-between px-4 relative">
@@ -231,35 +234,47 @@ const EmployeeList = () => {
 
         {/* Add Candidate Button */}
         <button
-        onClick={handleAddCandidateClick} 
-        className="flex items-center justify-between bg-[#4d989d] text-white py-2 px-4 rounded-md mb-4 md:mb-0 outline-none focus:outline-none focus:border-none">
+          onClick={handleAddCandidateClick}
+          className="flex items-center justify-between bg-[#4d989d] text-white py-2 px-4 rounded-md mb-4 md:mb-0 outline-none focus:outline-none focus:border-none"
+        >
           <AddIcon className="text-white mr-2" />
           Add Candidate
         </button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 shadow-full ">
         {filteredProjectMembers.length > 0 ? (
           filteredProjectMembers.map((member, index) => (
             <div
               key={`${member.user}-${index}`}
-              className="bg-white rounded-lg shadow-md p-4 flex justify-center items-center flex-col"
+              className="bg-white rounded-lg shadow-md p-4 border  max-w-[300px]"
             >
-              {/* <div className="flex items-center justify-center">
+              <div className=" ">
                 <img
                   src={`${baseUrl}/media/${member.image}`}
                   alt={member.username}
                   className="w-16 h-16 rounded-full mr-20"
                 />
-              </div> */}
-              <Avatar src={`${baseUrl}/media/${member.image}`} alt={member.username} style={{width: 75, height: 75}}/>
-              <div className="text-center mt-1">
-                <p className="font-bold">{member.username}</p>
-                <p className="text-gray-500 text-sm">{member.email}</p>
-                <p className="text-sm text-black">{member.position}</p>
-                <p className="text-sm text-black">{member.role}</p>
-                <p className="text-sm text-black">{member.date_joined}</p>
-                <p className="mb-2">{member.user}</p>
+              </div>
+              <div className="text-center mt-4">
+                <p className="font-bold text-left">{member.username}</p>
+                <p className="text-gray-500 text-sm text-left">{member.role}</p>
+                <div className="flex justify-between mt-3 mb-2">
+                  <div className="">
+                    <p className="text-md font-semibold">Department</p>
+                    <p className="text-sm text-black">{member.position}</p>
+                  </div>
+                  <div>
+                    <p className="text-md font-semibold">Hired Date</p>
+                    <p className="text-sm text-black">{member.date_joined}</p>
+                  </div>
+                </div>
+                <div className="text-left flex items-center">
+                  <FontAwesomeIcon className="pr-2" icon={faEnvelope} />
+                  <p className="text-sm text-black">{member.email}</p>
+                </div>
+
+                {/* <p className="mb-2 mt-4 text-sm text-gray-500">{member.user}</p> */}
               </div>
             </div>
           ))
@@ -284,6 +299,7 @@ const EmployeeList = () => {
           Back
         </button>
       </div>
+    
     </div>
   );
 };
