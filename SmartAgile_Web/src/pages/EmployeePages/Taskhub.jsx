@@ -261,7 +261,15 @@ const Taskhub = () => {
           isDragging ? "opacity-20" : "opacity-100"
         }`}
       >
-        <p>{task.task_name}</p>
+       <div className=" rounded-lg mb-2 bg-white shadow-none" >
+       <p className="text-xl font-bold pt-4 pl-2 mb-2">{task.task_name}</p>
+        <p className="text-sm text-gray-600 pl-3 mb-2">{task.task_deadline}</p>
+        <p className="text-gray-700 pl-3">{task.task_desc}</p> 
+
+        <button className="priority text-[14px] font-serif rounded-full p-0 pl-1 pr-1 mt-3 bg-yellow-300">{task.task_priority}</button>
+        
+       </div>
+
         {/* <button
           className="absolute bottom-1 right-1 text-slate-400"
           onClick={() => handleRemove(task.task_id)}
