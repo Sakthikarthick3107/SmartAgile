@@ -77,6 +77,7 @@ function Login() {
         };
         localStorage.setItem('org_id', JSON.stringify(res.organization));
         localStorage.setItem("user", JSON.stringify(userData));
+        localStorage.setItem('LoggedIn', JSON.stringify(true));
         setTimeout(() => {
           if(res.is_staff){
             navigate('/sdashboard');

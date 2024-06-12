@@ -65,10 +65,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import logo from "../../assets/logo.png";
 import Avatar from '@mui/material/Avatar';
+import LogoutIcon from '@mui/icons-material/Logout';
+import {useNavigate} from 'react-router-dom';
 
 const Navbar = () => {
   const [userData, setUserData] = useState({});
   const [notificationCount, setNotificationCount] = useState(0);
+  const [profileMenu, setProfileMenu] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch user data when the component mounts
@@ -91,6 +96,23 @@ const Navbar = () => {
     }
   };
 
+  const handleProfileMenu = () => {
+    setProfileMenu(!profileMenu);
+  };
+
+  const logout = () => {
+    localStorage.removeItem('LoggedIn');
+    localStorage.removeItem('isStaff');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('project_id');
+    localStorage.removeItem('chatroom_id');
+    localStorage.removeItem('user');
+    localStorage.removeItem('org_id');
+    localStorage.removeItem('employee_data');
+    navigate('/');
+    window.location.reload();
+  }
+
   return (
     <div className="bg-[#4D989D] w-[99.2vw] text-white flex justify-between items-center p-5 px-10">
       <div className="flex items-center">
@@ -108,7 +130,15 @@ const Navbar = () => {
             src={userData.profilePicture}
             alt="Profile"
           /> */}
-          <Avatar src={userData.image} alt="Profile"/>
+          <div className="relative">
+            <div onClick={handleProfileMenu} className="cursor-pointer"><Avatar src={userData.image} alt={userData.username}/></div>
+            <div className={`bg-[#4D989D] rounded-lg absolute p-1 w-[8vw] right-0 ${profileMenu ? '' : 'hidden'}`}>
+              <Avatar src={userData.image} alt={userData.username} />
+              <span>{userData.username}</span>
+              <hr className="mt-1 mb-2" />
+              <div className="flex justify-center cursor-pointer" onClick={logout}><LogoutIcon sx={{transform: 'rotate(180deg)'}}/> <span className="ml-2">Logout</span></div>
+            </div>
+          </div>
         </div>
         <div className="ml-3">
           {/* FontAwesome Bell Icon with notification count */}
