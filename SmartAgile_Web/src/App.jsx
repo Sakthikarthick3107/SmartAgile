@@ -40,8 +40,6 @@
 //       <Route path="/chat/:teamId" element={<LayoutWithSidebar><TeamDetails /></LayoutWithSidebar>} />
 //       <Route path="/settings" element={<LayoutWithSidebar><Settings /></LayoutWithSidebar>} />
 
-
-
 //       <Route path="/sdashboard" element={<SDashboard />} />
 //     </Routes>
 //   );
@@ -49,16 +47,14 @@
 
 // export default App;
 
-
-
-import React, {useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Organization from "./pages/Organization";
 import FirstPage from "./pages/FirstPage";
 import Navbar from "./components/EmployeeComponents/NavBar";
 import Sidebar from "./components/EmployeeComponents/Sidebar";
-import '@fortawesome/fontawesome-free/css/all.min.css';
+import "@fortawesome/fontawesome-free/css/all.min.css";
 import Projects from "./pages/EmployeePages/Projects";
 import TaskHub from "./pages/EmployeePages/Taskhub";
 import Chat from "./pages/EmployeePages/Chat";
@@ -72,12 +68,13 @@ import SProjects from "./pages/SupervisorPages/SProjects";
 import SEmployees from "./pages/SupervisorPages/SEmployees";
 import SSettings from "./pages/SupervisorPages/SSettings";
 import UserList from "./pages/EmployeePages/EmployeePage";
-import SmartAgileDocumentation from "./pages/EmployeePages/SmartAgileDocumentation"
+import SmartAgileDocumentation from "./pages/EmployeePages/SmartAgileDocumentation";
 import ViewEmployee from "./pages/EmployeePages/ViewEmployee";
 import AddProject from "./components/SupervisorComponents/ProjectComponents/AddProject";
 import AddCandidate from "./components/SupervisorComponents/ProjectComponents/AddCandidate";
 import ViewEmployeeList from "./pages/SupervisorPages/ViewEmployeeList";
 import SProjectDetails from "./components/Supervisor/SProjectComponents/SProjectDetails";
+import SManageTask from "./components/Supervisor/SProjectComponents/SManageTask";
 
 // Layout component with Navbar and Sidebar
 function LayoutWithSidebar({ children }) {
@@ -90,7 +87,7 @@ function LayoutWithSidebar({ children }) {
       </div>
     </div>
   );
-};
+}
 
 function LayoutWithTop({ children }) {
   return (
@@ -104,29 +101,27 @@ function LayoutWithTop({ children }) {
   );
 }
 
+function App() {
+  const [isStaff, setIsStaff] = useState(null);
 
-  function App() {
-    const [isStaff, setIsStaff] = useState(null);
-  
-    useEffect(() => {
-      const logged_in = JSON.parse(localStorage.getItem('LoggedIn'));
-      if(logged_in){
-        const user = JSON.parse(localStorage.getItem("user"));
-        if (user) {
-          setIsStaff(user.isStaff);
-        };
-      };
-    }, []);
-  
-    // if (isStaff === null) {
-    //   return <div>Loading...</div>; // Or a spinner/loading component
-    // }
+  useEffect(() => {
+    const logged_in = JSON.parse(localStorage.getItem("LoggedIn"));
+    if (logged_in) {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (user) {
+        setIsStaff(user.isStaff);
+      }
+    }
+  }, []);
+
+  // if (isStaff === null) {
+  //   return <div>Loading...</div>; // Or a spinner/loading component
+  // }
   return (
     <Routes>
-      {JSON.parse(localStorage.getItem('LoggedIn')) ? (
+      {JSON.parse(localStorage.getItem("LoggedIn")) ? (
         <>
           {isStaff ? (
-            
             <>
               <Route
                 path="/sdashboard"
@@ -142,7 +137,7 @@ function LayoutWithTop({ children }) {
                   <LayoutWithTop>
                     <SProjects />
                   </LayoutWithTop>
-                } 
+                }
               />
               <Route
                 path="/sprojects/:proj_id"
@@ -153,12 +148,21 @@ function LayoutWithTop({ children }) {
                 }
               />
               <Route
-                exact path="/user-list"
+                path="/sprojects/:proj_id/smanagetask"
+                element={
+                  <LayoutWithTop>
+                    <SManageTask />
+                  </LayoutWithTop>
+                }
+              />
+              <Route
+                exact
+                path="/user-list"
                 element={
                   <LayoutWithTop>
                     <UserList />
                   </LayoutWithTop>
-                } 
+                }
               />
               <Route
                 path="/ViewEmployee"
@@ -166,7 +170,7 @@ function LayoutWithTop({ children }) {
                   <LayoutWithTop>
                     <ViewEmployee />
                   </LayoutWithTop>
-                } 
+                }
               />
               <Route
                 path="/addproject"
@@ -174,7 +178,7 @@ function LayoutWithTop({ children }) {
                   <LayoutWithTop>
                     <AddProject />
                   </LayoutWithTop>
-                } 
+                }
               />
               <Route
                 path="/addcandidate"
@@ -182,7 +186,7 @@ function LayoutWithTop({ children }) {
                   <LayoutWithTop>
                     <AddCandidate />
                   </LayoutWithTop>
-                } 
+                }
               />
               <Route
                 path="/employees"
@@ -190,7 +194,7 @@ function LayoutWithTop({ children }) {
                   <LayoutWithTop>
                     <SEmployees />
                   </LayoutWithTop>
-                } 
+                }
               />
               <Route
                 path="/ViewEmployeeList"
@@ -198,7 +202,7 @@ function LayoutWithTop({ children }) {
                   <LayoutWithTop>
                     <ViewEmployeeList />
                   </LayoutWithTop>
-                } 
+                }
               />
               <Route
                 path="/ssettings"
@@ -206,13 +210,9 @@ function LayoutWithTop({ children }) {
                   <LayoutWithTop>
                     <SSettings />
                   </LayoutWithTop>
-                } 
+                }
               />
-              <Route
-              path="*"
-              element={<Navigate to='/sdashboard'/>}
-              />
-              
+              <Route path="*" element={<Navigate to="/sdashboard" />} />
             </>
           ) : (
             // Non-staff routes
@@ -223,7 +223,7 @@ function LayoutWithTop({ children }) {
                   <LayoutWithSidebar>
                     <Dashboard />
                   </LayoutWithSidebar>
-                } 
+                }
               />
               <Route
                 path="/projects"
@@ -231,7 +231,7 @@ function LayoutWithTop({ children }) {
                   <LayoutWithSidebar>
                     <Projects />
                   </LayoutWithSidebar>
-                } 
+                }
               />
               <Route
                 path="/SmartAgileDocumentation"
@@ -239,7 +239,7 @@ function LayoutWithTop({ children }) {
                   <LayoutWithSidebar>
                     <SmartAgileDocumentation />
                   </LayoutWithSidebar>
-                } 
+                }
               />
               <Route
                 path="/tasks"
@@ -247,7 +247,7 @@ function LayoutWithTop({ children }) {
                   <LayoutWithSidebar>
                     <TaskHub />
                   </LayoutWithSidebar>
-                } 
+                }
               />
               <Route
                 path="/chat"
@@ -255,15 +255,15 @@ function LayoutWithTop({ children }) {
                   <LayoutWithSidebar>
                     <Chat />
                   </LayoutWithSidebar>
-                } 
+                }
               />
               <Route
-                path="/chat/:teamId" 
+                path="/chat/:teamId"
                 element={
-                <LayoutWithSidebar>
-                  <TeamDetails />
-                </LayoutWithSidebar>
-                } 
+                  <LayoutWithSidebar>
+                    <TeamDetails />
+                  </LayoutWithSidebar>
+                }
               />
               <Route
                 path="/settings"
@@ -271,12 +271,9 @@ function LayoutWithTop({ children }) {
                   <LayoutWithSidebar>
                     <Settings />
                   </LayoutWithSidebar>
-                } 
+                }
               />
-              <Route
-              path="*"
-              element={<Navigate to='/dashboard'/>}
-              />
+              <Route path="*" element={<Navigate to="/dashboard" />} />
             </>
           )}
         </>
@@ -285,10 +282,9 @@ function LayoutWithTop({ children }) {
           <Route path="/" element={<FirstPage />} />
           <Route path="/organization" element={<Organization />} />
           <Route path="/login" element={<Login />} />
-          <Route path="*" element={<Navigate to='/'/>}/>
+          <Route path="*" element={<Navigate to="/" />} />
         </>
       )}
-      
     </Routes>
   );
 }
