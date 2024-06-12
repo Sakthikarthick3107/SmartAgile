@@ -52,7 +52,7 @@
 
 
 import React, {useState,useEffect} from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Organization from "./pages/Organization";
 import FirstPage from "./pages/FirstPage";
@@ -109,10 +109,13 @@ function LayoutWithTop({ children }) {
     const [isStaff, setIsStaff] = useState(null);
   
     useEffect(() => {
-      const user = JSON.parse(localStorage.getItem("user"));
-      if (user) {
-        setIsStaff(user.isStaff);
-      }
+      const logged_in = JSON.parse(localStorage.getItem('LoggedIn'));
+      if(logged_in){
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (user) {
+          setIsStaff(user.isStaff);
+        };
+      };
     }, []);
   
     // if (isStaff === null) {
@@ -120,157 +123,171 @@ function LayoutWithTop({ children }) {
     // }
   return (
     <Routes>
-      <Route path="/" element={<FirstPage />} />
-      <Route path="/organization" element={<Organization />} />
-      <Route path="/login" element={<Login />} />
-      
-      {isStaff ? (
-       
+      {JSON.parse(localStorage.getItem('LoggedIn')) ? (
         <>
-          <Route
-           path="/sdashboard"
-            element={
-              <LayoutWithTop>
-                <SDashboard />
-              </LayoutWithTop>
-            }
-          />
-          <Route
-           path="/sprojects"
-            element={
-              <LayoutWithTop>
-                <SProjects />
-              </LayoutWithTop>
-            } 
-          />
-          <Route
-            path="/sprojects/:proj_id"
-            element={
-              <LayoutWithTop>
-                <SProjectDetails />
-              </LayoutWithTop>
-            }
-          />
-          <Route
-           exact path="/user-list"
-            element={
-              <LayoutWithTop>
-                <UserList />
-              </LayoutWithTop>
-            } 
-          />
-          <Route
-            path="/ViewEmployee"
-            element={
-              <LayoutWithTop>
-                <ViewEmployee />
-              </LayoutWithTop>
-            } 
-          />
-          <Route
-           path="/addproject"
-            element={
-              <LayoutWithTop>
-                <AddProject />
-              </LayoutWithTop>
-            } 
-          />
-          <Route
-           path="/addcandidate"
-            element={
-              <LayoutWithTop>
-                <AddCandidate />
-              </LayoutWithTop>
-            } 
-          />
-          <Route
-           path="/employees"
-            element={
-              <LayoutWithTop>
-                <SEmployees />
-              </LayoutWithTop>
-            } 
-          />
-          <Route
-           path="/ViewEmployeeList"
-            element={
-              <LayoutWithTop>
-                <ViewEmployeeList />
-              </LayoutWithTop>
-            } 
-          />
-          <Route
-           path="/ssettings"
-            element={
-              <LayoutWithTop>
-                <SSettings />
-              </LayoutWithTop>
-            } 
-          />
-          
+          {isStaff ? (
+            
+            <>
+              <Route
+                path="/sdashboard"
+                element={
+                  <LayoutWithTop>
+                    <SDashboard />
+                  </LayoutWithTop>
+                }
+              />
+              <Route
+                path="/sprojects"
+                element={
+                  <LayoutWithTop>
+                    <SProjects />
+                  </LayoutWithTop>
+                } 
+              />
+              <Route
+                path="/sprojects/:proj_id"
+                element={
+                  <LayoutWithTop>
+                    <SProjectDetails />
+                  </LayoutWithTop>
+                }
+              />
+              <Route
+                exact path="/user-list"
+                element={
+                  <LayoutWithTop>
+                    <UserList />
+                  </LayoutWithTop>
+                } 
+              />
+              <Route
+                path="/ViewEmployee"
+                element={
+                  <LayoutWithTop>
+                    <ViewEmployee />
+                  </LayoutWithTop>
+                } 
+              />
+              <Route
+                path="/addproject"
+                element={
+                  <LayoutWithTop>
+                    <AddProject />
+                  </LayoutWithTop>
+                } 
+              />
+              <Route
+                path="/addcandidate"
+                element={
+                  <LayoutWithTop>
+                    <AddCandidate />
+                  </LayoutWithTop>
+                } 
+              />
+              <Route
+                path="/employees"
+                element={
+                  <LayoutWithTop>
+                    <SEmployees />
+                  </LayoutWithTop>
+                } 
+              />
+              <Route
+                path="/ViewEmployeeList"
+                element={
+                  <LayoutWithTop>
+                    <ViewEmployeeList />
+                  </LayoutWithTop>
+                } 
+              />
+              <Route
+                path="/ssettings"
+                element={
+                  <LayoutWithTop>
+                    <SSettings />
+                  </LayoutWithTop>
+                } 
+              />
+              <Route
+              path="*"
+              element={<Navigate to='/sdashboard'/>}
+              />
+              
+            </>
+          ) : (
+            // Non-staff routes
+            <>
+              <Route
+                path="/dashboard"
+                element={
+                  <LayoutWithSidebar>
+                    <Dashboard />
+                  </LayoutWithSidebar>
+                } 
+              />
+              <Route
+                path="/projects"
+                element={
+                  <LayoutWithSidebar>
+                    <Projects />
+                  </LayoutWithSidebar>
+                } 
+              />
+              <Route
+                path="/SmartAgileDocumentation"
+                element={
+                  <LayoutWithSidebar>
+                    <SmartAgileDocumentation />
+                  </LayoutWithSidebar>
+                } 
+              />
+              <Route
+                path="/tasks"
+                element={
+                  <LayoutWithSidebar>
+                    <TaskHub />
+                  </LayoutWithSidebar>
+                } 
+              />
+              <Route
+                path="/chat"
+                element={
+                  <LayoutWithSidebar>
+                    <Chat />
+                  </LayoutWithSidebar>
+                } 
+              />
+              <Route
+                path="/chat/:teamId" 
+                element={
+                <LayoutWithSidebar>
+                  <TeamDetails />
+                </LayoutWithSidebar>
+                } 
+              />
+              <Route
+                path="/settings"
+                element={
+                  <LayoutWithSidebar>
+                    <Settings />
+                  </LayoutWithSidebar>
+                } 
+              />
+              <Route
+              path="*"
+              element={<Navigate to='/dashboard'/>}
+              />
+            </>
+          )}
         </>
       ) : (
-        // Non-staff routes
         <>
-          <Route
-           path="/dashboard"
-            element={
-              <LayoutWithSidebar>
-                <Dashboard />
-              </LayoutWithSidebar>
-            } 
-          />
-          <Route
-           path="/projects"
-            element={
-              <LayoutWithSidebar>
-                <Projects />
-              </LayoutWithSidebar>
-            } 
-          />
-          <Route
-           path="/SmartAgileDocumentation"
-            element={
-              <LayoutWithSidebar>
-                <SmartAgileDocumentation />
-              </LayoutWithSidebar>
-            } 
-          />
-          <Route
-           path="/tasks"
-            element={
-              <LayoutWithSidebar>
-                <TaskHub />
-              </LayoutWithSidebar>
-            } 
-          />
-          <Route
-           path="/chat"
-            element={
-              <LayoutWithSidebar>
-                <Chat />
-              </LayoutWithSidebar>
-            } 
-          />
-          <Route
-           path="/chat/:teamId" 
-           element={
-            <LayoutWithSidebar>
-              <TeamDetails />
-            </LayoutWithSidebar>
-           } 
-          />
-          <Route
-           path="/settings"
-            element={
-              <LayoutWithSidebar>
-                <Settings />
-              </LayoutWithSidebar>
-            } 
-          />
+          <Route path="/" element={<FirstPage />} />
+          <Route path="/organization" element={<Organization />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="*" element={<Navigate to='/'/>}/>
         </>
       )}
-
       
     </Routes>
   );
