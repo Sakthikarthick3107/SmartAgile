@@ -151,6 +151,7 @@
 // };
 
 // export default SProjectDetails;
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -214,6 +215,9 @@ const SProjectDetails = () => {
     setSelectedMember(member); // Set the selected member
     // console.log(member)
     setShowAddTaskPopup(true);
+  };
+  const handleManageTask = (proj_id) => {
+    navigate(`/sprojects/${proj_id}/smanagetask`);
   };
 
   if (!project) {
@@ -290,7 +294,7 @@ const SProjectDetails = () => {
           </tbody>
         </table>
         <div className="text-right">
-          <button className="bg-[#4D989D] text-white mt-6">Manage Tasks</button>
+          <button className="bg-[#4D989D] text-white mt-6" onClick={handleManageTask}>Manage Tasks</button>
         </div>
       </div>
 
