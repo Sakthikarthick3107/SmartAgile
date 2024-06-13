@@ -75,6 +75,7 @@ import AddCandidate from "./components/SupervisorComponents/ProjectComponents/Ad
 import ViewEmployeeList from "./pages/SupervisorPages/ViewEmployeeList";
 import SProjectDetails from "./components/Supervisor/SProjectComponents/SProjectDetails";
 import SManageTask from "./components/Supervisor/SProjectComponents/SManageTask";
+import ViewTaskEmployee from "./components/Supervisor/View Task/ViewTaskEmployee";
 
 // Layout component with Navbar and Sidebar
 function LayoutWithSidebar({ children }) {
@@ -144,6 +145,14 @@ function App() {
                 element={
                   <LayoutWithTop>
                     <SProjectDetails />
+                  </LayoutWithTop>
+                }
+              />
+                  <Route
+                path="/sprojects/:proj_id/viewtask/"
+                element={
+                  <LayoutWithTop>
+                  <ViewTaskEmployee/>
                   </LayoutWithTop>
                 }
               />

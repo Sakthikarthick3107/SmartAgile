@@ -215,11 +215,15 @@ const SProjectDetails = () => {
     // console.log(member)
     setShowAddTaskPopup(true);
   };
+  const handleViewTaskClick = () => {
+    navigate(`/sprojects/${proj_id}/viewtask/`);
+  };
+   
 
-  const handleManageTask = (proj_id) => {
+
+  const handleManageTask = () => {
     navigate(`/sprojects/${proj_id}/smanagetask`);
   };
-
 
   if (!project) {
     return <div>Loading...</div>;
@@ -284,7 +288,7 @@ const SProjectDetails = () => {
                 <td className="px-6 py-4">-</td>
                 <td className="px-6 py-4">
                   <div className="flex gap-6 align-center mt-1">
-                    <button className="bg-[#4D989D] text-white">View Task</button>
+                    <button className="bg-[#4D989D] text-white" onClick={handleViewTaskClick}>View Task</button>
                     <button className="bg-[#4D989D] text-white" onClick={() => handleAddTaskClick(member)}>
                       Add Task
                     </button>
