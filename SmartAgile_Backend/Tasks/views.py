@@ -4,6 +4,10 @@ from drf_spectacular.utils import extend_schema
 from .serializers import TaskSerializer
 from rest_framework.views import APIView
 from .models import Task
+from Users.models import UserProfile
+from Projects.models import ProjectMembers, Project
+from Users.serializers import UserProfileSerializer
+from Projects.serializers import ProjectMemberSerializer
 
 @extend_schema(request=TaskSerializer, responses=TaskSerializer)
 class TaskView(APIView):
@@ -66,3 +70,29 @@ class Project_Task(APIView):
                 return Response({'message':'Task Not found'},status=status.HTTP_400_BAD_REQUEST)
           
         
+class UserTaskListView(APIView):
+    def get(self, request, proj_id, user_id):
+        try:
+            user_data = UserProfile.objects.get(user = user_id)
+            if(user_data):
+                user_data_serializer = UserProfileSerializer(user_data)
+                serialized_user_data = user_data_serializer.data
+
+                user_profile_id = serialized_user_data['id']
+                project_members = ProjectMembers.objects.get(profile=user_profile_id, project=proj_id)
+                if(project_members):
+                    project_member_serializer = ProjectMemberSerializer(project_members)
+
+                    project_member_id = project_member_serializer.data['id']
+                    task_data = Task.objects.filter(project=proj_id, assigned_to = project_member_id)
+                    if(task_data):
+                        task_serializer = TaskSerializer(task_data, many=True)
+                        return Response(task_serializer.data)
+                    else:
+                        return Response('Task not found', status=status.HTTP_404_NOT_FOUND)
+                else:
+                    return Response('Project Member not found', status=status.HTTP_404_NOT_FOUND)
+            else:
+                return Response('User not found', status=status.HTTP_404_NOT_FOUND)
+        except Task.DoesNotExist:
+            return Response('Incorrect Credentials', status=status.HTTP_400_BAD_REQUEST)
