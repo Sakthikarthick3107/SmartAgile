@@ -21,7 +21,9 @@ function TeamDetails() {
   const [showOptions, setShowOptions] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [showModal, setShowModal] = useState(false);
-
+const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  
+ 
 
   // Create a ref to detect clicks outside the dropdown
   const dropdownRef = useRef(null);
@@ -219,7 +221,7 @@ function TeamDetails() {
   };
 
   const handleTeamMemberClick = (username) => {
-    setInput(`${input}<span style="font-weight: bold;">@${username}</span> `);
+    setInput(`${input}@${username} `);
     setShowTeamMembers(false);
   };
 
@@ -279,6 +281,32 @@ function TeamDetails() {
   };
 
 
+  const handleRightClick = (message) => {
+    setSelectedMessage(message);
+    setShowOptions(true); // Show the delete option
+  };
+  
+  // Function to delete the selected message
+  const deleteMessage = async () => {
+    try {
+      // Perform deletion action (e.g., make API call to delete the message)
+      await fetch(`${baseUrl}/chat/chatroom/${chatroomId}/message/${selectedMessage.id}`, {
+        method: 'DELETE',
+      });
+      // Remove the deleted message from the UI
+      setMessages(messages.filter(msg => msg.id !== selectedMessage.id));
+      // Hide the delete confirmation modal
+      setShowDeleteConfirmation(false);
+      setSelectedMessage(null); // Reset the selected message
+    } catch (error) {
+      console.error('Error deleting message:', error);
+    }
+  };
+  
+
+
+
+
   return (
     <div className="flex border flex-col pr-2 pl-2 rounded-md h-screen">
        <div className="flex items-center justify-between pt-4 pl-4">
@@ -294,7 +322,10 @@ function TeamDetails() {
       </div>
       <div className="flex-1 overflow-y-auto p-4 border-gray-300 bg-white">
         {messages.map((message, index) => (
-          <div key={index} className="mb-4">
+          <div key={index} className="mb-4"  onContextMenu={(e) => {
+            e.preventDefault();
+            handleRightClick(message); // Handle right-click on the message
+          }}>
             {message.user_id === userId
             ? <div className="flex items-center justify-end mb-1">
               <div className="flex items-center">
@@ -347,7 +378,7 @@ function TeamDetails() {
                   ))
                 }
               </div>
-              <div className={`text-xs text-black ${message.file ? '' : 'hidden'} ${message.user_id === userId ? 'text-start' : 'text-end'}`}>{messageTime(message.sent_at)}</div>
+              <div className={`text-xs mt-1 text-black ${message.file ? '' : 'hidden'} ${message.user_id === userId ? 'text-start' : 'text-end'}`}>{messageTime(message.sent_at)}</div>
             </div>
             {/* {message.file && (
               <div>
@@ -407,17 +438,18 @@ function TeamDetails() {
                   onClick={() => handleTeamMemberClick(member.username)}
                 >
                   <div className="flex items-center">
-                    <Avatar src={`${backendUrl}/media/${member.image}`} alt={member.username} sx={{width: 26, height: 26}}/>
+                    <Avatar src={`${baseUrl}/media/${member.image}`} alt={member.username} sx={{width: 26, height: 26}}/>
                     <span className="ml-3">{member.username}</span>
                   </div>
                 </div>
               ))}
+              
             </div>
           )}
         </div>
         <button
           type="submit"
-          className="ml-2 bg-[#4D989D] hover:bg-blue-700 text-white rounded-full p-2"
+          className="ml-2 bg-[#4D989D] hover:bg-[#4D999A] text-white rounded-full p-2"
           style={{ outline: 'none' }}
         >
           <FontAwesomeIcon icon={faPaperPlane} size="lg" />
@@ -434,170 +466,22 @@ function TeamDetails() {
           <img src={selectedImage} alt="Full Screen" className="w-full h-full object-contain" />
         </Box>
       </Modal>
+      
+
+      
+
+    
+      
+      
 
     </div>
+
+    
   );
 
 
-//   return (
-//     <div className="flex flex-col h-screen border rounded-md p-2">
-//       <div className="flex items-center justify-between pt-4 pl-4">
-//         <div className="flex items-center">
-//           <FontAwesomeIcon onClick={goBack} className="hover:text-gray-500 cursor-pointer" icon={faArrowLeft} size="md" />
-//           {projectDetails && (
-//             <div className="flex items-center ml-2">
-              
-//               <img src={projectDetails.icon} alt="Project Logo" className="w-10 h-10 ml-1 mr-4" />
-//               <span className="text-xl font-bold">{projectDetails.proj_name}</span>
-//             </div>
-//           )}
-//         </div>
-//       </div>
-//       <div className="flex-1 overflow-y-auto p-4 bg-white border-gray-300">
-//         {messages.map((message, index) => (
-//           <div key={index} className="mb-4">
-//             {message.user === "self" && userProfile && (
-//               <div className="flex items-center justify-end mb-1">
-//                 <div className="flex items-center">
-//                 <span className="text-sm font-bold mr-2">You</span>
-//                   {userProfile.image && (
-//                     <img src={userProfile.image} alt="Profile" className="w-7 h-7 rounded-full " />
-//                   )}
-//                   {/* <span className="text-sm font-bold">You</span> */}
-//                 </div>
-//               </div>
-//             )}
-//             <div
-//               className={`rounded p-2 ${
-//                 message.user === "self"
-//                   ? "bg-[#D9D9D9] ml-auto rounded-lg rounded-tr-none mr-8 self-message"
-//                   : "bg-[#4D989D] mr-auto rounded-lg rounded-tl-none ml-8 other-message"
-//               }`}
-//               style={{
-//                 justifySelf: message.user === "self" ? 'flex-end' : 'flex-start',
-//                 minWidth: '50px', // Set a minimum width for the message bubble
-//                 width: 'max-content', // Set a fixed width for all messages, adjust as needed
-//                 maxWidth: `${maxWidth}px`,
-//                 position: 'relative',
-//               }}
-//               onClick={() => {
-//                 setSelectedMessage(message);
-//                 setShowOptions(true);
-//               }}
-//             >
-//               {/* {message.text} */}
-//               <div className="mt-1">{message.text}</div>
 
-//                 {/* Sending file to the chat */}
-
-//                 {message.file && (
-//                     <div className="mt-2 flex items-center">
-//                         {message.fileType.startsWith("image/") ? (
-//                             <img src={message.file} alt={message.fileName} className="max-w-xs rounded" onClick={() => handleImageClick(message.file)} />
-//                         ) : (
-//                             <a href={message.file} target="_blank" rel="noopener noreferrer" className="flex items-center">                               
-//                                 <span className="text-blue-500 hover:underline">{message.fileName}</span>
-//                             </a>
-//                         )}
-//                     </div>
-//                 )}
-
-                
-
-//               <div className={`text-xs text-gray-500 font-semibold mt-3 absolute  ${message.user === "self" ? 'left-0' : 'right-0'} `}>{new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-              
-//             </div>
-            
-            
-//           </div>
-          
-//         ))}
-        
-//       </div>
-
-      
-
-      
-//       <form className="flex items-center pl-8 pr-12 pb-32 relative" onSubmit={sendMessage}>
-//         <div className="relative flex-grow">
-//           <span
-//             className="absolute left-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-700"
-//             style={{ fontSize: '20px', fontWeight: 'bold' }}
-//             onClick={fetchTeamMembers}
-//           >
-//             @
-//           </span>
-//           <input
-//             type="text"
-//             value={input}
-//             onChange={(e) => setInput(e.target.value)}
-//             placeholder="Type a message..."
-//             className="w-full p-3 pl-9 bg-gray-200  border-none rounded-full focus:outline-none"
-//           />
-
-// {file && (
-//       <div className="flex items-center ml-4 mt-2 absolute bottom-12  ">
-//         <span className="text-sm font-semibold mr-2">{file.name}</span>
-//         <button
-//           type="button"
-//           onClick={() => setFile(null)}
-//           className="text-red-500 p-1 pb-1 hover:underline bg-white focus:outline-none"
-//         >
-//           Remove
-//         </button>
-//       </div>
-//     )}
-          
-
-//       <div className="absolute right-6 top-1/2 transform -translate-y-1/2 cursor-pointer">
-//       {/* Add your attachment symbol/icon here */}
-//       {/* Example: */}
-//       <label htmlFor="fileInput">
-//         <FontAwesomeIcon icon={faPaperclip} size="lg" className="text-gray-700 hover:text-gray-900" />
-//         {/* Hide input element */}
-//         <input
-//           type="file"
-//           id="fileInput"
-//           style={{ display: 'none' }}
-//           accept=".docx,.doc,.pdf,.xls,.ppt,image/*"
-//           onChange={handleFileChange}
-//         />
-//       </label>
-//     </div>
-    
-//           {showTeamMembers && (
-//             <div ref={dropdownRef} className="absolute bottom-14 bg-white border border-gray-300 rounded-lg mt-2 max-h-32 overflow-y-auto w-48 z-10 p-2">
-//             {teamMembers.map(member => (
-//               <div
-//                 key={member.user}
-//                 className="p-2 hover:bg-gray-200 cursor-pointer"
-//                 onClick={() => handleTeamMemberClick(member.username)}
-//               >
-//                 <div className="flex items-center">
-//                   {/* {member.image && (
-//                     <img src={member.image} alt={member.username} className="w-6 h-6 rounded-full mr-2" />
-//                   )} */}
-//                   <span>{member.username}</span>
-//                 </div>
-//               </div>
-//             ))}
-            
- 
-//           </div>
-//         )}
-//       </div>
-//       <button
-//         type="submit"
-//         className="ml-2 bg-teal-600 hover:bg-teal-700 text-white rounded-full p-3 button"
-//       >
-//         <FontAwesomeIcon icon={faPaperPlane} size="lg" />
-//       </button>
-//     </form>
-//   </div>
-// );
 }
 
 export default TeamDetails;
-
-
 
