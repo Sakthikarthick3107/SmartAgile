@@ -14,6 +14,16 @@ def status_choices(request):
     statuses = dict(Project.STATUS_CHOICES)
     return Response(statuses)
 
+@extend_schema(request=ProjectMemberSerializer, responses=ProjectMemberSerializer)
+class ProjectMemberListView(APIView):
+    def get(self, request, id):
+        try:
+            projectMember = ProjectMembers.objects.get(pk = id)
+            serializer = ProjectMemberSerializer(projectMember)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except ProjectMembers.DoesNotExist:
+            return Response('Project Member Does not exist', status=status.HTTP_400_BAD_REQUEST)
+
 
 @extend_schema(request=ProjectMemberSerializer , responses=ProjectMemberSerializer)
 class ProjectMemberView(APIView):
