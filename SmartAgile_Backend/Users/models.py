@@ -67,6 +67,6 @@ class UserProfile(models.Model):
     organization = models.ForeignKey(Organization , on_delete=models.CASCADE)
     position = models.CharField(max_length=20, choices = POSITION_CHOICES , null=True , blank=True)
     role = models.CharField(max_length=100, null=True)
-    date_joined = models.CharField(max_length=20,null=True)
+    date_joined = models.DateField(null=True)
     def __str__(self):
         return f"{self.user.username}  {self.organization.org_name}"
