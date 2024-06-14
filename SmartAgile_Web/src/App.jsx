@@ -149,10 +149,10 @@ function App() {
                 }
               />
                   <Route
-                path="/sprojects/:proj_id/viewtask/"
+                path="/sprojects/:proj_id/viewtask/:user_id"
                 element={
                   <LayoutWithTop>
-                  <ViewTaskEmployee/>
+                  <ViewTaskEmployee />
                   </LayoutWithTop>
                 }
               />

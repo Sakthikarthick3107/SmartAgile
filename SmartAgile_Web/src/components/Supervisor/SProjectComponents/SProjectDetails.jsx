@@ -154,7 +154,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleInfo, faCircleXmark, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faCircleInfo, faXmark } from '@fortawesome/free-solid-svg-icons';
 import SAbstractPopup from '../../Supervisor/SProjectComponents/SAbstractPopup';
 import AddTaskEmployee from '../AddTask/AddTaskEmployee';
 
@@ -179,11 +179,9 @@ const SProjectDetails = () => {
     const start = new Date(startDate);
     const end = new Date(endDate);
     const differenceInTime = end - start;
-    console.log(startDate, start);
-    console.log(endDate, end);
-    const differenceInDays = differenceInTime/(1000*3600*24);
+    const differenceInDays = differenceInTime / (1000 * 3600 * 24);
     return Math.round(differenceInDays);
-  }
+  };
 
   useEffect(() => {
     async function fetchProjectDetails() {
@@ -212,14 +210,12 @@ const SProjectDetails = () => {
 
   const handleAddTaskClick = (member) => {
     setSelectedMember(member); // Set the selected member
-    // console.log(member)
     setShowAddTaskPopup(true);
   };
-  const handleViewTaskClick = () => {
-    navigate(`/sprojects/${proj_id}/viewtask/`);
-  };
-   
 
+  const handleViewTaskClick = (member) => {
+    navigate(`/sprojects/${proj_id}/viewtask/${member.id}`);
+  };
 
   const handleManageTask = () => {
     navigate(`/sprojects/${proj_id}/smanagetask`);
@@ -288,7 +284,7 @@ const SProjectDetails = () => {
                 <td className="px-6 py-4">-</td>
                 <td className="px-6 py-4">
                   <div className="flex gap-6 align-center mt-1">
-                    <button className="bg-[#4D989D] text-white" onClick={handleViewTaskClick}>View Task</button>
+                    <button className="bg-[#4D989D] text-white" onClick={() => handleViewTaskClick(member)}>View Task</button>
                     <button className="bg-[#4D989D] text-white" onClick={() => handleAddTaskClick(member)}>
                       Add Task
                     </button>
@@ -299,7 +295,7 @@ const SProjectDetails = () => {
           </tbody>
         </table>
         <div className="text-right">
-          <button className="bg-[#4D989D] text-white mt-6" onClick={handleManageTask} >Manage Tasks</button>
+          <button className="bg-[#4D989D] text-white mt-6" onClick={handleManageTask}>Manage Tasks</button>
         </div>
       </div>
 
@@ -320,7 +316,7 @@ const SProjectDetails = () => {
             <div className="text-right">
               <FontAwesomeIcon className="px-1.5 cursor-pointer py-1 text-xl text-red-600 border-red-600 border rounded-full" icon={faXmark} onClick={() => setShowAddTaskPopup(false)} />
             </div>
-            <AddTaskEmployee projectId={proj_id} projectName={project.proj_name} assignedTo={selectedMember ? selectedMember.username : ''} assignedId ={selectedMember.id}  />
+            <AddTaskEmployee projectId={proj_id} projectName={project.proj_name} assignedTo={selectedMember ? selectedMember.username : ''} assignedId={selectedMember.id} />
           </div>
         </div>
       )}
@@ -328,4 +324,4 @@ const SProjectDetails = () => {
   );
 };
 
-export default SProjectDetails
+export default SProjectDetails;
