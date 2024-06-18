@@ -5,7 +5,7 @@ from .serializers import TaskSerializer
 from rest_framework.views import APIView
 from .models import Task
 from Users.models import UserProfile
-from Projects.models import ProjectMembers, Project
+from Projects.models import ProjectMembers
 from Users.serializers import UserProfileSerializer
 from Projects.serializers import ProjectMemberSerializer
 
@@ -81,3 +81,30 @@ class UserTaskListView(APIView):
                 return Response('Task not found', status=status.HTTP_404_NOT_FOUND)
         except Task.DoesNotExist:
             return Response('Incorrect Credentials', status=status.HTTP_400_BAD_REQUEST)
+
+class UserTaskView(APIView):
+    def get(self, request, proj_id, user_id):
+
+        try:
+            user_data = UserProfile.objects.get(user = user_id)
+        except UserProfile.DoesNotExist:
+            return Response('User not found', status=status.HTTP_404_NOT_FOUND)
+
+        user_data_serializer = UserProfileSerializer(user_data)
+        serialized_user_data = user_data_serializer.data['id']
+
+        try:
+            project_members = ProjectMembers.objects.get(profile = serialized_user_data, project = proj_id)
+        except ProjectMembers.DoesNotExist:
+            return Response('Project Member Not found', status=status.HTTP_404_NOT_FOUND)
+        
+        project_member_serializer = ProjectMemberSerializer(project_members)
+        project_member_id = project_member_serializer.data['id']
+
+        try:
+            task_data = Task.objects.filter(project=proj_id, assigned_to = project_member_id)
+        except Task.DoesNotExist:
+            return Response('Task Not found', status=status.HTTP_404_NOT_FOUND)
+        
+        task_serializer = TaskSerializer(task_data, many=True)
+        return Response(task_serializer.data, status=status.HTTP_200_OK)
