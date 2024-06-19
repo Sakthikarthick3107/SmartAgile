@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import User, UserProfile
 from rest_framework.exceptions import ValidationError
+from django.core.files.base import ContentFile
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -30,6 +31,11 @@ class UserSerializer(serializers.ModelSerializer):
         if User.objects.filter(email = value).exists():
             raise ValidationError('A user with that email already exist!')
         return value
+    
+class UserCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id','email', 'mobile', 'address', 'username', 'image', 'emp_id', 'date_of_birth']
     
 class LoginSerializer(serializers.Serializer):  
      email = serializers.EmailField()
@@ -120,6 +126,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source = 'user.email')
     username = serializers.CharField(source = 'user.username')
     image = serializers.CharField(source = 'user.image')
+    emp_id = serializers.CharField(source = 'user.emp_id')
+    date_of_birth = serializers.DateField(source = 'user.date_of_birth')
     class Meta:
         model = UserProfile
         fields = '__all__'

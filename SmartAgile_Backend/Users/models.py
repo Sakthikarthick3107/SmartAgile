@@ -47,6 +47,8 @@ class User(AbstractBaseUser,PermissionsMixin):
     is_superuser = models.BooleanField(default=False) # this field we inherit from PermissionsMixin.
     image =  models.ImageField(upload_to='profile-image/',blank=True,null=True)
     otp = models.CharField(max_length=6, blank=True, null=True)
+    emp_id = models.CharField(max_length=20, null=True)
+    date_of_birth = models.DateField(null=True)
 
     objects = CustomUserManager()
 

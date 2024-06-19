@@ -8,7 +8,8 @@ from .views import (
     SuperuserViewEditDelete,
     UserProfileListFilter,
     position_choices,
-    UserProfileView
+    UserProfileView,
+    UserCreateView
     )
 from .forgot_password_views import PasswordResetRequestView, PasswordResetConfirmOtpView, PasswordResetConfirmView
 
@@ -23,6 +24,7 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
     path('employees/superuser/',SuperuserCreate.as_view(),name='superuser-create'),
     path('employees/superuser/<int:id>/', SuperuserViewEditDelete.as_view() , name="SuperUserViewEditDelete"),
+    path('employees/create/', UserCreateView.as_view(), name='Create new user'),
     
 
     path('employee/profile/<int:org_id>/' , UserProfileCreate.as_view() , name="User-Profile"),
