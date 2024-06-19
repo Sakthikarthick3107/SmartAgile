@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import Token
 from .models import UserProfile, User
-from .serializers import UserSerializer , SuperuserSerializer , LoginSerializer, UserProfileSerializer
+from .serializers import UserSerializer , SuperuserSerializer , LoginSerializer, UserProfileSerializer, UserCreateSerializer
 from rest_framework import status
 from django.contrib.auth import authenticate
 from drf_spectacular.utils import extend_schema
@@ -36,6 +36,10 @@ def position_choices(request):
 class UsersView(ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+class UserCreateView(ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserCreateSerializer
 
 class UserEditUpdateDeleteView(RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()

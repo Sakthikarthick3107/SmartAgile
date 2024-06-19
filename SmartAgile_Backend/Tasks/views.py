@@ -108,3 +108,35 @@ class UserTaskView(APIView):
         
         task_serializer = TaskSerializer(task_data, many=True)
         return Response(task_serializer.data, status=status.HTTP_200_OK)
+    
+class UserTaskLists(APIView):
+    def get(self, request, user_id):
+        try:
+            user_data = UserProfile.objects.get(user = user_id)
+        except UserProfile.DoesNotExist:
+            return Response('User not found', status=status.HTTP_404_NOT_FOUND)
+
+        user_data_serializer = UserProfileSerializer(user_data)
+        serialized_user_data = user_data_serializer.data['id']
+
+        try:
+            project_members = ProjectMembers.objects.filter(profile = serialized_user_data)
+        except ProjectMembers.DoesNotExist:
+            return Response('Project Member Not found', status=status.HTTP_404_NOT_FOUND)
+            
+        project_member_serializer = ProjectMemberSerializer(project_members, many=True)
+        project_member_details = project_member_serializer.data
+
+        task_list = []
+
+        for project_member in project_member_details:
+            project_member_id = project_member['id']
+            
+            try:
+                task_data = Task.objects.filter(assigned_to = project_member_id)
+            except Task.DoesNotExist:
+                return Response('Task Not found', status=status.HTTP_404_NOT_FOUND)
+            
+            task_serializer = TaskSerializer(task_data, many=True)
+            task_list.append(task_serializer.data)
+        return Response(task_list, status=status.HTTP_200_OK)
