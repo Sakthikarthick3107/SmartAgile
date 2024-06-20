@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import axios from "axios";
 import {
@@ -20,14 +21,13 @@ const AddCandidate = () => {
   const [designation, setDesignation] = useState("");
   const [uploadedImage, setUploadedImage] = useState(null);
   const [formData, setFormData] = useState({
-    name: "",
-    employeeId: "",
-    contactNumber: "",
-    department: "",
-    dob: "",
-    joiningDate: "",
+    username: "",
+    emp_id: "",
+    mobile: "",
+    date_of_birth: "",
     email: "",
     address: "",
+    image: "",
   });
   const [errors, setErrors] = useState({});
 
@@ -35,7 +35,7 @@ const AddCandidate = () => {
     const file = e.target.files[0];
     if (file) {
       setUploadedImage(URL.createObjectURL(file));
-      setFormData({ ...formData, uploadedImage: file });
+      setFormData({ ...formData, image: file });
     }
   };
 
@@ -47,16 +47,14 @@ const AddCandidate = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.name) newErrors.name = "Employee name is required";
-    if (!formData.employeeId) newErrors.employeeId = "Employee ID is required";
-    if (!formData.contactNumber) newErrors.contactNumber = "Contact number is required";
-    if (!formData.department) newErrors.department = "Department is required";
-    if (!formData.dob) newErrors.dob = "Date of birth is required";
-    if (!formData.joiningDate) newErrors.joiningDate = "Joining date is required";
+    if (!formData.username) newErrors.username = "Employee name is required";
+    if (!formData.emp_id) newErrors.emp_id = "Employee ID is required";
+    if (!formData.mobile) newErrors.mobile = "Contact number is required";
+    if (!designation) newErrors.designation = "Designation is required";
+    if (!formData.date_of_birth) newErrors.date_of_birth = "Date of birth is required";
     if (!formData.email) newErrors.email = "Email is required";
     if (!formData.address) newErrors.address = "Address is required";
-    if (!designation) newErrors.designation = "Designation is required";
-    if (!uploadedImage) newErrors.uploadedImage = "Image is required";
+    if (!uploadedImage) newErrors.image = "Image is required";
 
     setErrors(newErrors);
 
@@ -71,17 +69,38 @@ const AddCandidate = () => {
         for (const key in formData) {
           formDataToSend.append(key, formData[key]);
         }
-        formDataToSend.append("designation", designation);
-        formDataToSend.append("image", formData.uploadedImage);
+        // formDataToSend.append("designation", designation);
+        formDataToSend.append("image", formData.image);
+        console.log(formData)
+        console.log(formDataToSend)
 
-        const response = await axios.post("/api/candidates", formDataToSend, {
+        // Then send the data using the first JSON structure
+        const response2 = await axios.post("http://127.0.0.1:8000/users/employees/create/", formDataToSend, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
 
-        console.log("Form data saved: ", response.data);
-        navigate("/success");  // Navigate to a success page or display a success message
+        console.log("Data saved with first JSON structure: ", response2.data);
+        const org_id=localStorage.getItem("org_id")
+        // First send the data using the second JSON structure
+        const response = await axios.post("http://127.0.0.1:8000/users/employees/profile/", {
+          username:response2.data.username ,
+          email:response2.data.email,
+          image:response2.data.image,
+          position: designation,
+          role: formData.department,
+          date_joined: formData.joiningDate,
+          user: response2.data.id,
+          organization: org_id,
+        }, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        console.log("Data saved with second JSON structure: ", response.data);
+        navigate("/success"); // Navigate to a success page or display a success message
       } catch (error) {
         console.error("Error saving form data: ", error);
       }
@@ -93,6 +112,7 @@ const AddCandidate = () => {
   const onBackClick = () => {
     navigate(-1);
   };
+
   return (
     <div className="mt-0px pb-[10px] pt-[10px] pl-[165px] pr-[95px]">
       {/* Header */}
@@ -104,7 +124,7 @@ const AddCandidate = () => {
           <FaArrowLeft className="mr-2" />
           Back
         </button>
-        <hr className="w-[300px] mt-[60px] border-[#4d989d] border-b-[2px]  mr-[40px]" />
+        <hr className="w-[300px] mt-[60px] border-[#4d989d] border-b-[2px] mr-[40px]" />
         <h2 className="text-2xl font-bold text-[#4d989d] mr-[75px] mt-[60px]">
           Add Candidate
         </h2>
@@ -121,28 +141,28 @@ const AddCandidate = () => {
               <FaUser className="text-grey-600 mr-2" />
               <input
                 type="text"
-                name="name"
-                value={formData.name}
+                name="username"
+                value={formData.username}
                 onChange={handleChange}
                 className="w-full bg-transparent p-2 focus:outline-none placeholder-black opacity"
                 placeholder="Employee Name"
                 required
               />
-              {errors.name && <span className="text-red-500">{errors.name}</span>}
+              {errors.username && <span className="text-red-500">{errors.username}</span>}
             </div>
 
             <div className="flex items-center bg-[#4d989d] bg-opacity-35 rounded-lg shadow-md p-2 w-[500px]">
               <FaIdBadge className="text-grey-600 mr-2" />
               <input
                 type="text"
-                name="employeeId"
-                value={formData.employeeId}
+                name="emp_id"
+                value={formData.emp_id}
                 onChange={handleChange}
                 className="w-full bg-transparent p-2 focus:outline-none placeholder-black"
                 placeholder="Employee ID"
                 required
               />
-              {errors.employeeId && <span className="text-red-500">{errors.employeeId}</span>}
+              {errors.emp_id && <span className="text-red-500">{errors.emp_id}</span>}
             </div>
 
             <div className="flex items-center bg-[#4d989d] bg-opacity-35 rounded-lg shadow-md p-2 w-[500px]">
@@ -154,13 +174,13 @@ const AddCandidate = () => {
                 onChange={(e) => setDesignation(e.target.value)}
                 required
               >
-                <option value="">Designation</option>
-                <option value="Frontend">Frontend</option>
-                <option value="Backend">Backend</option>
-                <option value="Java Developer">Java Developer</option>
-                <option value="Desktop">Desktop</option>
-                <option value="AI Developer">AI Developer</option>
-                <option value="Mobile">Mobile</option>
+                <option value="">Role</option>
+                <option value="IN">Intern</option>
+                <option value="AS">Associate</option>
+                <option value="MID">Mid-Senior</option>
+                <option value="LEAD">Lead</option>    
+                <option value="DR">Director</option>
+                
               </select>
               {errors.designation && <span className="text-red-500">{errors.designation}</span>}
             </div>
@@ -169,14 +189,14 @@ const AddCandidate = () => {
               <FaPhone className="text-grey mr-2" />
               <input
                 type="text"
-                name="contactNumber"
-                value={formData.contactNumber}
+                name="mobile"
+                value={formData.mobile}
                 onChange={handleChange}
                 className="w-full bg-transparent p-2 focus:outline-none placeholder-black"
                 placeholder="Contact Number"
                 required
               />
-              {errors.contactNumber && <span className="text-red-500">{errors.contactNumber}</span>}
+              {errors.mobile && <span className="text-red-500">{errors.mobile}</span>}
             </div>
 
             <div className="flex items-center bg-[#4d989d] bg-opacity-35 rounded-lg shadow-md p-2 w-[500px]">
@@ -189,9 +209,9 @@ const AddCandidate = () => {
                 required
               >
                 <option value="">Department</option>
-                <option value="Frontend">DR</option>
-                <option value="Backend">IN</option>
-                <option value="Java Developer">AS</option>
+                <option value="Frontend">Frontend</option>
+                <option value="Backend">Backend</option>
+                <option value="Java Developer">Java Developer</option>
               </select>
               {errors.department && <span className="text-red-500">{errors.department}</span>}
             </div>
@@ -200,13 +220,13 @@ const AddCandidate = () => {
               <FaBirthdayCake className="text-grey-600 mr-2" />
               <input
                 type="date"
-                name="dob"
-                value={formData.dob}
+                name="date_of_birth"
+                value={formData.date_of_birth}
                 onChange={handleChange}
                 className="w-full bg-transparent p-2 focus:outline-none placeholder-black"
                 required
               />
-              {errors.dob && <span className="text-red-500">{errors.dob}</span>}
+              {errors.date_of_birth && <span className="text-red-500">{errors.date_of_birth}</span>}
             </div>
 
             {/* Second Column */}
@@ -260,7 +280,7 @@ const AddCandidate = () => {
                   className="mt-4 w-[200px] h-[200px] object-cover rounded-lg"
                 />
               )}
-              {errors.uploadedImage && <span className="text-red-500">{errors.uploadedImage}</span>}
+              {errors.image && <span className="text-red-500">{errors.image}</span>}
             </div>
 
             <div className="flex items-center bg-[#4d989d] bg-opacity-35 rounded-lg shadow-md p-2 w-[500px] ml-[px]">
