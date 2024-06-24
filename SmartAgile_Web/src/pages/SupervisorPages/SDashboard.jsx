@@ -1,9 +1,11 @@
 import React from 'react'
+import SDoughnet from '../../components/SupervisorComponents/DashboardComponents/SDoughnet'
+
 
 export default function SDashboard() {
   return (
     <div>
-      Supervisor Dashboard
+      <SDoughnet/>
     </div>
   )
 }
