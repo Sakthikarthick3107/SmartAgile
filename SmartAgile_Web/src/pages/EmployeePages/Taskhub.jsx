@@ -1,244 +1,94 @@
-
-// import React, { useEffect, useState } from 'react';
-// import { DndProvider, useDrag, useDrop } from 'react-dnd';
-// import { HTML5Backend } from 'react-dnd-html5-backend';
-
-// const Taskhub = () => {
-//   const [tasks, setTasks] = useState([]); // State to store tasks
-//   const [selectedStatus, setSelectedStatus] = useState('All'); // State to filter tasks by status
-//   const userId = localStorage.getItem('user_id');
-
-//   // Fetch tasks from the backend when the component mounts
-//   useEffect(() => {
-//     const fetchUserProjects = async () => {
-//       try {
-//         const projectResponse = await fetch(`http://127.0.0.1:8000/tasks/projects/user-task/${userId}/`)
-//         console.log(projectResponse)
-//         if (!projectResponse.ok) {
-//           throw new Error('Failed to fetch projects');
-//         }
-//         const projectData = await projectResponse.json();
-//         console.log(projectData)
-//         console.log(projectData[1])
-
-//         setTasks(projectData[1]); // Set the fetched tasks into the state
-//       } catch (error) {
-//         console.error('Error fetching projects:', error);
-//       }
-//     };
-
-//     fetchUserProjects();
-//   }, [userId]);
-
-//   // Load tasks from localStorage when the component mounts
-//   useEffect(() => {
-//     const savedTasks = localStorage.getItem('tasks');
-//     if (savedTasks) {
-//       setTasks(JSON.parse(savedTasks));
-//     }
-//   }, []);
-
-//   const statuses = ['todo', 'inProgress', 'completed']; // Different task statuses
-
-//   // Section component to display tasks of a specific status
-//   const Section = ({ status, tasks, setTasks }) => {
-//     const [{ isOver }, drop] = useDrop({
-//       accept: 'task',
-//       drop: (item) => addItemToSection(item.id, status),
-//       collect: (monitor) => ({
-//         isOver: !!monitor.isOver(),
-//       }),
-//     });
-
-//     // Function to update task status when dropped in a section
-//     const addItemToSection = (id, sectionStatus) => {
-//       setTasks((prevTasks) => {
-//         const updatedTasks = prevTasks.map((task) =>
-//           task.id === id ? { ...task, status: sectionStatus } : task
-//         );
-
-//         localStorage.setItem('tasks', JSON.stringify(updatedTasks));
-
-//         return updatedTasks;
-//       });
-//     };
-
-//     // Filter tasks for this section
-//     const sectionTasks = tasks.filter((task) => task.status === status);
-
-//     return (
-//       <div ref={drop} className={`w-64 rounded-md p-2 ${isOver ? 'bg-slate-200' : ''}`}>
-//         <Header text={status} bg="bg-gray-200" count={sectionTasks.length} />
-//         {sectionTasks.map((task) => (
-//           <Task key={task.id} task={task} setTasks={setTasks} />
-//         ))}
-//       </div>
-//     );
-//   };
-
-//   // Header component for section title and task count
-//   const Header = ({ text, bg, count }) => (
-//     <div className={`${bg} flex text-black items-center h-12 pl-4 rounded-md uppercase text-sm`}>
-//       {text}
-//       <div className="ml-2 bg-white w-5 h-5 text-black rounded-full flex items-center justify-center">
-//         {count}
-//       </div>
-//     </div>
-//   );
-
-//   // Task component to display individual task details
-//   const Task = ({ task, setTasks }) => {
-//     const [{ isDragging }, drag] = useDrag({
-//       type: 'task',
-//       item: { id: task.id },
-//       collect: (monitor) => ({
-//         isDragging: !!monitor.isDragging(),
-//       }),
-//     });
-
-//     // Function to remove a task
-//     const handleRemove = async (id) => {
-//       try {
-//         await fetch(`http://127.0.0.1:8000/tasks/${id}/`, {
-//           method: 'DELETE',
-//         });
-//         const updatedTasks = tasks.filter((t) => t.id !== id);
-//         localStorage.setItem('tasks', JSON.stringify(updatedTasks));
-//         setTasks(updatedTasks);
-//       } catch (error) {
-//         console.error('Error deleting task:', error);
-//       }
-//     };
-
-//     return (
-//       <div
-//         ref={drag}
-//         className={`relative p-4 mt-8 shadow-md rounded-md cursor-grab ${isDragging ? 'opacity-20' : 'opacity-100'}`}
-//       >
-//         <p>{task.task_name}</p>
-//         <button className="absolute bottom-1 right-1 text-slate-400" onClick={() => handleRemove(task.id)}>
-//           Remove
-//         </button>
-//       </div>
-//     );
-//   };
-
-//   // Filter tasks based on the selected status
-//   const filteredTasks = tasks.filter((task) => selectedStatus === 'All' || task.status === selectedStatus);
-
-//   return (
-//     <DndProvider backend={HTML5Backend}>
-//       <div className="flex h-screen">
-//         <div className="flex flex-col flex-grow overflow-y-auto">
-//           <div className="p-4">
-//             <h1 className="text-3xl font-bold mb-4 mt-4">Task Status</h1>
-
-//             <div className="flex flex-wrap ml-3 justify-start gap-10">
-//               {statuses.map((status) => (
-//                 <Section key={status} status={status} tasks={tasks} setTasks={setTasks} />
-//               ))}
-//             </div>
-
-//             <div className="flex flex-col mt-4" draggable>
-//               {filteredTasks.map((task) => (
-//                 <div
-//                   key={task.id}
-//                   className="card mb-3 mt-2 task-card relative rounded-[19px] ml-4 pt-1 pb-2 shadow-lg bg-white max-w-[255px]"
-//                 >
-//                   <h2 className="text-xl font-bold pt-4 pl-2 mb-2">{task.task_name}</h2>
-//                   <div className="text-sm text-gray-600 pl-3 mb-2">Deadline: {task.task_deadline}</div>
-//                   <p className="text-gray-700 pl-3">{task.task_desc}</p>
-//                   <div className="flex justify-between mb-0 mt-1 pl-2 pr-1 relative">
-//                     <button className="priority text-[14px] font-serif rounded-full p-0 pl-1 pr-1 mt-3 bg-yellow-300">
-//                       {task.task_priority}
-//                     </button>
-//                   </div>
-//                 </div>
-//               ))}
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </DndProvider>
-//   );
-// };
-
-// export default Taskhub;
-
-import React, { useEffect, useState } from 'react';
-import { DndProvider, useDrag, useDrop } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import React, { useEffect, useState, useRef } from "react";
+import { DndProvider, useDrag, useDrop } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { useParams, useNavigate } from 'react-router-dom';
+import { Modal, Box, Button } from '@mui/material';
 
 const Taskhub = () => {
-  const [tasks, setTasks] = useState([]); // State to store tasks
-  const userId = localStorage.getItem('user_id');
+  const [tasks, setTasks] = useState([]);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [taskToDelete, setTaskToDelete] = useState(null);
+  const [contextMenu, setContextMenu] = useState(null);
+  const { proj_id, user_id } = useParams();
+  const navigate = useNavigate();
+  const contextMenuRef = useRef(null);
 
-  // Fetch tasks from the backend when the component mounts
   useEffect(() => {
-    const fetchUserProjects = async () => {
+    const fetchTasks = async () => {
       try {
-        const projectResponse = await fetch(`http://127.0.0.1:8000/tasks/projects/user-task/${userId}/`);
-        if (!projectResponse.ok) {
-          throw new Error('Failed to fetch projects');
+        const taskResponse = await fetch(`http://127.0.0.1:8000/tasks/projects/user-task-data/1/6/`);
+        if (!taskResponse.ok) {
+          throw new Error("Failed to fetch tasks");
         }
-        const projectData = await projectResponse.json();
-        console.log(projectData)
-        setTasks(projectData[1]); // Set the fetched tasks into the state
+        const taskData = await taskResponse.json();
+        const initialTasks = taskData.map((task) => ({ ...task, status: "todo" }));
+        setTasks(initialTasks);
+        localStorage.setItem("tasks", JSON.stringify(initialTasks));
       } catch (error) {
-        console.error('Error fetching projects:', error);
+        console.error("Error fetching tasks:", error);
       }
     };
 
-    fetchUserProjects();
-  }, [userId]);
+    fetchTasks();
+  }, [proj_id, user_id]);
 
-  // Load tasks from localStorage when the component mounts
   useEffect(() => {
-    const savedTasks = localStorage.getItem('tasks');
-    if (savedTasks) {
-      setTasks(JSON.parse(savedTasks));
-    }
+    const handleClickOutside = (event) => {
+      if (contextMenuRef.current && !contextMenuRef.current.contains(event.target)) {
+        setContextMenu(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
-  const statuses = ['todo', 'inProgress', 'completed']; // Different task statuses
-
-  // Section component to display tasks of a specific status
-  const Section = ({ status, tasks, setTasks }) => {
+  const Section = ({ status }) => {
     const [{ isOver }, drop] = useDrop({
-      accept: 'task',
+      accept: "task",
       drop: (item) => addItemToSection(item.id, status),
       collect: (monitor) => ({
         isOver: !!monitor.isOver(),
       }),
     });
 
-    // Function to update task status when dropped in a section
     const addItemToSection = (id, sectionStatus) => {
       setTasks((prevTasks) => {
         const updatedTasks = prevTasks.map((task) =>
-          task.id === id ? { ...task, status: sectionStatus } : task
+          task.task_id === id ? { ...task, status: sectionStatus } : task
         );
 
-        localStorage.setItem('tasks', JSON.stringify(updatedTasks));
+        localStorage.setItem("tasks", JSON.stringify(updatedTasks));
 
         return updatedTasks;
       });
     };
 
-    // Filter tasks for this section
     const sectionTasks = tasks.filter((task) => task.status === status);
 
     return (
-      <div ref={drop} className={`w-64 rounded-md p-2 ${isOver ? 'bg-slate-200' : ''}`}>
+      <div
+        ref={drop}
+        className={`w-[344px] rounded-md p-2 ml-[60px] mr-[80px] ${isOver ? "bg-slate-200" : ""}`}
+      >
         <Header text={status} bg="bg-gray-200" count={sectionTasks.length} />
         {sectionTasks.map((task) => (
-          <Task key={task.id} task={task} setTasks={setTasks} />
+          <Task key={task.task_id} task={task} />
         ))}
       </div>
     );
   };
 
-  // Header component for section title and task count
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
   const Header = ({ text, bg, count }) => (
     <div className={`${bg} flex text-black items-center h-12 pl-4 rounded-md uppercase text-sm`}>
       {text}
@@ -248,81 +98,157 @@ const Taskhub = () => {
     </div>
   );
 
-  // Task component to display individual task details
-  const Task = ({ task, setTasks }) => {
+  const Task = ({ task }) => {
     const [{ isDragging }, drag] = useDrag({
-      type: 'task',
-      item: { id: task.id },
+      type: "task",
+      item: { id: task.task_id },
       collect: (monitor) => ({
         isDragging: !!monitor.isDragging(),
       }),
     });
 
-    // Function to remove a task
-    const handleRemove = async (id) => {
+    const getPriorityColor = (priority) => {
+      switch (priority) {
+        case "HIGH":
+          return "bg-red-300";
+        case "MED":
+          return "bg-yellow-300";
+        case "LOW":
+          return "bg-green-300";
+        default:
+          return "bg-gray-300";
+      }
+    };
+
+    const handleContextMenu = (event) => {
+      event.preventDefault();
+      setTaskToDelete(task);
+      setContextMenu(
+        contextMenu === null
+          ? {
+            mouseX: event.clientX - 15 ,
+            mouseY: event.clientY + 10,
+            }
+          : null,
+      );
+    };
+
+    const handleDeleteConfirmation = async () => {
       try {
-        await fetch(`http://127.0.0.1:8000/tasks/${id}/`, {
+        await fetch(`http://127.0.0.1:8000/tasks/${taskToDelete.task_id}/`, {
           method: 'DELETE',
         });
-        const updatedTasks = tasks.filter((t) => t.id !== id);
-        localStorage.setItem('tasks', JSON.stringify(updatedTasks));
-        setTasks(updatedTasks);
+        setTasks((prevTasks) => prevTasks.filter((task) => task.task_id !== taskToDelete.task_id));
+        setShowDeleteConfirmation(false);
+        setTaskToDelete(null);
       } catch (error) {
-        console.error('Error deleting task:', error);
+        console.error("Error deleting task:", error);
       }
     };
 
     return (
       <div
         ref={drag}
-        className={`relative p-4 mt-8 shadow-md rounded-md cursor-grab ${isDragging ? 'opacity-20' : 'opacity-100'}`}
+        onContextMenu={handleContextMenu}
+        className={`relative p-4 mt-8 shadow-md border-2 rounded-md cursor-grab ${
+          isDragging ? "opacity-20" : "opacity-100"
+        }`}
       >
-        <p>{task.task_name}</p>
-        <button className="absolute bottom-1 right-1 text-slate-400" onClick={() => handleRemove(task.id)}>
-          Remove
-        </button>
+        <div className="rounded-lg mb-2 bg-white shadow-none">
+          <p className="text-xl font-bold pt-4 pl-2 mb-2">{task.task_name}</p>
+          <p className="text-sm text-gray-600 pl-3 mb-2 ">{formatDate(task.task_deadline)}</p>
+          <p className="text-gray-700 pl-3">{task.task_desc}</p>
+
+          <button
+            className={`priority text-[14px] font-serif rounded-full p-0 pl-1 pr-1 mt-3 focus:outline-none ${getPriorityColor(task.task_priority)}`}
+          >
+            {task.task_priority}
+          </button>
+        </div>
       </div>
     );
   };
 
-  // Filter tasks based on the selected status
-  const filteredTasks = tasks.filter((task) => task.status);
+  const handleDeleteClick = () => {
+    setContextMenu(null);
+    setShowDeleteConfirmation(true);
+  };
+
+  const handleDeleteConfirmation = async () => {
+    try {
+      await fetch(`http://127.0.0.1:8000/tasks/${taskToDelete.task_id}/`, {
+        method: 'DELETE',
+      });
+      setTasks((prevTasks) => prevTasks.filter((task) => task.task_id !== taskToDelete.task_id));
+      setShowDeleteConfirmation(false);
+      setTaskToDelete(null);
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
+  };
 
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="flex h-screen">
         <div className="flex flex-col flex-grow overflow-y-auto">
           <div className="p-4">
+            <button onClick={() => navigate(-1)} className="text-md mb-4 px-4 py-0 bg-[#4D989D]">Back</button>
             <h1 className="text-3xl font-bold mb-4 mt-4">Task Status</h1>
-            <div className="flex flex-wrap ml-3 justify-start gap-10">
-              {statuses.map((status) => (
-                <Section key={status} status={status} tasks={tasks} setTasks={setTasks} />
-              ))}
-            </div>
 
-            <div className="flex flex-col mt-4" draggable>
-              {filteredTasks.map((task) => (
-                <div
-                  key={task.id}
-                  className="card mb-3 mt-2 task-card relative rounded-[19px] ml-4 pt-1 pb-2 shadow-lg bg-white max-w-[255px]"
-                >
-                  <h2 className="text-xl font-bold pt-4 pl-2 mb-2">{task.task_name}</h2>
-                  <div className="text-sm text-gray-600 pl-3 mb-2">Deadline: {task.task_deadline}</div>
-                  <p className="text-gray-700 pl-3">{task.task_desc}</p>
-                  <div className="flex justify-between mb-0 mt-1 pl-2 pr-1 relative">
-                    <button className="priority text-[14px] font-serif rounded-full p-0 pl-1 pr-1 mt-3 bg-yellow-300">
-                      {task.task_priority}
-                    </button>
-                  </div>
-                </div>
-              ))}
+            <div className="flex">
+              <Section status="todo" />
+              <Section status="inProgress" />
+              <Section status="completed" />
             </div>
           </div>
         </div>
       </div>
+
+      {contextMenu && (
+        <div
+          ref={contextMenuRef}
+          style={{
+            position: 'absolute',
+            top: contextMenu.mouseY,
+            left: contextMenu.mouseX,
+            backgroundColor: 'white',
+            boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.2)',
+            padding: '3px',
+            zIndex: 1000,
+          }}
+          onClick={handleDeleteClick}
+        >
+          <button style={{backgroundColor: 'white',}}>Delete</button>
+        </div>
+      )}
+
+      <Modal open={showDeleteConfirmation} onClose={() => setShowDeleteConfirmation(false)}>
+        <Box sx={{ ...modalStyle, width: 400 }}>
+          <h2 className="font-semibold">Confirm Delete</h2>
+          <p className="mt-2 mb-4">Are you sure you want to delete this task?</p>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+            <Button onClick={handleDeleteConfirmation} sx={{ mr: 2 }} color="secondary" variant="contained" style={{ backgroundColor: '#4D989D', color: 'white', fontWeight: 'bold' }}>
+              Delete
+            </Button>
+            <Button onClick={() => setShowDeleteConfirmation(false)} color="primary" variant="contained" style={{ backgroundColor: 'white', color: '#4D989D', fontWeight: 'bold' }}>
+              Cancel
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
     </DndProvider>
-    
   );
+};
+
+const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: 1,
 };
 
 export default Taskhub;
