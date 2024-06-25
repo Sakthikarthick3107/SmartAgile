@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useParams } from "react-router-dom";
-import AddTaskEmployee from '../AddTask/AddTaskEmployee';
+import AddTaskTeamMembers from '../AddTask/AddTaskTeamMembers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import AddIcon from "@mui/icons-material/Add"; // Adjust the import path according to your project structure
@@ -186,7 +186,7 @@ const SManageTask = () => {
                 onClick={() => setShowAddTaskPopup(false)}
               />
             </div>
-            <AddTaskEmployee
+            <AddTaskTeamMembers
               projectId={proj_id}
               projectName={project ? project.proj_name : ''}
               assignedTo={selectedMember ? selectedMember.username : ''}

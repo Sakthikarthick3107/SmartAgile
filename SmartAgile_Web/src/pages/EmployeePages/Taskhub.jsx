@@ -174,6 +174,18 @@ const Taskhub = () => {
     setShowDeleteConfirmation(true);
   };
 
+  const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+    borderRadius: 1,
+  };
+  
+
   const handleDeleteConfirmation = async () => {
     try {
       await fetch(`http://127.0.0.1:8000/tasks/${taskToDelete.task_id}/`, {
@@ -192,7 +204,7 @@ const Taskhub = () => {
       <div className="flex h-screen">
         <div className="flex flex-col flex-grow overflow-y-auto">
           <div className="p-4">
-            <button onClick={() => navigate(-1)} className="text-md mb-4 px-4 py-0 bg-[#4D989D]">Back</button>
+         
             <h1 className="text-3xl font-bold mb-4 mt-4">Task Status</h1>
 
             <div className="flex">
@@ -240,15 +252,5 @@ const Taskhub = () => {
   );
 };
 
-const modalStyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 4,
-  borderRadius: 1,
-};
 
 export default Taskhub;

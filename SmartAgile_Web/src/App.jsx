@@ -67,9 +67,8 @@ import Side from "./components/Supervisor/Side";
 import SProjects from "./pages/SupervisorPages/SProjects";
 import SEmployees from "./pages/SupervisorPages/SEmployees";
 import SSettings from "./pages/SupervisorPages/SSettings";
-import UserList from "./pages/EmployeePages/EmployeePage";
+import  AddTaskTeamMembers from "./components/Supervisor/AddTask/AddTaskTeamMembers";
 import SmartAgileDocumentation from "./pages/EmployeePages/SmartAgileDocumentation";
-import ViewEmployee from "./pages/EmployeePages/ViewEmployee";
 import AddProject from "./components/SupervisorComponents/ProjectComponents/AddProject";
 import AddCandidate from "./components/SupervisorComponents/ProjectComponents/AddCandidate";
 import ViewEmployeeList from "./pages/SupervisorPages/ViewEmployeeList";
@@ -166,10 +165,10 @@ function App() {
               />
               <Route
                 exact
-                path="/user-list"
+                path="/add-team_member"
                 element={
                   <LayoutWithTop>
-                    <UserList />
+                    < AddTaskTeamMembers />
                   </LayoutWithTop>
                 }
               />
