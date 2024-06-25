@@ -140,3 +140,21 @@ class UserTaskLists(APIView):
             task_serializer = TaskSerializer(task_data, many=True)
             task_list.append(task_serializer.data)
         return Response(task_list, status=status.HTTP_200_OK)
+    
+class TaskStatusModifyView(APIView):
+    def patch(self,request, task_id):
+        try:
+            task = Task.objects.get(task_id = task_id)
+        except:
+            return Response({'message' : 'Task Not found'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        status_data = request.data.get('status')
+
+        if status_data is None:
+            return Response({'message' : 'Status is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        task.status = status_data
+        task.save()
+        
+        serializer = TaskSerializer(task)
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
