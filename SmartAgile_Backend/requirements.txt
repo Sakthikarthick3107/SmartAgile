@@ -8,3 +8,4 @@
 # pip install drf-spectacular
 # pip install djangorestframework-simplejwt
 # pip install django-filter
+# pip install pillow
